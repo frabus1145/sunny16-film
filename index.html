@@ -36,11 +36,28 @@
     padding: 16px;
     padding-bottom: 40px;
   }
-  h1 {
-    font-size: 1.1rem;
-    font-weight: 600;
-    margin: 4px 0 2px;
-    color: var(--accent);
+  .top-row {
+    width: 100%;
+    max-width: 420px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    margin-bottom: 2px;
+  }
+  h1 { font-size: 1.1rem; font-weight: 600; margin: 4px 0 2px; color: var(--accent); text-align: center; }
+  .gear-btn {
+    position: absolute;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 34px; height: 34px;
+    border-radius: 50%;
+    background: var(--panel);
+    border: 1px solid #24252a;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1rem;
+    cursor: pointer;
   }
   .subtitle {
     color: var(--muted);
@@ -48,6 +65,16 @@
     margin-bottom: 14px;
     text-align: center;
     max-width: 420px;
+  }
+  .camera-chip {
+    font-size: 0.7rem;
+    color: var(--accent2);
+    background: rgba(78,161,242,0.1);
+    border: 1px solid rgba(78,161,242,0.3);
+    border-radius: 8px;
+    padding: 4px 10px;
+    margin-bottom: 12px;
+    text-align: center;
   }
 
   .tabs {
@@ -61,14 +88,9 @@
     border: 1px solid #24252a;
   }
   .tab-btn {
-    flex: 1;
-    text-align: center;
-    padding: 9px 2px;
-    font-size: 0.78rem;
-    font-weight: 600;
-    color: var(--muted);
-    border-radius: 9px;
-    cursor: pointer;
+    flex: 1; text-align: center; padding: 9px 2px;
+    font-size: 0.78rem; font-weight: 600; color: var(--muted);
+    border-radius: 9px; cursor: pointer;
   }
   .tab-btn.active { background: rgba(242,193,78,0.14); color: var(--accent); }
 
@@ -76,333 +98,168 @@
   .hidden { display: none !important; }
 
   .panel {
-    width: 100%;
-    max-width: 420px;
-    background: var(--panel);
-    border-radius: 14px;
-    padding: 16px;
-    border: 1px solid #24252a;
-    margin-bottom: 14px;
+    width: 100%; max-width: 420px; background: var(--panel);
+    border-radius: 14px; padding: 16px; border: 1px solid #24252a; margin-bottom: 14px;
   }
-  .row {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 12px;
-  }
+  .row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
   .row:last-child { margin-bottom: 0; }
-  label {
-    font-size: 0.85rem;
-    color: var(--muted);
-    font-weight: 600;
-  }
-  select, input[type=text] {
-    background: #101113;
-    color: var(--text);
-    border: 1px solid #2f3036;
-    border-radius: 8px;
-    padding: 7px 10px;
-    font-size: 0.9rem;
-    flex: 1;
-    margin-left: 12px;
+  label { font-size: 0.85rem; color: var(--muted); font-weight: 600; }
+  select, input[type=text], input[type=number] {
+    background: #101113; color: var(--text); border: 1px solid #2f3036;
+    border-radius: 8px; padding: 7px 10px; font-size: 0.9rem; flex: 1; margin-left: 12px;
   }
   input[type=text] { margin-left: 0; width: 100%; }
-  .light-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 6px;
-    margin-top: 4px;
-  }
+  .light-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; margin-top: 4px; }
   .light-btn {
-    background: #101113;
-    border: 1px solid #2f3036;
-    color: var(--text);
-    padding: 8px 4px;
-    border-radius: 10px;
-    font-size: 0.7rem;
-    text-align: center;
-    cursor: pointer;
-    line-height: 1.25;
+    background: #101113; border: 1px solid #2f3036; color: var(--text);
+    padding: 8px 4px; border-radius: 10px; font-size: 0.7rem; text-align: center; cursor: pointer; line-height: 1.25;
   }
   .light-btn .emoji { font-size: 1.1rem; display: block; margin-bottom: 2px; }
-  .light-btn.active {
-    border-color: var(--accent);
-    background: rgba(242,193,78,0.12);
-    color: var(--accent);
-  }
+  .light-btn.active { border-color: var(--accent); background: rgba(242,193,78,0.12); color: var(--accent); }
   .ev-fine { margin-top: 14px; }
-  .ev-fine-label {
-    display: flex;
-    justify-content: space-between;
-    font-size: 0.75rem;
-    color: var(--muted);
-    margin-bottom: 6px;
-  }
+  .ev-fine-label { display: flex; justify-content: space-between; font-size: 0.75rem; color: var(--muted); margin-bottom: 6px; }
   input[type=range] { width: 100%; accent-color: var(--accent); }
 
   .table-wrap {
-    width: 100%;
-    max-width: 420px;
-    background: var(--panel);
-    border-radius: 14px;
-    border: 1px solid #24252a;
-    overflow: hidden;
-    margin-bottom: 14px;
+    width: 100%; max-width: 420px; background: var(--panel);
+    border-radius: 14px; border: 1px solid #24252a; overflow: hidden; margin-bottom: 10px;
   }
   table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
   th {
-    background: #101113;
-    color: var(--muted);
-    font-size: 0.7rem;
-    text-transform: uppercase;
-    letter-spacing: 0.04em;
-    padding: 9px 6px;
-    text-align: center;
-    font-weight: 600;
+    background: #101113; color: var(--muted); font-size: 0.7rem; text-transform: uppercase;
+    letter-spacing: 0.04em; padding: 9px 6px; text-align: center; font-weight: 600;
   }
   td { padding: 9px 6px; text-align: center; border-top: 1px solid #24252a; }
   tbody tr { cursor: pointer; }
   tr.suggested td { background: rgba(242,193,78,0.08); }
-  tr.selected td {
-    background: rgba(78,161,242,0.16);
-    color: var(--accent2);
-    font-weight: 700;
-  }
+  tr.selected td { background: rgba(78,161,242,0.16); color: var(--accent2); font-weight: 700; }
+  tr.flagged td.shutter-col { color: var(--danger); }
   .aperture-col { color: var(--accent2); font-weight: 600; }
+  .warn-mark { font-size: 0.72rem; margin-left: 3px; }
   .header-info {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 10px 14px;
-    font-size: 0.78rem;
-    color: var(--muted);
-    background: #101113;
-    border-bottom: 1px solid #24252a;
+    display: flex; justify-content: space-between; align-items: center; padding: 10px 14px;
+    font-size: 0.78rem; color: var(--muted); background: #101113; border-bottom: 1px solid #24252a;
   }
   .header-info b { color: var(--text); }
-  .table-hint {
-    text-align: center;
-    font-size: 0.68rem;
-    color: var(--muted);
-    padding: 7px 10px;
-    border-top: 1px solid #24252a;
+  .table-hint { text-align: center; font-size: 0.68rem; color: var(--muted); padding: 7px 10px; border-top: 1px solid #24252a; }
+
+  .notes-box {
+    width: 100%; max-width: 420px; background: rgba(242,107,78,0.08);
+    border: 1px solid rgba(242,107,78,0.3); border-radius: 12px; padding: 12px 14px; margin-bottom: 14px;
   }
+  .notes-box .note-line { font-size: 0.76rem; color: var(--text); line-height: 1.5; margin-bottom: 8px; }
+  .notes-box .note-line:last-child { margin-bottom: 0; }
+  .notes-box .note-line b { color: var(--danger); }
 
   .save-btn {
-    width: 100%;
-    max-width: 420px;
-    background: var(--accent);
-    color: #1a1a1a;
-    border: none;
-    padding: 13px 0;
-    border-radius: 12px;
-    font-weight: 700;
-    font-size: 0.95rem;
-    cursor: pointer;
-    margin-bottom: 14px;
+    width: 100%; max-width: 420px; background: var(--accent); color: #1a1a1a;
+    border: none; padding: 13px 0; border-radius: 12px; font-weight: 700; font-size: 0.95rem;
+    cursor: pointer; margin-bottom: 14px;
   }
   .save-btn:active { transform: scale(0.98); }
 
   .warning {
-    max-width: 420px;
-    font-size: 0.7rem;
-    color: var(--muted);
-    text-align: center;
-    margin-top: 4px;
-    line-height: 1.4;
-    padding: 0 8px;
+    max-width: 420px; font-size: 0.7rem; color: var(--muted); text-align: center;
+    margin-top: 4px; line-height: 1.4; padding: 0 8px;
   }
 
-  /* Manual dial-style steppers */
-  .dial-row {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 18px 0;
-    border-bottom: 1px solid #24252a;
+  /* ===== Wheel pickers (Manuale) ===== */
+  .wheel-cluster { display: flex; gap: 10px; width: 100%; max-width: 420px; margin-bottom: 14px; }
+  .wheel-col { flex: 1; display: flex; flex-direction: column; align-items: center; }
+  .wheel-label {
+    font-size: 0.68rem; color: var(--muted); text-transform: uppercase;
+    letter-spacing: 0.06em; font-weight: 700; margin-bottom: 8px;
   }
-  .dial-row:last-child { border-bottom: none; }
-  .dial-label {
-    font-size: 0.72rem;
-    color: var(--muted);
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
-    font-weight: 700;
-    margin-bottom: 10px;
+  .wheel-frame {
+    position: relative; width: 100%; height: 190px;
+    background: var(--panel); border: 1px solid #24252a; border-radius: 14px; overflow: hidden;
   }
-  .dial-control {
-    display: flex;
-    align-items: center;
-    gap: 18px;
+  .wheel-highlight {
+    position: absolute; left: 6px; right: 6px; top: 75px; height: 40px;
+    background: rgba(242,193,78,0.12); border-top: 1px solid rgba(242,193,78,0.4);
+    border-bottom: 1px solid rgba(242,193,78,0.4); border-radius: 8px; pointer-events: none; z-index: 2;
   }
-  .dial-btn {
-    width: 44px;
-    height: 44px;
-    border-radius: 50%;
-    background: #101113;
-    border: 1px solid #2f3036;
-    color: var(--accent);
-    font-size: 1.4rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    user-select: none;
+  .wheel-fade-top, .wheel-fade-bottom {
+    position: absolute; left: 0; right: 0; height: 50px; pointer-events: none; z-index: 3;
   }
-  .dial-btn:active { background: rgba(242,193,78,0.15); }
-  .dial-value {
-    min-width: 110px;
-    text-align: center;
-    font-size: 1.3rem;
-    font-weight: 800;
-    color: var(--accent2);
+  .wheel-fade-top { top: 0; background: linear-gradient(to bottom, var(--panel), transparent); }
+  .wheel-fade-bottom { bottom: 0; background: linear-gradient(to top, var(--panel), transparent); }
+  .wheel-scroll {
+    height: 100%; overflow-y: scroll; scroll-snap-type: y mandatory;
+    -webkit-overflow-scrolling: touch; scrollbar-width: none;
+  }
+  .wheel-scroll::-webkit-scrollbar { display: none; }
+  .wheel-item {
+    height: 40px; display: flex; align-items: center; justify-content: center;
+    scroll-snap-align: center; font-size: 0.92rem; color: var(--muted);
     font-family: ui-monospace, "SF Mono", monospace;
   }
+  .wheel-item.center-active { color: var(--accent2); font-weight: 800; font-size: 1.1rem; }
 
-  /* Modal */
+  /* Modal (condiviso: salvataggio scatto + impostazioni fotocamera) */
   .modal-overlay {
-    position: fixed; inset: 0;
-    background: rgba(0,0,0,0.65);
-    display: flex; align-items: flex-end; justify-content: center;
-    z-index: 100;
+    position: fixed; inset: 0; background: rgba(0,0,0,0.65);
+    display: flex; align-items: flex-end; justify-content: center; z-index: 100;
   }
   .modal-card {
-    width: 100%;
-    max-width: 420px;
-    background: var(--panel);
-    border: 1px solid #2a2b2f;
-    border-radius: 18px 18px 0 0;
-    padding: 18px;
-    padding-bottom: 28px;
-    max-height: 85vh;
-    overflow-y: auto;
+    width: 100%; max-width: 420px; background: var(--panel); border: 1px solid #2a2b2f;
+    border-radius: 18px 18px 0 0; padding: 18px; padding-bottom: 28px; max-height: 85vh; overflow-y: auto;
   }
   .modal-card h3 { margin: 0 0 12px; font-size: 1rem; color: var(--accent); }
+  .modal-card .hint { font-size: 0.72rem; color: var(--muted); margin: -6px 0 14px; line-height: 1.4; }
   .string-preview {
-    background: #101113;
-    border: 1px solid #2f3036;
-    border-radius: 10px;
-    padding: 10px 12px;
-    font-family: ui-monospace, "SF Mono", monospace;
-    font-size: 0.75rem;
-    color: var(--accent2);
-    margin-bottom: 14px;
-    line-height: 1.5;
-    word-break: break-word;
+    background: #101113; border: 1px solid #2f3036; border-radius: 10px; padding: 10px 12px;
+    font-family: ui-monospace, "SF Mono", monospace; font-size: 0.75rem; color: var(--accent2);
+    margin-bottom: 14px; line-height: 1.5; word-break: break-word;
   }
   .modal-field { margin-bottom: 12px; }
   .modal-field label { display: block; margin-bottom: 5px; font-size: 0.78rem; }
-  .roll-choice-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 8px;
-    margin-bottom: 10px;
-  }
+  .roll-choice-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 10px; }
   .roll-choice-btn {
-    background: #101113;
-    border: 1px solid #2f3036;
-    color: var(--text);
-    padding: 9px 4px;
-    border-radius: 9px;
-    font-size: 0.78rem;
-    text-align: center;
-    cursor: pointer;
+    background: #101113; border: 1px solid #2f3036; color: var(--text);
+    padding: 9px 4px; border-radius: 9px; font-size: 0.78rem; text-align: center; cursor: pointer;
   }
   .roll-choice-btn.active { border-color: var(--accent); background: rgba(242,193,78,0.12); color: var(--accent); }
   .modal-actions { display: flex; gap: 10px; margin-top: 14px; }
   .btn {
-    flex: 1;
-    padding: 11px 0;
-    border-radius: 10px;
-    text-align: center;
-    font-weight: 600;
-    font-size: 0.88rem;
-    cursor: pointer;
-    border: none;
+    flex: 1; padding: 11px 0; border-radius: 10px; text-align: center;
+    font-weight: 600; font-size: 0.88rem; cursor: pointer; border: none;
   }
   .btn-primary { background: var(--accent); color: #1a1a1a; }
   .btn-secondary { background: #24252a; color: var(--text); }
+  .checkbox-row { display: flex; align-items: center; gap: 10px; margin-top: 4px; }
+  .checkbox-row input { width: 18px; height: 18px; accent-color: var(--accent); }
+  .checkbox-row label { flex: 1; margin: 0; }
 
   /* Catalog view */
   .roll-card {
-    width: 100%;
-    background: var(--panel);
-    border: 1px solid #24252a;
-    border-radius: 14px;
-    padding: 14px 16px;
-    margin-bottom: 10px;
-    cursor: pointer;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+    width: 100%; background: var(--panel); border: 1px solid #24252a; border-radius: 14px;
+    padding: 14px 16px; margin-bottom: 10px; cursor: pointer; display: flex; justify-content: space-between; align-items: center;
   }
   .roll-card .name { font-weight: 700; font-size: 0.95rem; }
   .roll-card .count { color: var(--muted); font-size: 0.78rem; margin-top: 2px; }
   .roll-card .chevron { color: var(--muted); font-size: 1.1rem; }
-
-  .empty-state {
-    width: 100%;
-    text-align: center;
-    color: var(--muted);
-    font-size: 0.85rem;
-    padding: 40px 20px;
-    line-height: 1.5;
-  }
-
-  .detail-header {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    width: 100%;
-    margin-bottom: 14px;
-  }
-  .back-btn {
-    background: var(--panel);
-    border: 1px solid #24252a;
-    color: var(--accent);
-    padding: 8px 12px;
-    border-radius: 10px;
-    font-size: 0.85rem;
-    cursor: pointer;
-  }
+  .empty-state { width: 100%; text-align: center; color: var(--muted); font-size: 0.85rem; padding: 40px 20px; line-height: 1.5; }
+  .detail-header { display: flex; align-items: center; gap: 10px; width: 100%; margin-bottom: 14px; }
+  .back-btn { background: var(--panel); border: 1px solid #24252a; color: var(--accent); padding: 8px 12px; border-radius: 10px; font-size: 0.85rem; cursor: pointer; }
   .detail-title { font-weight: 700; font-size: 1rem; flex: 1; }
   .delete-roll-btn { color: var(--danger); font-size: 0.75rem; cursor: pointer; padding: 6px 8px; }
-
-  .shot-card {
-    width: 100%;
-    background: var(--panel);
-    border: 1px solid #24252a;
-    border-radius: 12px;
-    padding: 12px 14px;
-    margin-bottom: 8px;
-    position: relative;
-  }
+  .shot-card { width: 100%; background: var(--panel); border: 1px solid #24252a; border-radius: 12px; padding: 12px 14px; margin-bottom: 8px; position: relative; }
   .shot-card .subject { font-weight: 700; font-size: 0.9rem; margin-bottom: 2px; }
   .shot-card .datetime { color: var(--muted); font-size: 0.72rem; margin-bottom: 6px; }
   .shot-card .params { font-family: ui-monospace, "SF Mono", monospace; font-size: 0.78rem; color: var(--accent2); }
-  .shot-card .src-tag {
-    display: inline-block;
-    font-size: 0.62rem;
-    color: var(--muted);
-    border: 1px solid #2f3036;
-    border-radius: 6px;
-    padding: 1px 6px;
-    margin-top: 6px;
-  }
-  .shot-delete {
-    position: absolute;
-    top: 10px; right: 10px;
-    color: var(--muted);
-    font-size: 0.9rem;
-    cursor: pointer;
-    padding: 4px 8px;
-  }
+  .shot-card .src-tag { display: inline-block; font-size: 0.62rem; color: var(--muted); border: 1px solid #2f3036; border-radius: 6px; padding: 1px 6px; margin-top: 6px; }
+  .shot-delete { position: absolute; top: 10px; right: 10px; color: var(--muted); font-size: 0.9rem; cursor: pointer; padding: 4px 8px; }
 </style>
 </head>
 <body>
 
-<h1>📷 Sunny 16 Film</h1>
+<div class="top-row">
+  <h1>📷 Sunny 16 Film</h1>
+  <div class="gear-btn" id="gearBtn">⚙️</div>
+</div>
 <div class="subtitle">Calcola l'esposizione, imposta a mano, registra i tuoi scatti</div>
+<div class="camera-chip" id="cameraChip">Nessuna fotocamera impostata — tocca ⚙️ per configurarla</div>
 
 <div class="tabs">
   <div class="tab-btn active" id="tabCalc">Calcolatore</div>
@@ -412,7 +269,6 @@
 
 <!-- ===== CALCULATOR VIEW ===== -->
 <div class="view" id="calcView">
-
   <div class="panel">
     <div class="row">
       <label>ISO</label>
@@ -427,17 +283,12 @@
         <option value="6400">6400</option>
       </select>
     </div>
-
     <div style="margin-top:14px;">
       <label style="display:block;margin-bottom:8px;">Condizione di luce</label>
       <div class="light-grid" id="lightGrid"></div>
     </div>
-
     <div class="ev-fine">
-      <div class="ev-fine-label">
-        <span>Regolazione fine</span>
-        <span>EV <span id="evLabel">15</span></span>
-      </div>
+      <div class="ev-fine-label"><span>Regolazione fine</span><span>EV <span id="evLabel">15</span></span></div>
       <input type="range" id="evSlider" min="-2" max="17" step="0.5" value="15">
     </div>
   </div>
@@ -454,38 +305,43 @@
     <div class="table-hint">Tocca una riga per selezionare la coppia da salvare</div>
   </div>
 
+  <div class="notes-box hidden" id="notesBox"></div>
+
   <button class="save-btn" id="saveCalcBtn">💾 Salva scatto</button>
 
   <div class="warning">
-    ⚠️ Calcolo basato su valori EV standard (regola "Sunny 16") e non su una lettura reale della luce — usalo come riferimento/punto di partenza, non come sostituto di un esposimetro calibrato.
+    ⚠️ Calcolo basato su valori EV standard (regola "Sunny 16"), non su una lettura reale della luce — usalo come riferimento/punto di partenza, non come sostituto di un esposimetro calibrato.
   </div>
 </div>
 
 <!-- ===== MANUAL VIEW ===== -->
 <div class="view hidden" id="manualView">
-  <div class="panel" style="padding:6px 16px;">
-    <div class="dial-row">
-      <div class="dial-label">ISO</div>
-      <div class="dial-control">
-        <div class="dial-btn" id="isoMinus">−</div>
-        <div class="dial-value" id="manIsoVal">100</div>
-        <div class="dial-btn" id="isoPlus">+</div>
+  <div class="wheel-cluster">
+    <div class="wheel-col">
+      <div class="wheel-label">ISO</div>
+      <div class="wheel-frame">
+        <div class="wheel-highlight"></div>
+        <div class="wheel-fade-top"></div>
+        <div class="wheel-fade-bottom"></div>
+        <div class="wheel-scroll" id="wheelIso"></div>
       </div>
     </div>
-    <div class="dial-row">
-      <div class="dial-label">Diaframma</div>
-      <div class="dial-control">
-        <div class="dial-btn" id="apMinus">−</div>
-        <div class="dial-value" id="manApVal">f/8</div>
-        <div class="dial-btn" id="apPlus">+</div>
+    <div class="wheel-col">
+      <div class="wheel-label">Diaframma</div>
+      <div class="wheel-frame">
+        <div class="wheel-highlight"></div>
+        <div class="wheel-fade-top"></div>
+        <div class="wheel-fade-bottom"></div>
+        <div class="wheel-scroll" id="wheelAp"></div>
       </div>
     </div>
-    <div class="dial-row">
-      <div class="dial-label">Tempo di scatto</div>
-      <div class="dial-control">
-        <div class="dial-btn" id="shMinus">−</div>
-        <div class="dial-value" id="manShVal">1/250</div>
-        <div class="dial-btn" id="shPlus">+</div>
+    <div class="wheel-col">
+      <div class="wheel-label">Tempo</div>
+      <div class="wheel-frame">
+        <div class="wheel-highlight"></div>
+        <div class="wheel-fade-top"></div>
+        <div class="wheel-fade-bottom"></div>
+        <div class="wheel-scroll" id="wheelSh"></div>
       </div>
     </div>
   </div>
@@ -493,7 +349,7 @@
   <button class="save-btn" id="saveManualBtn">💾 Salva scatto</button>
 
   <div class="warning">
-    Qui imposti tu i tre parametri manualmente — utile quando il tuo occhio/esperienza dice qualcosa di diverso dal calcolo automatico.
+    Fai scorrere le rotelle come fossero anelli dell'obiettivo. Se hai impostato la tua fotocamera (⚙️), qui vedi solo i valori che supporta davvero.
   </div>
 </div>
 
@@ -503,23 +359,20 @@
   <div id="rollDetailWrap" style="width:100%;" class="hidden"></div>
 </div>
 
-<!-- ===== SAVE MODAL ===== -->
+<!-- ===== SAVE SHOT MODAL ===== -->
 <div class="modal-overlay hidden" id="modalOverlay">
   <div class="modal-card">
     <h3>Salva scatto</h3>
     <div class="string-preview" id="stringPreview"></div>
-
     <div class="modal-field">
       <label>Rullino</label>
       <div class="roll-choice-grid" id="rollChoiceGrid"></div>
       <input type="text" id="newRollInput" placeholder="Nome nuovo rullino" class="hidden">
     </div>
-
     <div class="modal-field">
       <label>Soggetto / nome scatto</label>
       <input type="text" id="subjectInput" placeholder="es. Ritratto sul lungomare">
     </div>
-
     <div class="modal-actions">
       <div class="btn btn-secondary" id="modalCancel">Annulla</div>
       <div class="btn btn-primary" id="modalConfirm">Salva</div>
@@ -527,8 +380,95 @@
   </div>
 </div>
 
+<!-- ===== CAMERA SETTINGS MODAL ===== -->
+<div class="modal-overlay hidden" id="cameraModalOverlay">
+  <div class="modal-card">
+    <h3>La tua fotocamera</h3>
+    <div class="hint">Imposta i limiti reali del tuo corpo macchina/obiettivo: la tabella del calcolatore e le rotelle del manuale si adatteranno, avvisandoti quando un'esposizione calcolata non è raggiungibile.</div>
+
+    <div class="modal-field">
+      <label>Diaframma più aperto (es. 3.5)</label>
+      <input type="number" id="apMinInput" step="0.1" min="0.7" max="64" value="1.4">
+    </div>
+    <div class="modal-field">
+      <label>Diaframma più chiuso (es. 16)</label>
+      <input type="number" id="apMaxInput" step="0.1" min="0.7" max="64" value="22">
+    </div>
+    <div class="modal-field">
+      <label>Tempo più rapido disponibile</label>
+      <select id="shFastestSelect"></select>
+    </div>
+    <div class="checkbox-row">
+      <input type="checkbox" id="hasBulbCheckbox" checked>
+      <label>Ha la posa B (esposizioni manuali illimitate)</label>
+    </div>
+
+    <div class="modal-actions">
+      <div class="btn btn-secondary" id="cameraModalReset">Ripristina default</div>
+      <div class="btn btn-primary" id="cameraModalSave">Salva</div>
+    </div>
+  </div>
+</div>
+
 <script>
-/* ============ CALCULATOR ============ */
+/* ============ SCALE A TERZI DI STOP (come le fotocamere vere) ============ */
+const APERTURE_THIRDS = [1,1.1,1.2,1.4,1.6,1.8,2,2.2,2.5,2.8,3.2,3.5,4,4.5,5,5.6,6.3,7.1,8,9,10,11,13,14,16,18,20,22,25,29,32];
+const SHUTTER_THIRDS = [
+  1/8000,1/6400,1/5000,1/4000,1/3200,1/2500,1/2000,1/1600,1/1250,1/1000,1/800,1/640,1/500,1/400,1/320,
+  1/250,1/200,1/160,1/125,1/100,1/80,1/60,1/50,1/40,1/30,1/25,1/20,1/15,1/13,1/10,1/8,1/6,1/5,1/4,
+  0.3,0.4,0.5,0.6,0.8,1,1.3,1.6,2,2.5,3.2,4,5,6,8,10,13,15,20,25,30
+];
+
+function formatShutter(t) {
+  if (t === 'B') return 'B';
+  if (t >= 1) return (Number.isInteger(t) ? t : t.toFixed(1)) + 's';
+  return '1/' + Math.round(1/t);
+}
+function nearestIn(list, target) {
+  return list.reduce((prev, curr) => Math.abs(curr - target) < Math.abs(prev - target) ? curr : prev);
+}
+
+/* ============ PROFILO FOTOCAMERA ============ */
+const CAMERA_KEY = 'sunny16_camera_profile';
+const DEFAULT_PROFILE = { apMin: 1.4, apMax: 22, shFastest: 1/8000, hasBulb: true, configured: false };
+
+function loadProfile() {
+  try {
+    const p = JSON.parse(localStorage.getItem(CAMERA_KEY));
+    return p ? { ...DEFAULT_PROFILE, ...p } : { ...DEFAULT_PROFILE };
+  } catch (e) { return { ...DEFAULT_PROFILE }; }
+}
+function saveProfile(p) { localStorage.setItem(CAMERA_KEY, JSON.stringify(p)); }
+
+let cameraProfile = loadProfile();
+
+function apertureOptionsForProfile(p) {
+  const base = APERTURE_THIRDS.filter(a => a >= p.apMin - 0.001 && a <= p.apMax + 0.001);
+  const set = new Set(base.map(v => Math.round(v*10)/10));
+  set.add(Math.round(p.apMin*10)/10);
+  set.add(Math.round(p.apMax*10)/10);
+  return Array.from(set).sort((a,b) => a-b);
+}
+function shutterOptionsForProfile(p) {
+  const base = SHUTTER_THIRDS.filter(t => t >= p.shFastest - 1e-9);
+  const set = new Set(base);
+  set.add(p.shFastest);
+  let arr = Array.from(set).sort((a,b) => a-b);
+  if (p.hasBulb) arr.push('B');
+  return arr;
+}
+
+function updateCameraChip() {
+  const chip = document.getElementById('cameraChip');
+  if (!cameraProfile.configured) {
+    chip.textContent = 'Nessuna fotocamera impostata — tocca ⚙️ per configurarla';
+  } else {
+    chip.textContent = `📷 f/${cameraProfile.apMin}–f/${cameraProfile.apMax} · max ${formatShutter(cameraProfile.shFastest)}${cameraProfile.hasBulb ? ' · B' : ''}`;
+  }
+}
+updateCameraChip();
+
+/* ============ CALCOLATORE ============ */
 const LIGHT_CONDITIONS = [
   { key: 'snowsun', label: 'Sole su neve/spiaggia', emoji: '🏖️', ev: 16 },
   { key: 'sun',     label: 'Sole pieno',        emoji: '☀️', ev: 15 },
@@ -545,9 +485,7 @@ const LIGHT_CONDITIONS = [
   { key: 'indoordim', label: 'Interno scarso',  emoji: '🕯️', ev: 3 },
 ];
 
-const APERTURES = [1.4, 2, 2.8, 4, 5.6, 8, 11, 16, 22];
-const SUGGESTED_APERTURE = 8;
-let selectedAperture = SUGGESTED_APERTURE;
+let selectedAperture = null;
 let currentComputedRows = [];
 
 const isoSel = document.getElementById('iso');
@@ -557,6 +495,7 @@ const evLabel = document.getElementById('evLabel');
 const condLabel = document.getElementById('condLabel');
 const isoLabel = document.getElementById('isoLabel');
 const tableBody = document.getElementById('tableBody');
+const notesBox = document.getElementById('notesBox');
 
 let currentCondition = LIGHT_CONDITIONS[1];
 
@@ -587,79 +526,138 @@ evSlider.addEventListener('input', () => {
   condLabel.textContent = nearest.label + (Math.abs(nearest.ev - evSlider.value) < 0.3 ? '' : ' (regolato)');
   renderCalc();
 });
-
 isoSel.addEventListener('change', renderCalc);
-
-const STANDARD_SHUTTERS = [
-  1/8000, 1/4000, 1/2000, 1/1000, 1/500, 1/250, 1/125, 1/60,
-  1/30, 1/15, 1/8, 1/4, 1/2, 1, 2, 4, 8, 15, 30, 60
-];
-function snapShutter(t) {
-  return STANDARD_SHUTTERS.reduce((prev, curr) =>
-    Math.abs(curr - t) < Math.abs(prev - t) ? curr : prev
-  );
-}
-function formatShutter(t) {
-  if (t >= 1) return t.toFixed(t >= 10 ? 0 : 1) + 's';
-  const denom = Math.round(1 / t);
-  return '1/' + denom;
-}
 
 function renderCalc() {
   const iso = parseFloat(isoSel.value);
   const ev100 = parseFloat(evSlider.value);
   evLabel.textContent = ev100;
   isoLabel.textContent = iso;
-
   const evIso = ev100 - Math.log2(iso / 100);
+
+  const apOptions = apertureOptionsForProfile(cameraProfile);
+  const shPool = shutterOptionsForProfile(cameraProfile).filter(v => v !== 'B'); // pool numerico per lo snap
+
+  if (selectedAperture === null || !apOptions.includes(selectedAperture)) {
+    selectedAperture = nearestIn(apOptions, 8);
+  }
 
   tableBody.innerHTML = '';
   currentComputedRows = [];
-  APERTURES.forEach(a => {
-    let t = (a * a) / Math.pow(2, evIso);
-    t = Math.max(1/8000, Math.min(60, t));
-    const snapped = snapShutter(t);
+  const notes = [];
+
+  apOptions.forEach(a => {
+    const idealT = (a * a) / Math.pow(2, evIso);
+    const snapped = nearestIn(shPool, Math.max(1/8000, Math.min(60, idealT)));
     const shutterText = formatShutter(snapped);
-    currentComputedRows.push({ aperture: a, shutterText });
+    let flagged = false;
+
+    if (cameraProfile.configured) {
+      if (idealT < cameraProfile.shFastest - 1e-9) {
+        flagged = true;
+        notes.push(`<div class="note-line">⚠️ A <b>f/${a}</b> servirebbe un tempo più rapido di ${formatShutter(cameraProfile.shFastest)} (il tuo massimo) — con ${shutterText} rischi di <b>sovraesposizione</b>. Valuta di chiudere il diaframma, abbassare l'ISO o usare un filtro ND.</div>`);
+      } else if (idealT > 30 && !cameraProfile.hasBulb) {
+        flagged = true;
+        notes.push(`<div class="note-line">⚠️ A <b>f/${a}</b> servirebbe un'esposizione molto lunga (~${formatShutter(idealT)}) ma non hai la posa B — rischio di <b>sottoesposizione</b>. Valuta di aprire il diaframma o alzare l'ISO.</div>`);
+      } else if (idealT > 30 && cameraProfile.hasBulb) {
+        notes.push(`<div class="note-line">ℹ️ A <b>f/${a}</b> servirebbe circa ${idealT.toFixed(0)}s: ti servirà la posa B a scatto manuale (cronometrata).</div>`);
+      }
+    }
+
+    currentComputedRows.push({ aperture: a, shutterText, flagged });
 
     const tr = document.createElement('tr');
     let cls = '';
-    if (a === SUGGESTED_APERTURE) cls += 'suggested ';
     if (a === selectedAperture) cls += 'selected ';
+    if (flagged) cls += 'flagged ';
     tr.className = cls.trim();
-    tr.innerHTML = `<td class="aperture-col">f/${a}</td><td>${shutterText}</td>`;
+    tr.innerHTML = `<td class="aperture-col">f/${a}</td><td class="shutter-col">${shutterText}${flagged ? '<span class="warn-mark">⚠️</span>' : ''}</td>`;
     tr.addEventListener('click', () => { selectedAperture = a; renderCalc(); });
     tableBody.appendChild(tr);
   });
+
+  if (notes.length) {
+    notesBox.innerHTML = notes.join('');
+    notesBox.classList.remove('hidden');
+  } else {
+    notesBox.classList.add('hidden');
+  }
 }
 renderCalc();
 
-/* ============ MANUAL DIALS ============ */
-const MAN_ISO = [25, 50, 100, 200, 400, 800, 1600, 3200, 6400, 12800];
-const MAN_APERTURES = [1.2, 1.4, 1.8, 2, 2.8, 4, 5.6, 8, 11, 16, 22, 32];
-const MAN_SHUTTERS = STANDARD_SHUTTERS; // stesso set, dal più rapido al più lento
+/* ============ MANUALE: ROTELLE ============ */
+function createWheel(containerId, values, formatFn, initialValue, onChange) {
+  const container = document.getElementById(containerId);
+  container.innerHTML = '';
+  const itemH = 40, padH = 75;
 
-let manIsoIdx = MAN_ISO.indexOf(100);
-let manApIdx = MAN_APERTURES.indexOf(8);
-let manShIdx = MAN_SHUTTERS.indexOf(1/250);
+  const padTop = document.createElement('div'); padTop.style.height = padH + 'px'; container.appendChild(padTop);
+  values.forEach((v, i) => {
+    const item = document.createElement('div');
+    item.className = 'wheel-item';
+    item.textContent = formatFn(v);
+    item.dataset.idx = i;
+    container.appendChild(item);
+  });
+  const padBottom = document.createElement('div'); padBottom.style.height = padH + 'px'; container.appendChild(padBottom);
 
-const manIsoVal = document.getElementById('manIsoVal');
-const manApVal = document.getElementById('manApVal');
-const manShVal = document.getElementById('manShVal');
+  let currentIdx = Math.max(0, values.indexOf(initialValue));
+  if (currentIdx === -1) currentIdx = 0;
 
-function renderManual() {
-  manIsoVal.textContent = MAN_ISO[manIsoIdx];
-  manApVal.textContent = 'f/' + MAN_APERTURES[manApIdx];
-  manShVal.textContent = formatShutter(MAN_SHUTTERS[manShIdx]);
+  function scrollToIndex(idx, smooth) {
+    container.scrollTo({ top: idx * itemH, behavior: smooth ? 'smooth' : 'auto' });
+  }
+  function updateActive(idx) {
+    container.querySelectorAll('.wheel-item').forEach((el, i) => el.classList.toggle('center-active', i === idx));
+  }
+
+  scrollToIndex(currentIdx, false);
+  updateActive(currentIdx);
+
+  let t;
+  container.addEventListener('scroll', () => {
+    clearTimeout(t);
+    t = setTimeout(() => {
+      const idx = Math.max(0, Math.min(values.length - 1, Math.round(container.scrollTop / itemH)));
+      currentIdx = idx;
+      updateActive(idx);
+      scrollToIndex(idx, true);
+      onChange(values[idx]);
+    }, 110);
+  });
+
+  container.addEventListener('click', (e) => {
+    const item = e.target.closest('.wheel-item');
+    if (!item) return;
+    const idx = parseInt(item.dataset.idx, 10);
+    currentIdx = idx;
+    scrollToIndex(idx, true);
+    updateActive(idx);
+    onChange(values[idx]);
+  });
+
+  return { getValue: () => values[currentIdx] };
 }
-renderManual();
 
-document.getElementById('isoMinus').addEventListener('click', () => { manIsoIdx = Math.max(0, manIsoIdx-1); renderManual(); });
-document.getElementById('isoPlus').addEventListener('click', () => { manIsoIdx = Math.min(MAN_ISO.length-1, manIsoIdx+1); renderManual(); });
-document.getElementById('apMinus').addEventListener('click', () => { manApIdx = Math.max(0, manApIdx-1); renderManual(); });
-document.getElementById('apPlus').addEventListener('click', () => { manApIdx = Math.min(MAN_APERTURES.length-1, manApIdx+1); renderManual(); });
-document.getElementById('shMinus').addEventListener('click', () => { manShIdx = Math.max(0, manShIdx-1); renderManual(); });
-document.getElementById('shPlus').addEventListener('click', () => { manShIdx = Math.min(MAN_SHUTTERS.length-1, manShIdx+1); renderManual(); });
+const MAN_ISO = [25, 50, 100, 200, 400, 800, 1600, 3200, 6400, 12800];
+let manIsoWheel, manApWheel, manShWheel;
+let manIsoVal = 100, manApVal = 8, manShVal = 1/250;
+
+function rebuildManualWheels() {
+  const apOptions = apertureOptionsForProfile(cameraProfile);
+  const shOptions = shutterOptionsForProfile(cameraProfile);
+
+  if (!apOptions.includes(manApVal)) manApVal = nearestIn(apOptions, manApVal);
+  if (!shOptions.includes(manShVal)) {
+    const numeric = shOptions.filter(v => v !== 'B');
+    manShVal = numeric.length ? nearestIn(numeric, typeof manShVal === 'number' ? manShVal : 1/250) : shOptions[0];
+  }
+
+  manIsoWheel = createWheel('wheelIso', MAN_ISO, v => v, manIsoVal, v => { manIsoVal = v; });
+  manApWheel = createWheel('wheelAp', apOptions, v => 'f/' + v, manApVal, v => { manApVal = v; });
+  manShWheel = createWheel('wheelSh', shOptions, formatShutter, manShVal, v => { manShVal = v; });
+}
+rebuildManualWheels();
 
 /* ============ TABS ============ */
 const tabCalc = document.getElementById('tabCalc');
@@ -680,7 +678,59 @@ tabCalc.addEventListener('click', () => setActiveTab('calc'));
 tabManual.addEventListener('click', () => setActiveTab('manual'));
 tabCatalog.addEventListener('click', () => setActiveTab('catalog'));
 
-/* ============ STORAGE ============ */
+/* ============ CAMERA SETTINGS MODAL ============ */
+const gearBtn = document.getElementById('gearBtn');
+const cameraModalOverlay = document.getElementById('cameraModalOverlay');
+const apMinInput = document.getElementById('apMinInput');
+const apMaxInput = document.getElementById('apMaxInput');
+const shFastestSelect = document.getElementById('shFastestSelect');
+const hasBulbCheckbox = document.getElementById('hasBulbCheckbox');
+
+SHUTTER_THIRDS.forEach(t => {
+  const opt = document.createElement('option');
+  opt.value = t;
+  opt.textContent = formatShutter(t);
+  shFastestSelect.appendChild(opt);
+});
+
+function openCameraModal() {
+  apMinInput.value = cameraProfile.apMin;
+  apMaxInput.value = cameraProfile.apMax;
+  shFastestSelect.value = cameraProfile.shFastest;
+  hasBulbCheckbox.checked = cameraProfile.hasBulb;
+  cameraModalOverlay.classList.remove('hidden');
+}
+gearBtn.addEventListener('click', openCameraModal);
+
+document.getElementById('cameraModalSave').addEventListener('click', () => {
+  const apMin = parseFloat(apMinInput.value) || DEFAULT_PROFILE.apMin;
+  const apMax = parseFloat(apMaxInput.value) || DEFAULT_PROFILE.apMax;
+  cameraProfile = {
+    apMin: Math.min(apMin, apMax),
+    apMax: Math.max(apMin, apMax),
+    shFastest: parseFloat(shFastestSelect.value),
+    hasBulb: hasBulbCheckbox.checked,
+    configured: true,
+  };
+  saveProfile(cameraProfile);
+  updateCameraChip();
+  selectedAperture = null;
+  renderCalc();
+  rebuildManualWheels();
+  cameraModalOverlay.classList.add('hidden');
+});
+
+document.getElementById('cameraModalReset').addEventListener('click', () => {
+  cameraProfile = { ...DEFAULT_PROFILE };
+  saveProfile(cameraProfile);
+  updateCameraChip();
+  selectedAperture = null;
+  renderCalc();
+  rebuildManualWheels();
+  cameraModalOverlay.classList.add('hidden');
+});
+
+/* ============ STORAGE CATALOGO ============ */
 const STORAGE_KEY = 'sunny16_catalog_v1';
 function loadCatalog() {
   try { return JSON.parse(localStorage.getItem(STORAGE_KEY)) || {}; }
@@ -688,7 +738,7 @@ function loadCatalog() {
 }
 function saveCatalog(catalog) { localStorage.setItem(STORAGE_KEY, JSON.stringify(catalog)); }
 
-/* ============ SAVE MODAL (condiviso da Calcolatore e Manuale) ============ */
+/* ============ SAVE SHOT MODAL ============ */
 const modalOverlay = document.getElementById('modalOverlay');
 const stringPreview = document.getElementById('stringPreview');
 const subjectInput = document.getElementById('subjectInput');
@@ -713,19 +763,17 @@ function buildShotDataFromCalc() {
     source: 'calc',
   };
 }
-
 function buildShotDataFromManual() {
   const now = new Date();
   return {
     date: `${pad(now.getDate())}/${pad(now.getMonth()+1)}/${now.getFullYear()}`,
     time: `${pad(now.getHours())}:${pad(now.getMinutes())}`,
-    iso: MAN_ISO[manIsoIdx],
-    aperture: MAN_APERTURES[manApIdx],
-    shutter: formatShutter(MAN_SHUTTERS[manShIdx]),
+    iso: manIsoWheel.getValue(),
+    aperture: manApWheel.getValue(),
+    shutter: formatShutter(manShWheel.getValue()),
     source: 'manual',
   };
 }
-
 function shotToString(shot, subject) {
   const subj = subject && subject.trim() ? subject.trim() : '(senza nome)';
   const base = `${shot.date} ${shot.time} — ${subj} — ISO ${shot.iso}, f/${shot.aperture}, ${shot.shutter}`;
@@ -767,8 +815,7 @@ function openSaveModal(shot) {
     document.querySelectorAll('.roll-choice-btn').forEach(x => x.classList.remove('active'));
     newBtn.classList.add('active');
     newRollInput.classList.remove('hidden');
-    const nextNum = rollNames.length + 1;
-    newRollInput.value = `Rullino ${nextNum}`;
+    newRollInput.value = `Rullino ${rollNames.length + 1}`;
     newRollInput.focus();
     newRollInput.select();
   });
@@ -791,29 +838,20 @@ document.getElementById('saveManualBtn').addEventListener('click', () => openSav
 subjectInput.addEventListener('input', () => {
   if (pendingShot) stringPreview.textContent = shotToString(pendingShot, subjectInput.value);
 });
-
-modalCancel.addEventListener('click', () => {
-  modalOverlay.classList.add('hidden');
-  pendingShot = null;
-});
-
+modalCancel.addEventListener('click', () => { modalOverlay.classList.add('hidden'); pendingShot = null; });
 modalConfirm.addEventListener('click', () => {
-  const rollName = (selectedRollName === null)
-    ? (newRollInput.value.trim() || 'Rullino 1')
-    : selectedRollName;
+  const rollName = (selectedRollName === null) ? (newRollInput.value.trim() || 'Rullino 1') : selectedRollName;
   const subject = subjectInput.value.trim();
   if (!pendingShot) return;
-
   const catalog = loadCatalog();
   if (!catalog[rollName]) catalog[rollName] = [];
   catalog[rollName].push({ ...pendingShot, subject });
   saveCatalog(catalog);
-
   modalOverlay.classList.add('hidden');
   pendingShot = null;
 });
 
-/* ============ CATALOG VIEW ============ */
+/* ============ CATALOGO ============ */
 const rollListWrap = document.getElementById('rollListWrap');
 const rollDetailWrap = document.getElementById('rollDetailWrap');
 
@@ -821,26 +859,17 @@ function showRollList() {
   rollDetailWrap.classList.add('hidden');
   rollListWrap.classList.remove('hidden');
   rollListWrap.innerHTML = '';
-
   const catalog = loadCatalog();
   const names = Object.keys(catalog);
-
   if (names.length === 0) {
     rollListWrap.innerHTML = `<div class="empty-state">Nessun rullino ancora.<br>Vai su "Calcolatore" o "Manuale", imposta i parametri e tocca "Salva scatto" per iniziare il tuo primo rullino.</div>`;
     return;
   }
-
   names.forEach(name => {
     const shots = catalog[name];
     const card = document.createElement('div');
     card.className = 'roll-card';
-    card.innerHTML = `
-      <div>
-        <div class="name">${name}</div>
-        <div class="count">${shots.length} scatt${shots.length === 1 ? 'o' : 'i'}</div>
-      </div>
-      <div class="chevron">›</div>
-    `;
+    card.innerHTML = `<div><div class="name">${name}</div><div class="count">${shots.length} scatt${shots.length === 1 ? 'o' : 'i'}</div></div><div class="chevron">›</div>`;
     card.addEventListener('click', () => showRollDetail(name));
     rollListWrap.appendChild(card);
   });
@@ -850,16 +879,10 @@ function showRollDetail(rollName) {
   rollListWrap.classList.add('hidden');
   rollDetailWrap.classList.remove('hidden');
   rollDetailWrap.innerHTML = '';
-
   const header = document.createElement('div');
   header.className = 'detail-header';
-  header.innerHTML = `
-    <div class="back-btn" id="backBtn">‹ Rullini</div>
-    <div class="detail-title">${rollName}</div>
-    <div class="delete-roll-btn" id="deleteRollBtn">Elimina rullino</div>
-  `;
+  header.innerHTML = `<div class="back-btn" id="backBtn">‹ Rullini</div><div class="detail-title">${rollName}</div><div class="delete-roll-btn" id="deleteRollBtn">Elimina rullino</div>`;
   rollDetailWrap.appendChild(header);
-
   header.querySelector('#backBtn').addEventListener('click', showRollList);
   header.querySelector('#deleteRollBtn').addEventListener('click', () => {
     const catalog = loadCatalog();
@@ -870,7 +893,6 @@ function showRollDetail(rollName) {
 
   const catalog = loadCatalog();
   const shots = catalog[rollName] || [];
-
   if (shots.length === 0) {
     const empty = document.createElement('div');
     empty.className = 'empty-state';
@@ -883,9 +905,7 @@ function showRollDetail(rollName) {
     const realIdx = shots.length - 1 - revIdx;
     const card = document.createElement('div');
     card.className = 'shot-card';
-    const srcLine = shot.source === 'calc'
-      ? `EV ${shot.ev} (${shot.light})`
-      : 'impostato manualmente';
+    const srcLine = shot.source === 'calc' ? `EV ${shot.ev} (${shot.light})` : 'impostato manualmente';
     card.innerHTML = `
       <div class="shot-delete" data-idx="${realIdx}">✕</div>
       <div class="subject">${shot.subject && shot.subject.trim() ? shot.subject : '(senza nome)'}</div>
