@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Sunny 16 Film</title>
+
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="icon" type="image/png" href="icon-192.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Sunny 16 Film">
+<meta name="theme-color" content="#0b0b0d">
+<style>
+  :root {
+    --bg: #0b0b0d;
+    --panel: #17181b;
+    --accent: #f2c14e;
+    --accent2: #4ea1f2;
+    --text: #eaeaea;
+    --muted: #8b8d93;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 16px;
+  }
+  h1 {
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin: 4px 0 2px;
+    color: var(--accent);
+  }
+  .subtitle {
+    color: var(--muted);
+    font-size: 0.8rem;
+    margin-bottom: 16px;
+    text-align: center;
+    max-width: 420px;
+  }
+  .panel {
+    width: 100%;
+    max-width: 420px;
+    background: var(--panel);
+    border-radius: 14px;
+    padding: 16px;
+    border: 1px solid #24252a;
+    margin-bottom: 14px;
+  }
+  .row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+  }
+  .row:last-child { margin-bottom: 0; }
+  label {
+    font-size: 0.85rem;
+    color: var(--muted);
+    font-weight: 600;
+  }
+  select {
+    background: #101113;
+    color: var(--text);
+    border: 1px solid #2f3036;
+    border-radius: 8px;
+    padding: 7px 10px;
+    font-size: 0.9rem;
+    flex: 1;
+    margin-left: 12px;
+  }
+  .light-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 6px;
+    margin-top: 4px;
+  }
+  .light-btn {
+    background: #101113;
+    border: 1px solid #2f3036;
+    color: var(--text);
+    padding: 8px 4px;
+    border-radius: 10px;
+    font-size: 0.7rem;
+    text-align: center;
+    cursor: pointer;
+    line-height: 1.25;
+  }
+  .light-btn .emoji { font-size: 1.1rem; display: block; margin-bottom: 2px; }
+  .light-btn.active {
+    border-color: var(--accent);
+    background: rgba(242,193,78,0.12);
+    color: var(--accent);
+  }
+  .ev-fine {
+    margin-top: 14px;
+  }
+  .ev-fine-label {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.75rem;
+    color: var(--muted);
+    margin-bottom: 6px;
+  }
+  input[type=range] {
+    width: 100%;
+    accent-color: var(--accent);
+  }
+  .table-wrap {
+    width: 100%;
+    max-width: 420px;
+    background: var(--panel);
+    border-radius: 14px;
+    border: 1px solid #24252a;
+    overflow: hidden;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.85rem;
+  }
+  th {
+    background: #101113;
+    color: var(--muted);
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    padding: 9px 6px;
+    text-align: center;
+    font-weight: 600;
+  }
+  td {
+    padding: 9px 6px;
+    text-align: center;
+    border-top: 1px solid #24252a;
+  }
+  tr.suggested td {
+    background: rgba(242,193,78,0.12);
+    color: var(--accent);
+    font-weight: 700;
+  }
+  .aperture-col { color: var(--accent2); font-weight: 600; }
+  .header-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 14px;
+    font-size: 0.78rem;
+    color: var(--muted);
+    background: #101113;
+    border-bottom: 1px solid #24252a;
+  }
+  .header-info b { color: var(--text); }
+  .warning {
+    max-width: 420px;
+    font-size: 0.7rem;
+    color: var(--muted);
+    text-align: center;
+    margin-top: 16px;
+    line-height: 1.4;
+    padding: 0 8px;
+  }
+</style>
+</head>
+<body>
+
+<h1>📷 Sunny 16 Film</h1>
+<div class="subtitle">Imposta ISO e condizione di luce: calcolo tutte le coppie diaframma/tempo equivalenti</div>
+
+<div class="panel">
+  <div class="row">
+    <label>ISO</label>
+    <select id="iso">
+      <option value="50">50</option>
+      <option value="100" selected>100</option>
+      <option value="200">200</option>
+      <option value="400">400</option>
+      <option value="800">800</option>
+      <option value="1600">1600</option>
+      <option value="3200">3200</option>
+      <option value="6400">6400</option>
+    </select>
+  </div>
+
+  <div style="margin-top:14px;">
+    <label style="display:block;margin-bottom:8px;">Condizione di luce</label>
+    <div class="light-grid" id="lightGrid"></div>
+  </div>
+
+  <div class="ev-fine">
+    <div class="ev-fine-label">
+      <span>Regolazione fine</span>
+      <span>EV <span id="evLabel">15</span></span>
+    </div>
+    <input type="range" id="evSlider" min="-2" max="17" step="0.5" value="15">
+  </div>
+</div>
+
+<div class="table-wrap">
+  <div class="header-info">
+    <span>Luce: <b id="condLabel">Sole pieno</b></span>
+    <span>ISO <b id="isoLabel">100</b></span>
+  </div>
+  <table>
+    <thead>
+      <tr><th>Diaframma</th><th>Tempo</th></tr>
+    </thead>
+    <tbody id="tableBody"></tbody>
+  </table>
+</div>
+
+<div class="warning">
+  ⚠️ Calcolo basato su valori EV standard (regola "Sunny 16") e non su una lettura reale della luce — usalo come riferimento/punto di partenza, non come sostituto di un esposimetro calibrato.
+</div>
+
+<script>
+const LIGHT_CONDITIONS = [
+  { key: 'snowsun', label: 'Sole su neve/spiaggia', emoji: '🏖️', ev: 16 },
+  { key: 'sun',     label: 'Sole pieno',        emoji: '☀️', ev: 15 },
+  { key: 'hazy',    label: 'Foschia leggera',   emoji: '🌤️', ev: 14 },
+  { key: 'cloudybright', label: 'Nuvoloso luminoso', emoji: '⛅', ev: 13 },
+  { key: 'cloudy',  label: 'Nuvoloso',          emoji: '☁️', ev: 12 },
+  { key: 'shade',   label: 'Ombra',             emoji: '🌳', ev: 10 },
+  { key: 'sunset',  label: 'Tramonto / sera',   emoji: '🌇', ev: 6 },
+  { key: 'nightlit',label: 'Notte con luci città', emoji: '🌃', ev: 2 },
+  { key: 'nightdark', label: 'Notte buia',      emoji: '🌑', ev: -1 },
+  { key: 'indoorbright', label: 'Interno molto luminoso', emoji: '🪟', ev: 9 },
+  { key: 'indoor',  label: 'Interno luminoso',  emoji: '💡', ev: 7 },
+  { key: 'indoormid', label: 'Interno normale', emoji: '🏠', ev: 5 },
+  { key: 'indoordim', label: 'Interno scarso',  emoji: '🕯️', ev: 3 },
+];
+
+const APERTURES = [1.4, 2, 2.8, 4, 5.6, 8, 11, 16, 22];
+const SUGGESTED_APERTURE = 8; // aperture usually shown highlighted as balanced default
+
+const isoSel = document.getElementById('iso');
+const lightGrid = document.getElementById('lightGrid');
+const evSlider = document.getElementById('evSlider');
+const evLabel = document.getElementById('evLabel');
+const condLabel = document.getElementById('condLabel');
+const isoLabel = document.getElementById('isoLabel');
+const tableBody = document.getElementById('tableBody');
+
+let currentCondition = LIGHT_CONDITIONS[0];
+
+// build light condition buttons
+LIGHT_CONDITIONS.forEach(cond => {
+  const btn = document.createElement('div');
+  btn.className = 'light-btn' + (cond.key === currentCondition.key ? ' active' : '');
+  btn.innerHTML = `<span class="emoji">${cond.emoji}</span>${cond.label}`;
+  btn.addEventListener('click', () => {
+    currentCondition = cond;
+    evSlider.value = cond.ev;
+    document.querySelectorAll('.light-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    condLabel.textContent = cond.label;
+    render();
+  });
+  lightGrid.appendChild(btn);
+});
+lightGrid.children[0].classList.add('active');
+condLabel.textContent = currentCondition.label;
+
+evSlider.addEventListener('input', () => {
+  // manual fine adjustment deselects preset highlight if moved away
+  const nearest = LIGHT_CONDITIONS.reduce((prev, c) =>
+    Math.abs(c.ev - evSlider.value) < Math.abs(prev.ev - evSlider.value) ? c : prev
+  );
+  document.querySelectorAll('.light-btn').forEach((b, i) => {
+    b.classList.toggle('active', LIGHT_CONDITIONS[i].key === nearest.key && Math.abs(nearest.ev - evSlider.value) < 0.3);
+  });
+  condLabel.textContent = nearest.label + (Math.abs(nearest.ev - evSlider.value) < 0.3 ? '' : ' (regolato)');
+  render();
+});
+
+isoSel.addEventListener('change', render);
+
+const STANDARD_SHUTTERS = [
+  1/8000, 1/4000, 1/2000, 1/1000, 1/500, 1/250, 1/125, 1/60,
+  1/30, 1/15, 1/8, 1/4, 1/2, 1, 2, 4, 8, 15, 30, 60
+];
+function snapShutter(t) {
+  return STANDARD_SHUTTERS.reduce((prev, curr) =>
+    Math.abs(curr - t) < Math.abs(prev - t) ? curr : prev
+  );
+}
+function formatShutter(t) {
+  if (t >= 1) return t.toFixed(t >= 10 ? 0 : 1) + 's';
+  const denom = Math.round(1 / t);
+  return '1/' + denom;
+}
+
+function render() {
+  const iso = parseFloat(isoSel.value);
+  const ev100 = parseFloat(evSlider.value);
+  evLabel.textContent = ev100;
+  isoLabel.textContent = iso;
+
+  const evIso = ev100 - Math.log2(iso / 100);
+
+  tableBody.innerHTML = '';
+  APERTURES.forEach(a => {
+    let t = (a * a) / Math.pow(2, evIso);
+    t = Math.max(1/8000, Math.min(60, t));
+    const snapped = snapShutter(t);
+    const tr = document.createElement('tr');
+    if (a === SUGGESTED_APERTURE) tr.className = 'suggested';
+    tr.innerHTML = `<td class="aperture-col">f/${a}</td><td>${formatShutter(snapped)}</td>`;
+    tableBody.appendChild(tr);
+  });
+}
+
+render();
+</script>
+
+</body>
+</html>
