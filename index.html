@@ -21,6 +21,7 @@
     --accent2: #4ea1f2;
     --text: #eaeaea;
     --muted: #8b8d93;
+    --danger: #f26b4e;
   }
   * { box-sizing: border-box; }
   body {
@@ -33,6 +34,7 @@
     flex-direction: column;
     align-items: center;
     padding: 16px;
+    padding-bottom: 40px;
   }
   h1 {
     font-size: 1.1rem;
@@ -43,10 +45,36 @@
   .subtitle {
     color: var(--muted);
     font-size: 0.8rem;
-    margin-bottom: 16px;
+    margin-bottom: 14px;
     text-align: center;
     max-width: 420px;
   }
+
+  .tabs {
+    display: flex;
+    width: 100%;
+    max-width: 420px;
+    background: var(--panel);
+    border-radius: 12px;
+    padding: 4px;
+    margin-bottom: 16px;
+    border: 1px solid #24252a;
+  }
+  .tab-btn {
+    flex: 1;
+    text-align: center;
+    padding: 9px 2px;
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: var(--muted);
+    border-radius: 9px;
+    cursor: pointer;
+  }
+  .tab-btn.active { background: rgba(242,193,78,0.14); color: var(--accent); }
+
+  .view { width: 100%; max-width: 420px; display: flex; flex-direction: column; align-items: center; }
+  .hidden { display: none !important; }
+
   .panel {
     width: 100%;
     max-width: 420px;
@@ -68,7 +96,7 @@
     color: var(--muted);
     font-weight: 600;
   }
-  select {
+  select, input[type=text] {
     background: #101113;
     color: var(--text);
     border: 1px solid #2f3036;
@@ -78,6 +106,7 @@
     flex: 1;
     margin-left: 12px;
   }
+  input[type=text] { margin-left: 0; width: 100%; }
   .light-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -101,9 +130,7 @@
     background: rgba(242,193,78,0.12);
     color: var(--accent);
   }
-  .ev-fine {
-    margin-top: 14px;
-  }
+  .ev-fine { margin-top: 14px; }
   .ev-fine-label {
     display: flex;
     justify-content: space-between;
@@ -111,10 +138,8 @@
     color: var(--muted);
     margin-bottom: 6px;
   }
-  input[type=range] {
-    width: 100%;
-    accent-color: var(--accent);
-  }
+  input[type=range] { width: 100%; accent-color: var(--accent); }
+
   .table-wrap {
     width: 100%;
     max-width: 420px;
@@ -122,12 +147,9 @@
     border-radius: 14px;
     border: 1px solid #24252a;
     overflow: hidden;
+    margin-bottom: 14px;
   }
-  table {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: 0.85rem;
-  }
+  table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
   th {
     background: #101113;
     color: var(--muted);
@@ -138,14 +160,12 @@
     text-align: center;
     font-weight: 600;
   }
-  td {
-    padding: 9px 6px;
-    text-align: center;
-    border-top: 1px solid #24252a;
-  }
-  tr.suggested td {
-    background: rgba(242,193,78,0.12);
-    color: var(--accent);
+  td { padding: 9px 6px; text-align: center; border-top: 1px solid #24252a; }
+  tbody tr { cursor: pointer; }
+  tr.suggested td { background: rgba(242,193,78,0.08); }
+  tr.selected td {
+    background: rgba(78,161,242,0.16);
+    color: var(--accent2);
     font-weight: 700;
   }
   .aperture-col { color: var(--accent2); font-weight: 600; }
@@ -160,69 +180,355 @@
     border-bottom: 1px solid #24252a;
   }
   .header-info b { color: var(--text); }
+  .table-hint {
+    text-align: center;
+    font-size: 0.68rem;
+    color: var(--muted);
+    padding: 7px 10px;
+    border-top: 1px solid #24252a;
+  }
+
+  .save-btn {
+    width: 100%;
+    max-width: 420px;
+    background: var(--accent);
+    color: #1a1a1a;
+    border: none;
+    padding: 13px 0;
+    border-radius: 12px;
+    font-weight: 700;
+    font-size: 0.95rem;
+    cursor: pointer;
+    margin-bottom: 14px;
+  }
+  .save-btn:active { transform: scale(0.98); }
+
   .warning {
     max-width: 420px;
     font-size: 0.7rem;
     color: var(--muted);
     text-align: center;
-    margin-top: 16px;
+    margin-top: 4px;
     line-height: 1.4;
     padding: 0 8px;
+  }
+
+  /* Manual dial-style steppers */
+  .dial-row {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 18px 0;
+    border-bottom: 1px solid #24252a;
+  }
+  .dial-row:last-child { border-bottom: none; }
+  .dial-label {
+    font-size: 0.72rem;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    font-weight: 700;
+    margin-bottom: 10px;
+  }
+  .dial-control {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+  }
+  .dial-btn {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: #101113;
+    border: 1px solid #2f3036;
+    color: var(--accent);
+    font-size: 1.4rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    user-select: none;
+  }
+  .dial-btn:active { background: rgba(242,193,78,0.15); }
+  .dial-value {
+    min-width: 110px;
+    text-align: center;
+    font-size: 1.3rem;
+    font-weight: 800;
+    color: var(--accent2);
+    font-family: ui-monospace, "SF Mono", monospace;
+  }
+
+  /* Modal */
+  .modal-overlay {
+    position: fixed; inset: 0;
+    background: rgba(0,0,0,0.65);
+    display: flex; align-items: flex-end; justify-content: center;
+    z-index: 100;
+  }
+  .modal-card {
+    width: 100%;
+    max-width: 420px;
+    background: var(--panel);
+    border: 1px solid #2a2b2f;
+    border-radius: 18px 18px 0 0;
+    padding: 18px;
+    padding-bottom: 28px;
+    max-height: 85vh;
+    overflow-y: auto;
+  }
+  .modal-card h3 { margin: 0 0 12px; font-size: 1rem; color: var(--accent); }
+  .string-preview {
+    background: #101113;
+    border: 1px solid #2f3036;
+    border-radius: 10px;
+    padding: 10px 12px;
+    font-family: ui-monospace, "SF Mono", monospace;
+    font-size: 0.75rem;
+    color: var(--accent2);
+    margin-bottom: 14px;
+    line-height: 1.5;
+    word-break: break-word;
+  }
+  .modal-field { margin-bottom: 12px; }
+  .modal-field label { display: block; margin-bottom: 5px; font-size: 0.78rem; }
+  .roll-choice-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    margin-bottom: 10px;
+  }
+  .roll-choice-btn {
+    background: #101113;
+    border: 1px solid #2f3036;
+    color: var(--text);
+    padding: 9px 4px;
+    border-radius: 9px;
+    font-size: 0.78rem;
+    text-align: center;
+    cursor: pointer;
+  }
+  .roll-choice-btn.active { border-color: var(--accent); background: rgba(242,193,78,0.12); color: var(--accent); }
+  .modal-actions { display: flex; gap: 10px; margin-top: 14px; }
+  .btn {
+    flex: 1;
+    padding: 11px 0;
+    border-radius: 10px;
+    text-align: center;
+    font-weight: 600;
+    font-size: 0.88rem;
+    cursor: pointer;
+    border: none;
+  }
+  .btn-primary { background: var(--accent); color: #1a1a1a; }
+  .btn-secondary { background: #24252a; color: var(--text); }
+
+  /* Catalog view */
+  .roll-card {
+    width: 100%;
+    background: var(--panel);
+    border: 1px solid #24252a;
+    border-radius: 14px;
+    padding: 14px 16px;
+    margin-bottom: 10px;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .roll-card .name { font-weight: 700; font-size: 0.95rem; }
+  .roll-card .count { color: var(--muted); font-size: 0.78rem; margin-top: 2px; }
+  .roll-card .chevron { color: var(--muted); font-size: 1.1rem; }
+
+  .empty-state {
+    width: 100%;
+    text-align: center;
+    color: var(--muted);
+    font-size: 0.85rem;
+    padding: 40px 20px;
+    line-height: 1.5;
+  }
+
+  .detail-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    margin-bottom: 14px;
+  }
+  .back-btn {
+    background: var(--panel);
+    border: 1px solid #24252a;
+    color: var(--accent);
+    padding: 8px 12px;
+    border-radius: 10px;
+    font-size: 0.85rem;
+    cursor: pointer;
+  }
+  .detail-title { font-weight: 700; font-size: 1rem; flex: 1; }
+  .delete-roll-btn { color: var(--danger); font-size: 0.75rem; cursor: pointer; padding: 6px 8px; }
+
+  .shot-card {
+    width: 100%;
+    background: var(--panel);
+    border: 1px solid #24252a;
+    border-radius: 12px;
+    padding: 12px 14px;
+    margin-bottom: 8px;
+    position: relative;
+  }
+  .shot-card .subject { font-weight: 700; font-size: 0.9rem; margin-bottom: 2px; }
+  .shot-card .datetime { color: var(--muted); font-size: 0.72rem; margin-bottom: 6px; }
+  .shot-card .params { font-family: ui-monospace, "SF Mono", monospace; font-size: 0.78rem; color: var(--accent2); }
+  .shot-card .src-tag {
+    display: inline-block;
+    font-size: 0.62rem;
+    color: var(--muted);
+    border: 1px solid #2f3036;
+    border-radius: 6px;
+    padding: 1px 6px;
+    margin-top: 6px;
+  }
+  .shot-delete {
+    position: absolute;
+    top: 10px; right: 10px;
+    color: var(--muted);
+    font-size: 0.9rem;
+    cursor: pointer;
+    padding: 4px 8px;
   }
 </style>
 </head>
 <body>
 
 <h1>📷 Sunny 16 Film</h1>
-<div class="subtitle">Imposta ISO e condizione di luce: calcolo tutte le coppie diaframma/tempo equivalenti</div>
+<div class="subtitle">Calcola l'esposizione, imposta a mano, registra i tuoi scatti</div>
 
-<div class="panel">
-  <div class="row">
-    <label>ISO</label>
-    <select id="iso">
-      <option value="50">50</option>
-      <option value="100" selected>100</option>
-      <option value="200">200</option>
-      <option value="400">400</option>
-      <option value="800">800</option>
-      <option value="1600">1600</option>
-      <option value="3200">3200</option>
-      <option value="6400">6400</option>
-    </select>
-  </div>
+<div class="tabs">
+  <div class="tab-btn active" id="tabCalc">Calcolatore</div>
+  <div class="tab-btn" id="tabManual">Manuale</div>
+  <div class="tab-btn" id="tabCatalog">📁 Rullini</div>
+</div>
 
-  <div style="margin-top:14px;">
-    <label style="display:block;margin-bottom:8px;">Condizione di luce</label>
-    <div class="light-grid" id="lightGrid"></div>
-  </div>
+<!-- ===== CALCULATOR VIEW ===== -->
+<div class="view" id="calcView">
 
-  <div class="ev-fine">
-    <div class="ev-fine-label">
-      <span>Regolazione fine</span>
-      <span>EV <span id="evLabel">15</span></span>
+  <div class="panel">
+    <div class="row">
+      <label>ISO</label>
+      <select id="iso">
+        <option value="50">50</option>
+        <option value="100" selected>100</option>
+        <option value="200">200</option>
+        <option value="400">400</option>
+        <option value="800">800</option>
+        <option value="1600">1600</option>
+        <option value="3200">3200</option>
+        <option value="6400">6400</option>
+      </select>
     </div>
-    <input type="range" id="evSlider" min="-2" max="17" step="0.5" value="15">
+
+    <div style="margin-top:14px;">
+      <label style="display:block;margin-bottom:8px;">Condizione di luce</label>
+      <div class="light-grid" id="lightGrid"></div>
+    </div>
+
+    <div class="ev-fine">
+      <div class="ev-fine-label">
+        <span>Regolazione fine</span>
+        <span>EV <span id="evLabel">15</span></span>
+      </div>
+      <input type="range" id="evSlider" min="-2" max="17" step="0.5" value="15">
+    </div>
+  </div>
+
+  <div class="table-wrap">
+    <div class="header-info">
+      <span>Luce: <b id="condLabel">Sole pieno</b></span>
+      <span>ISO <b id="isoLabel">100</b></span>
+    </div>
+    <table>
+      <thead><tr><th>Diaframma</th><th>Tempo</th></tr></thead>
+      <tbody id="tableBody"></tbody>
+    </table>
+    <div class="table-hint">Tocca una riga per selezionare la coppia da salvare</div>
+  </div>
+
+  <button class="save-btn" id="saveCalcBtn">💾 Salva scatto</button>
+
+  <div class="warning">
+    ⚠️ Calcolo basato su valori EV standard (regola "Sunny 16") e non su una lettura reale della luce — usalo come riferimento/punto di partenza, non come sostituto di un esposimetro calibrato.
   </div>
 </div>
 
-<div class="table-wrap">
-  <div class="header-info">
-    <span>Luce: <b id="condLabel">Sole pieno</b></span>
-    <span>ISO <b id="isoLabel">100</b></span>
+<!-- ===== MANUAL VIEW ===== -->
+<div class="view hidden" id="manualView">
+  <div class="panel" style="padding:6px 16px;">
+    <div class="dial-row">
+      <div class="dial-label">ISO</div>
+      <div class="dial-control">
+        <div class="dial-btn" id="isoMinus">−</div>
+        <div class="dial-value" id="manIsoVal">100</div>
+        <div class="dial-btn" id="isoPlus">+</div>
+      </div>
+    </div>
+    <div class="dial-row">
+      <div class="dial-label">Diaframma</div>
+      <div class="dial-control">
+        <div class="dial-btn" id="apMinus">−</div>
+        <div class="dial-value" id="manApVal">f/8</div>
+        <div class="dial-btn" id="apPlus">+</div>
+      </div>
+    </div>
+    <div class="dial-row">
+      <div class="dial-label">Tempo di scatto</div>
+      <div class="dial-control">
+        <div class="dial-btn" id="shMinus">−</div>
+        <div class="dial-value" id="manShVal">1/250</div>
+        <div class="dial-btn" id="shPlus">+</div>
+      </div>
+    </div>
   </div>
-  <table>
-    <thead>
-      <tr><th>Diaframma</th><th>Tempo</th></tr>
-    </thead>
-    <tbody id="tableBody"></tbody>
-  </table>
+
+  <button class="save-btn" id="saveManualBtn">💾 Salva scatto</button>
+
+  <div class="warning">
+    Qui imposti tu i tre parametri manualmente — utile quando il tuo occhio/esperienza dice qualcosa di diverso dal calcolo automatico.
+  </div>
 </div>
 
-<div class="warning">
-  ⚠️ Calcolo basato su valori EV standard (regola "Sunny 16") e non su una lettura reale della luce — usalo come riferimento/punto di partenza, non come sostituto di un esposimetro calibrato.
+<!-- ===== CATALOG VIEW ===== -->
+<div class="view hidden" id="catalogView">
+  <div id="rollListWrap" style="width:100%;"></div>
+  <div id="rollDetailWrap" style="width:100%;" class="hidden"></div>
+</div>
+
+<!-- ===== SAVE MODAL ===== -->
+<div class="modal-overlay hidden" id="modalOverlay">
+  <div class="modal-card">
+    <h3>Salva scatto</h3>
+    <div class="string-preview" id="stringPreview"></div>
+
+    <div class="modal-field">
+      <label>Rullino</label>
+      <div class="roll-choice-grid" id="rollChoiceGrid"></div>
+      <input type="text" id="newRollInput" placeholder="Nome nuovo rullino" class="hidden">
+    </div>
+
+    <div class="modal-field">
+      <label>Soggetto / nome scatto</label>
+      <input type="text" id="subjectInput" placeholder="es. Ritratto sul lungomare">
+    </div>
+
+    <div class="modal-actions">
+      <div class="btn btn-secondary" id="modalCancel">Annulla</div>
+      <div class="btn btn-primary" id="modalConfirm">Salva</div>
+    </div>
+  </div>
 </div>
 
 <script>
+/* ============ CALCULATOR ============ */
 const LIGHT_CONDITIONS = [
   { key: 'snowsun', label: 'Sole su neve/spiaggia', emoji: '🏖️', ev: 16 },
   { key: 'sun',     label: 'Sole pieno',        emoji: '☀️', ev: 15 },
@@ -240,7 +546,9 @@ const LIGHT_CONDITIONS = [
 ];
 
 const APERTURES = [1.4, 2, 2.8, 4, 5.6, 8, 11, 16, 22];
-const SUGGESTED_APERTURE = 8; // aperture usually shown highlighted as balanced default
+const SUGGESTED_APERTURE = 8;
+let selectedAperture = SUGGESTED_APERTURE;
+let currentComputedRows = [];
 
 const isoSel = document.getElementById('iso');
 const lightGrid = document.getElementById('lightGrid');
@@ -250,10 +558,9 @@ const condLabel = document.getElementById('condLabel');
 const isoLabel = document.getElementById('isoLabel');
 const tableBody = document.getElementById('tableBody');
 
-let currentCondition = LIGHT_CONDITIONS[0];
+let currentCondition = LIGHT_CONDITIONS[1];
 
-// build light condition buttons
-LIGHT_CONDITIONS.forEach(cond => {
+LIGHT_CONDITIONS.forEach((cond) => {
   const btn = document.createElement('div');
   btn.className = 'light-btn' + (cond.key === currentCondition.key ? ' active' : '');
   btn.innerHTML = `<span class="emoji">${cond.emoji}</span>${cond.label}`;
@@ -263,15 +570,14 @@ LIGHT_CONDITIONS.forEach(cond => {
     document.querySelectorAll('.light-btn').forEach(b => b.classList.remove('active'));
     btn.classList.add('active');
     condLabel.textContent = cond.label;
-    render();
+    renderCalc();
   });
   lightGrid.appendChild(btn);
 });
-lightGrid.children[0].classList.add('active');
+document.querySelectorAll('.light-btn')[1].classList.add('active');
 condLabel.textContent = currentCondition.label;
 
 evSlider.addEventListener('input', () => {
-  // manual fine adjustment deselects preset highlight if moved away
   const nearest = LIGHT_CONDITIONS.reduce((prev, c) =>
     Math.abs(c.ev - evSlider.value) < Math.abs(prev.ev - evSlider.value) ? c : prev
   );
@@ -279,10 +585,10 @@ evSlider.addEventListener('input', () => {
     b.classList.toggle('active', LIGHT_CONDITIONS[i].key === nearest.key && Math.abs(nearest.ev - evSlider.value) < 0.3);
   });
   condLabel.textContent = nearest.label + (Math.abs(nearest.ev - evSlider.value) < 0.3 ? '' : ' (regolato)');
-  render();
+  renderCalc();
 });
 
-isoSel.addEventListener('change', render);
+isoSel.addEventListener('change', renderCalc);
 
 const STANDARD_SHUTTERS = [
   1/8000, 1/4000, 1/2000, 1/1000, 1/500, 1/250, 1/125, 1/60,
@@ -299,7 +605,7 @@ function formatShutter(t) {
   return '1/' + denom;
 }
 
-function render() {
+function renderCalc() {
   const iso = parseFloat(isoSel.value);
   const ev100 = parseFloat(evSlider.value);
   evLabel.textContent = ev100;
@@ -308,18 +614,296 @@ function render() {
   const evIso = ev100 - Math.log2(iso / 100);
 
   tableBody.innerHTML = '';
+  currentComputedRows = [];
   APERTURES.forEach(a => {
     let t = (a * a) / Math.pow(2, evIso);
     t = Math.max(1/8000, Math.min(60, t));
     const snapped = snapShutter(t);
+    const shutterText = formatShutter(snapped);
+    currentComputedRows.push({ aperture: a, shutterText });
+
     const tr = document.createElement('tr');
-    if (a === SUGGESTED_APERTURE) tr.className = 'suggested';
-    tr.innerHTML = `<td class="aperture-col">f/${a}</td><td>${formatShutter(snapped)}</td>`;
+    let cls = '';
+    if (a === SUGGESTED_APERTURE) cls += 'suggested ';
+    if (a === selectedAperture) cls += 'selected ';
+    tr.className = cls.trim();
+    tr.innerHTML = `<td class="aperture-col">f/${a}</td><td>${shutterText}</td>`;
+    tr.addEventListener('click', () => { selectedAperture = a; renderCalc(); });
     tableBody.appendChild(tr);
   });
 }
+renderCalc();
 
-render();
+/* ============ MANUAL DIALS ============ */
+const MAN_ISO = [25, 50, 100, 200, 400, 800, 1600, 3200, 6400, 12800];
+const MAN_APERTURES = [1.2, 1.4, 1.8, 2, 2.8, 4, 5.6, 8, 11, 16, 22, 32];
+const MAN_SHUTTERS = STANDARD_SHUTTERS; // stesso set, dal più rapido al più lento
+
+let manIsoIdx = MAN_ISO.indexOf(100);
+let manApIdx = MAN_APERTURES.indexOf(8);
+let manShIdx = MAN_SHUTTERS.indexOf(1/250);
+
+const manIsoVal = document.getElementById('manIsoVal');
+const manApVal = document.getElementById('manApVal');
+const manShVal = document.getElementById('manShVal');
+
+function renderManual() {
+  manIsoVal.textContent = MAN_ISO[manIsoIdx];
+  manApVal.textContent = 'f/' + MAN_APERTURES[manApIdx];
+  manShVal.textContent = formatShutter(MAN_SHUTTERS[manShIdx]);
+}
+renderManual();
+
+document.getElementById('isoMinus').addEventListener('click', () => { manIsoIdx = Math.max(0, manIsoIdx-1); renderManual(); });
+document.getElementById('isoPlus').addEventListener('click', () => { manIsoIdx = Math.min(MAN_ISO.length-1, manIsoIdx+1); renderManual(); });
+document.getElementById('apMinus').addEventListener('click', () => { manApIdx = Math.max(0, manApIdx-1); renderManual(); });
+document.getElementById('apPlus').addEventListener('click', () => { manApIdx = Math.min(MAN_APERTURES.length-1, manApIdx+1); renderManual(); });
+document.getElementById('shMinus').addEventListener('click', () => { manShIdx = Math.max(0, manShIdx-1); renderManual(); });
+document.getElementById('shPlus').addEventListener('click', () => { manShIdx = Math.min(MAN_SHUTTERS.length-1, manShIdx+1); renderManual(); });
+
+/* ============ TABS ============ */
+const tabCalc = document.getElementById('tabCalc');
+const tabManual = document.getElementById('tabManual');
+const tabCatalog = document.getElementById('tabCatalog');
+const calcView = document.getElementById('calcView');
+const manualView = document.getElementById('manualView');
+const catalogView = document.getElementById('catalogView');
+
+function setActiveTab(tab) {
+  [tabCalc, tabManual, tabCatalog].forEach(t => t.classList.remove('active'));
+  [calcView, manualView, catalogView].forEach(v => v.classList.add('hidden'));
+  if (tab === 'calc') { tabCalc.classList.add('active'); calcView.classList.remove('hidden'); }
+  if (tab === 'manual') { tabManual.classList.add('active'); manualView.classList.remove('hidden'); }
+  if (tab === 'catalog') { tabCatalog.classList.add('active'); catalogView.classList.remove('hidden'); showRollList(); }
+}
+tabCalc.addEventListener('click', () => setActiveTab('calc'));
+tabManual.addEventListener('click', () => setActiveTab('manual'));
+tabCatalog.addEventListener('click', () => setActiveTab('catalog'));
+
+/* ============ STORAGE ============ */
+const STORAGE_KEY = 'sunny16_catalog_v1';
+function loadCatalog() {
+  try { return JSON.parse(localStorage.getItem(STORAGE_KEY)) || {}; }
+  catch (e) { return {}; }
+}
+function saveCatalog(catalog) { localStorage.setItem(STORAGE_KEY, JSON.stringify(catalog)); }
+
+/* ============ SAVE MODAL (condiviso da Calcolatore e Manuale) ============ */
+const modalOverlay = document.getElementById('modalOverlay');
+const stringPreview = document.getElementById('stringPreview');
+const subjectInput = document.getElementById('subjectInput');
+const rollChoiceGrid = document.getElementById('rollChoiceGrid');
+const newRollInput = document.getElementById('newRollInput');
+const modalCancel = document.getElementById('modalCancel');
+const modalConfirm = document.getElementById('modalConfirm');
+
+function pad(n) { return n.toString().padStart(2, '0'); }
+
+function buildShotDataFromCalc() {
+  const now = new Date();
+  const iso = parseFloat(isoSel.value);
+  const row = currentComputedRows.find(r => r.aperture === selectedAperture);
+  const ev100 = parseFloat(evSlider.value);
+  return {
+    date: `${pad(now.getDate())}/${pad(now.getMonth()+1)}/${now.getFullYear()}`,
+    time: `${pad(now.getHours())}:${pad(now.getMinutes())}`,
+    iso, aperture: selectedAperture,
+    shutter: row ? row.shutterText : '--',
+    ev: ev100, light: currentCondition.label,
+    source: 'calc',
+  };
+}
+
+function buildShotDataFromManual() {
+  const now = new Date();
+  return {
+    date: `${pad(now.getDate())}/${pad(now.getMonth()+1)}/${now.getFullYear()}`,
+    time: `${pad(now.getHours())}:${pad(now.getMinutes())}`,
+    iso: MAN_ISO[manIsoIdx],
+    aperture: MAN_APERTURES[manApIdx],
+    shutter: formatShutter(MAN_SHUTTERS[manShIdx]),
+    source: 'manual',
+  };
+}
+
+function shotToString(shot, subject) {
+  const subj = subject && subject.trim() ? subject.trim() : '(senza nome)';
+  const base = `${shot.date} ${shot.time} — ${subj} — ISO ${shot.iso}, f/${shot.aperture}, ${shot.shutter}`;
+  return shot.source === 'calc' ? `${base}, EV ${shot.ev} (${shot.light})` : `${base} (manuale)`;
+}
+
+let pendingShot = null;
+let selectedRollName = null;
+
+function openSaveModal(shot) {
+  pendingShot = shot;
+  subjectInput.value = '';
+  stringPreview.textContent = shotToString(pendingShot, '');
+
+  const catalog = loadCatalog();
+  const rollNames = Object.keys(catalog);
+  selectedRollName = rollNames.length ? rollNames[rollNames.length - 1] : null;
+
+  rollChoiceGrid.innerHTML = '';
+  rollNames.forEach(name => {
+    const b = document.createElement('div');
+    b.className = 'roll-choice-btn' + (name === selectedRollName ? ' active' : '');
+    b.textContent = name;
+    b.addEventListener('click', () => {
+      selectedRollName = name;
+      newRollInput.classList.add('hidden');
+      newRollInput.value = '';
+      document.querySelectorAll('.roll-choice-btn').forEach(x => x.classList.remove('active'));
+      b.classList.add('active');
+    });
+    rollChoiceGrid.appendChild(b);
+  });
+
+  const newBtn = document.createElement('div');
+  newBtn.className = 'roll-choice-btn';
+  newBtn.textContent = '+ Nuovo rullino';
+  newBtn.addEventListener('click', () => {
+    selectedRollName = null;
+    document.querySelectorAll('.roll-choice-btn').forEach(x => x.classList.remove('active'));
+    newBtn.classList.add('active');
+    newRollInput.classList.remove('hidden');
+    const nextNum = rollNames.length + 1;
+    newRollInput.value = `Rullino ${nextNum}`;
+    newRollInput.focus();
+    newRollInput.select();
+  });
+  rollChoiceGrid.appendChild(newBtn);
+
+  if (rollNames.length === 0) {
+    newRollInput.classList.remove('hidden');
+    newRollInput.value = 'Rullino 1';
+    newBtn.classList.add('active');
+  } else {
+    newRollInput.classList.add('hidden');
+  }
+
+  modalOverlay.classList.remove('hidden');
+}
+
+document.getElementById('saveCalcBtn').addEventListener('click', () => openSaveModal(buildShotDataFromCalc()));
+document.getElementById('saveManualBtn').addEventListener('click', () => openSaveModal(buildShotDataFromManual()));
+
+subjectInput.addEventListener('input', () => {
+  if (pendingShot) stringPreview.textContent = shotToString(pendingShot, subjectInput.value);
+});
+
+modalCancel.addEventListener('click', () => {
+  modalOverlay.classList.add('hidden');
+  pendingShot = null;
+});
+
+modalConfirm.addEventListener('click', () => {
+  const rollName = (selectedRollName === null)
+    ? (newRollInput.value.trim() || 'Rullino 1')
+    : selectedRollName;
+  const subject = subjectInput.value.trim();
+  if (!pendingShot) return;
+
+  const catalog = loadCatalog();
+  if (!catalog[rollName]) catalog[rollName] = [];
+  catalog[rollName].push({ ...pendingShot, subject });
+  saveCatalog(catalog);
+
+  modalOverlay.classList.add('hidden');
+  pendingShot = null;
+});
+
+/* ============ CATALOG VIEW ============ */
+const rollListWrap = document.getElementById('rollListWrap');
+const rollDetailWrap = document.getElementById('rollDetailWrap');
+
+function showRollList() {
+  rollDetailWrap.classList.add('hidden');
+  rollListWrap.classList.remove('hidden');
+  rollListWrap.innerHTML = '';
+
+  const catalog = loadCatalog();
+  const names = Object.keys(catalog);
+
+  if (names.length === 0) {
+    rollListWrap.innerHTML = `<div class="empty-state">Nessun rullino ancora.<br>Vai su "Calcolatore" o "Manuale", imposta i parametri e tocca "Salva scatto" per iniziare il tuo primo rullino.</div>`;
+    return;
+  }
+
+  names.forEach(name => {
+    const shots = catalog[name];
+    const card = document.createElement('div');
+    card.className = 'roll-card';
+    card.innerHTML = `
+      <div>
+        <div class="name">${name}</div>
+        <div class="count">${shots.length} scatt${shots.length === 1 ? 'o' : 'i'}</div>
+      </div>
+      <div class="chevron">›</div>
+    `;
+    card.addEventListener('click', () => showRollDetail(name));
+    rollListWrap.appendChild(card);
+  });
+}
+
+function showRollDetail(rollName) {
+  rollListWrap.classList.add('hidden');
+  rollDetailWrap.classList.remove('hidden');
+  rollDetailWrap.innerHTML = '';
+
+  const header = document.createElement('div');
+  header.className = 'detail-header';
+  header.innerHTML = `
+    <div class="back-btn" id="backBtn">‹ Rullini</div>
+    <div class="detail-title">${rollName}</div>
+    <div class="delete-roll-btn" id="deleteRollBtn">Elimina rullino</div>
+  `;
+  rollDetailWrap.appendChild(header);
+
+  header.querySelector('#backBtn').addEventListener('click', showRollList);
+  header.querySelector('#deleteRollBtn').addEventListener('click', () => {
+    const catalog = loadCatalog();
+    delete catalog[rollName];
+    saveCatalog(catalog);
+    showRollList();
+  });
+
+  const catalog = loadCatalog();
+  const shots = catalog[rollName] || [];
+
+  if (shots.length === 0) {
+    const empty = document.createElement('div');
+    empty.className = 'empty-state';
+    empty.textContent = 'Nessuno scatto in questo rullino.';
+    rollDetailWrap.appendChild(empty);
+    return;
+  }
+
+  shots.slice().reverse().forEach((shot, revIdx) => {
+    const realIdx = shots.length - 1 - revIdx;
+    const card = document.createElement('div');
+    card.className = 'shot-card';
+    const srcLine = shot.source === 'calc'
+      ? `EV ${shot.ev} (${shot.light})`
+      : 'impostato manualmente';
+    card.innerHTML = `
+      <div class="shot-delete" data-idx="${realIdx}">✕</div>
+      <div class="subject">${shot.subject && shot.subject.trim() ? shot.subject : '(senza nome)'}</div>
+      <div class="datetime">${shot.date} · ${shot.time}</div>
+      <div class="params">ISO ${shot.iso} · f/${shot.aperture} · ${shot.shutter}</div>
+      <div class="src-tag">${srcLine}</div>
+    `;
+    card.querySelector('.shot-delete').addEventListener('click', (e) => {
+      e.stopPropagation();
+      const idx = parseInt(e.target.getAttribute('data-idx'), 10);
+      const cat = loadCatalog();
+      cat[rollName].splice(idx, 1);
+      saveCatalog(cat);
+      showRollDetail(rollName);
+    });
+    rollDetailWrap.appendChild(card);
+  });
+}
 </script>
 
 </body>
