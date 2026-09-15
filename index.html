@@ -685,7 +685,30 @@ function renderCalc() {
   if (selectedAperture === null || !apOptions.includes(selectedAperture)) {
     selectedAperture = nearestIn(apOptions, RECOMMENDED_APERTURE_TARGET);
   }
-  const recommendedAperture = nearestIn(apOptions, RECOMMENDED_APERTURE_TARGET);
+
+  // 1) calcola il tempo ideale (non arrotondato) per ogni diaframma e quanto "sfora" i limiti della fotocamera
+  const idealData = apOptions.map((a, idx) => {
+    const idealT = (a * a) / Math.pow(2, evIso);
+    let violationStops = 0; // quanti stop fuori dal range sicuro della fotocamera
+    if (cameraProfile.configured) {
+      if (idealT < cameraProfile.shFastest - 1e-9) {
+        violationStops = Math.log2(cameraProfile.shFastest / idealT); // sovraesposizione
+      } else if (idealT > 30 && !cameraProfile.hasBulb) {
+        violationStops = Math.log2(idealT / 30); // sottoesposizione, niente posa B
+      }
+    }
+    return { a, idx, idealT, violationStops };
+  });
+
+  // 2) il consigliato è quello che espone correttamente (violationStops minimo);
+  //    a parità, il più vicino a f/8 per versatilità generale
+  const best = idealData.reduce((best, cur) => {
+    if (cur.violationStops < best.violationStops - 1e-9) return cur;
+    if (Math.abs(cur.violationStops - best.violationStops) < 1e-9 &&
+        Math.abs(cur.a - RECOMMENDED_APERTURE_TARGET) < Math.abs(best.a - RECOMMENDED_APERTURE_TARGET)) return cur;
+    return best;
+  }, idealData[0]);
+  const recommendedAperture = best.a;
   const recIdx = apOptions.indexOf(recommendedAperture);
 
   // calcola tutte le righe (dati), poi decide quali mostrare
