@@ -112,7 +112,12 @@
   td { padding: 9px 6px; text-align: center; border-top: 1px solid #24252a33; }
   tbody tr { cursor: pointer; }
   tr.selected td { background: rgba(78,161,242,0.16); color: var(--accent2); font-weight: 700; }
+  tr.rec-main td { background: rgba(80,200,120,0.22); color: #4fd17a; font-weight: 800; }
+  tr.rec-near1 td { background: rgba(80,200,120,0.12); }
+  tr.rec-near2 td { background: rgba(80,200,120,0.06); }
+  tr.selected.rec-main td, tr.selected.rec-near1 td, tr.selected.rec-near2 td { background: rgba(78,161,242,0.16); color: var(--accent2); }
   .aperture-col { color: var(--accent2); font-weight: 600; }
+  .rec-badge { font-size: 0.6rem; background: rgba(80,200,120,0.25); color: #4fd17a; border-radius: 5px; padding: 1px 5px; margin-left: 5px; font-weight: 700; }
   .mark {
     display: inline-flex; align-items: center; justify-content: center;
     width: 20px; height: 20px; border-radius: 50%; margin-left: 5px;
@@ -231,12 +236,12 @@
 <body>
 
 <div class="top-row">
-  <div class="icon-btn" id="cameraBtn">📷</div>
+  <div class="icon-btn" style="visibility:hidden;">⚙️</div>
   <h1 id="appTitle">📷 Sunny 16 Film</h1>
   <div class="icon-btn" id="appSettingsBtn">⚙️</div>
 </div>
 <div class="subtitle" id="subtitleText"></div>
-<div class="camera-chip" id="cameraChip"></div>
+<div class="camera-chip" id="cameraChip" style="cursor:pointer;"></div>
 
 <div class="tabs">
   <div class="tab-btn active" id="tabCalc"></div>
@@ -281,6 +286,7 @@
       <tbody id="tableBody"></tbody>
     </table>
     <div class="table-hint" id="tableHint"></div>
+    <div class="table-hint" id="expandBtn" style="cursor:pointer; font-weight:700; color:var(--accent2);"></div>
   </div>
 
   <div class="reminder-badge">
@@ -606,6 +612,8 @@ function condLabelOf(cond) { return cond[LANG]; }
 let selectedAperture = null;
 let currentComputedRows = [];
 let currentCondition = LIGHT_CONDITIONS[1];
+let tableExpanded = false;
+const RECOMMENDED_APERTURE_TARGET = 8; // punto di partenza per il "consigliato"
 
 const isoSel = document.getElementById('iso');
 const lightGrid = document.getElementById('lightGrid');
@@ -646,6 +654,8 @@ evSlider.addEventListener('input', () => {
 });
 isoSel.addEventListener('change', renderCalc);
 
+const expandBtn = document.getElementById('expandBtn');
+
 function renderCalc() {
   const iso = parseFloat(isoSel.value);
   const ev100 = parseFloat(evSlider.value);
@@ -659,17 +669,17 @@ function renderCalc() {
   const handheldThreshold = 1 / focalLen;
 
   if (selectedAperture === null || !apOptions.includes(selectedAperture)) {
-    selectedAperture = nearestIn(apOptions, 8);
+    selectedAperture = nearestIn(apOptions, RECOMMENDED_APERTURE_TARGET);
   }
+  const recommendedAperture = nearestIn(apOptions, RECOMMENDED_APERTURE_TARGET);
+  const recIdx = apOptions.indexOf(recommendedAperture);
 
-  tableBody.innerHTML = '';
-  currentComputedRows = [];
-
-  apOptions.forEach(a => {
+  // calcola tutte le righe (dati), poi decide quali mostrare
+  const allRows = apOptions.map((a, idx) => {
     const idealT = (a * a) / Math.pow(2, evIso);
     const snapped = nearestIn(shPool, Math.max(1/8000, Math.min(60, idealT)));
     const shutterText = formatShutter(snapped);
-    let mark = null; // {type, text}
+    let mark = null;
 
     if (cameraProfile.configured) {
       if (idealT < cameraProfile.shFastest - 1e-9) {
@@ -683,21 +693,47 @@ function renderCalc() {
     if (!mark && a === selectedAperture && snapped > handheldThreshold && snapped <= 30) {
       mark = { type: 'shake', text: noteShake(shutterText, a, focalLen) };
     }
+    const distFromRec = Math.abs(idx - recIdx);
+    return { aperture: a, shutterText, mark, distFromRec, idx };
+  });
+  currentComputedRows = allRows;
 
-    currentComputedRows.push({ aperture: a, shutterText, mark });
+  const visibleRows = tableExpanded ? allRows : allRows.filter(r => r.distFromRec <= 2);
 
+  tableBody.innerHTML = '';
+  visibleRows.forEach(r => {
+    const { aperture: a, shutterText, mark, distFromRec } = r;
     const tr = document.createElement('tr');
-    tr.className = (a === selectedAperture) ? 'selected' : '';
+    let cls = [];
+    if (a === selectedAperture) cls.push('selected');
+    if (distFromRec === 0) cls.push('rec-main');
+    else if (distFromRec === 1) cls.push('rec-near1');
+    else if (distFromRec === 2) cls.push('rec-near2');
+    tr.className = cls.join(' ');
+
     const iconEmoji = mark ? (mark.type === 'warn' ? '⚠️' : mark.type === 'info' ? 'ℹ️' : '🫳') : '';
     const iconClass = mark ? (mark.type === 'warn' ? 'mk-warn' : mark.type === 'info' ? 'mk-info' : 'mk-shake') : '';
-    tr.innerHTML = `<td class="aperture-col">f/${a}</td><td>${shutterText}${mark ? `<span class="mark ${iconClass}" data-note>${iconEmoji}</span>` : ''}</td>`;
+    const badge = distFromRec === 0 ? `<span class="rec-badge">${LANG === 'it' ? 'CONSIGLIATO' : 'RECOMMENDED'}</span>` : '';
+    tr.innerHTML = `<td class="aperture-col">f/${a}${badge}</td><td>${shutterText}${mark ? `<span class="mark ${iconClass}" data-note>${iconEmoji}</span>` : ''}</td>`;
     tr.addEventListener('click', () => { selectedAperture = a; renderCalc(); });
     if (mark) {
       tr.querySelector('[data-note]').addEventListener('click', (e) => { e.stopPropagation(); openNotePopup(mark.text); });
     }
     tableBody.appendChild(tr);
   });
+
+  const hiddenCount = allRows.length - visibleRows.length;
+  if (!tableExpanded && hiddenCount > 0) {
+    expandBtn.textContent = (LANG === 'it' ? `Mostra tutte le combinazioni (+${hiddenCount}) ▾` : `Show all combinations (+${hiddenCount}) ▾`);
+    expandBtn.classList.remove('hidden');
+  } else if (tableExpanded) {
+    expandBtn.textContent = (LANG === 'it' ? 'Mostra meno ▴' : 'Show less ▴');
+    expandBtn.classList.remove('hidden');
+  } else {
+    expandBtn.classList.add('hidden');
+  }
 }
+expandBtn.addEventListener('click', () => { tableExpanded = !tableExpanded; renderCalc(); });
 
 /* ============ MANUALE: ROTELLE ============ */
 function createWheel(containerId, values, formatFn, initialValue, onChange) {
@@ -861,7 +897,7 @@ tabDof.addEventListener('click', () => setActiveTab('dof'));
 tabCatalog.addEventListener('click', () => setActiveTab('catalog'));
 
 /* ============ CAMERA SETTINGS MODAL ============ */
-const cameraBtn = document.getElementById('cameraBtn');
+const cameraChipEl = document.getElementById('cameraChip');
 const cameraModalOverlay = document.getElementById('cameraModalOverlay');
 const apMinInput = document.getElementById('apMinInput');
 const apMaxInput = document.getElementById('apMaxInput');
@@ -886,7 +922,7 @@ function openCameraModal() {
   focalLengthInput.value = cameraProfile.focalLength;
   cameraModalOverlay.classList.remove('hidden');
 }
-cameraBtn.addEventListener('click', openCameraModal);
+cameraChipEl.addEventListener('click', openCameraModal);
 
 function applyProfileEverywhere() {
   updateCameraChip();
