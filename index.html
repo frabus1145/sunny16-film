@@ -15,72 +15,39 @@
 <meta name="theme-color" content="#0b0b0d">
 <style>
   :root {
-    --bg: #0b0b0d;
-    --panel: #17181b;
-    --accent: #f2c14e;
-    --accent2: #4ea1f2;
-    --text: #eaeaea;
-    --muted: #8b8d93;
-    --danger: #f26b4e;
+    --bg: #0b0b0d; --panel: #17181b; --accent: #f2c14e; --accent2: #4ea1f2;
+    --text: #eaeaea; --muted: #8b8d93; --danger: #f26b4e;
   }
   body.theme-light {
-    --bg: #f3f2ee;
-    --panel: #ffffff;
-    --text: #17181b;
-    --muted: #6b6d73;
-    --accent: #b8790f;
-    --accent2: #1f66a8;
-    --danger: #c0392b;
+    --bg: #f3f2ee; --panel: #ffffff; --text: #17181b; --muted: #6b6d73;
+    --accent: #b8790f; --accent2: #1f66a8; --danger: #c0392b;
   }
   * { box-sizing: border-box; }
   body {
-    margin: 0;
-    background: var(--bg);
-    color: var(--text);
+    margin: 0; background: var(--bg); color: var(--text);
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 16px;
-    padding-top: calc(env(safe-area-inset-top, 20px) + 26px);
-    padding-bottom: 40px;
+    min-height: 100vh; display: flex; flex-direction: column; align-items: center;
+    padding: 16px; padding-top: calc(env(safe-area-inset-top, 20px) + 26px); padding-bottom: 40px;
   }
-  .top-row {
-    width: 100%; max-width: 420px; display: flex; justify-content: space-between;
-    align-items: center; margin-bottom: 2px; gap: 8px;
-  }
+  .top-row { width: 100%; max-width: 420px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 2px; gap: 8px; }
   h1 { font-size: 1.05rem; font-weight: 600; margin: 4px 0 2px; color: var(--accent); text-align: center; flex: 1; }
   .icon-btn {
     width: 38px; height: 38px; border-radius: 50%; flex-shrink: 0;
     background: var(--panel); border: 1px solid #24252a33;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 1.05rem; cursor: pointer;
+    display: flex; align-items: center; justify-content: center; font-size: 1.05rem; cursor: pointer;
   }
   .subtitle { color: var(--muted); font-size: 0.8rem; margin-bottom: 14px; text-align: center; max-width: 420px; }
   .camera-chip {
     font-size: 0.7rem; color: var(--accent2); background: rgba(78,161,242,0.1);
     border: 1px solid rgba(78,161,242,0.3); border-radius: 8px; padding: 4px 10px;
-    margin-bottom: 12px; text-align: center;
+    margin-bottom: 12px; text-align: center; cursor: pointer;
   }
-
-  .tabs {
-    display: flex; width: 100%; max-width: 420px; background: var(--panel);
-    border-radius: 12px; padding: 4px; margin-bottom: 16px; border: 1px solid #24252a33;
-  }
-  .tab-btn {
-    flex: 1; text-align: center; padding: 9px 1px; font-size: 0.68rem; font-weight: 600;
-    color: var(--muted); border-radius: 9px; cursor: pointer; line-height: 1.2;
-  }
+  .tabs { display: flex; width: 100%; max-width: 420px; background: var(--panel); border-radius: 12px; padding: 4px; margin-bottom: 16px; border: 1px solid #24252a33; }
+  .tab-btn { flex: 1; text-align: center; padding: 9px 1px; font-size: 0.68rem; font-weight: 600; color: var(--muted); border-radius: 9px; cursor: pointer; line-height: 1.2; }
   .tab-btn.active { background: rgba(242,193,78,0.14); color: var(--accent); }
-
   .view { width: 100%; max-width: 420px; display: flex; flex-direction: column; align-items: center; }
   .hidden { display: none !important; }
-
-  .panel {
-    width: 100%; max-width: 420px; background: var(--panel);
-    border-radius: 14px; padding: 16px; border: 1px solid #24252a33; margin-bottom: 14px;
-  }
+  .panel { width: 100%; max-width: 420px; background: var(--panel); border-radius: 14px; padding: 16px; border: 1px solid #24252a33; margin-bottom: 14px; }
   .row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
   .row:last-child { margin-bottom: 0; }
   label { font-size: 0.85rem; color: var(--muted); font-weight: 600; }
@@ -90,25 +57,15 @@
   }
   input[type=text] { margin-left: 0; width: 100%; }
   .light-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; margin-top: 4px; }
-  .light-btn {
-    background: var(--bg); border: 1px solid #2f303680; color: var(--text);
-    padding: 8px 4px; border-radius: 10px; font-size: 0.7rem; text-align: center; cursor: pointer; line-height: 1.25;
-  }
+  .light-btn { background: var(--bg); border: 1px solid #2f303680; color: var(--text); padding: 8px 4px; border-radius: 10px; font-size: 0.7rem; text-align: center; cursor: pointer; line-height: 1.25; }
   .light-btn .emoji { font-size: 1.1rem; display: block; margin-bottom: 2px; }
   .light-btn.active { border-color: var(--accent); background: rgba(242,193,78,0.12); color: var(--accent); }
   .ev-fine { margin-top: 14px; }
   .ev-fine-label { display: flex; justify-content: space-between; font-size: 0.75rem; color: var(--muted); margin-bottom: 6px; }
   input[type=range] { width: 100%; accent-color: var(--accent); }
-
-  .table-wrap {
-    width: 100%; max-width: 420px; background: var(--panel);
-    border-radius: 14px; border: 1px solid #24252a33; overflow: hidden; margin-bottom: 10px;
-  }
+  .table-wrap { width: 100%; max-width: 420px; background: var(--panel); border-radius: 14px; border: 1px solid #24252a33; overflow: hidden; margin-bottom: 10px; }
   table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
-  th {
-    background: var(--bg); color: var(--muted); font-size: 0.7rem; text-transform: uppercase;
-    letter-spacing: 0.04em; padding: 9px 6px; text-align: center; font-weight: 600;
-  }
+  th { background: var(--bg); color: var(--muted); font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.04em; padding: 9px 6px; text-align: center; font-weight: 600; }
   td { padding: 9px 6px; text-align: center; border-top: 1px solid #24252a33; }
   tbody tr { cursor: pointer; }
   tr.selected td { background: rgba(78,161,242,0.16); color: var(--accent2); font-weight: 700; }
@@ -118,63 +75,43 @@
   tr.selected.rec-main td, tr.selected.rec-near1 td, tr.selected.rec-near2 td { background: rgba(78,161,242,0.16); color: var(--accent2); }
   .aperture-col { color: var(--accent2); font-weight: 600; }
   .rec-badge { font-size: 0.6rem; background: rgba(80,200,120,0.25); color: #4fd17a; border-radius: 5px; padding: 1px 5px; margin-left: 5px; font-weight: 700; }
-  .mark {
-    display: inline-flex; align-items: center; justify-content: center;
-    width: 20px; height: 20px; border-radius: 50%; margin-left: 5px;
-    font-size: 0.72rem; cursor: pointer; vertical-align: middle;
-  }
+  .mark { display: inline-flex; align-items: center; justify-content: center; width: 20px; height: 20px; border-radius: 50%; margin-left: 5px; font-size: 0.72rem; cursor: pointer; vertical-align: middle; }
   .mark.mk-warn { background: rgba(242,107,78,0.16); }
   .mark.mk-info { background: rgba(78,161,242,0.16); }
   .mark.mk-shake { background: rgba(242,193,78,0.16); }
   .table-hint { text-align: center; font-size: 0.68rem; color: var(--muted); padding: 7px 10px; border-top: 1px solid #24252a33; }
-
-  .reminder-badge {
-    width: 100%; max-width: 420px; background: rgba(242,193,78,0.1);
-    border: 1.5px solid rgba(242,193,78,0.45); border-radius: 12px;
-    padding: 10px 14px; margin-bottom: 14px; display: flex; align-items: center; gap: 10px;
-  }
+  .reminder-badge { width: 100%; max-width: 420px; background: rgba(242,193,78,0.1); border: 1.5px solid rgba(242,193,78,0.45); border-radius: 12px; padding: 10px 14px; margin-bottom: 14px; display: flex; align-items: center; gap: 10px; }
   .reminder-badge .ricon { font-size: 1.1rem; flex-shrink: 0; }
   .reminder-badge .rtext { font-size: 0.76rem; color: var(--text); font-weight: 600; line-height: 1.4; }
-
-  .save-btn {
-    width: 100%; max-width: 420px; background: var(--accent); color: #1a1a1a;
-    border: none; padding: 13px 0; border-radius: 12px; font-weight: 700; font-size: 0.95rem;
-    cursor: pointer; margin-bottom: 14px;
-  }
+  .save-btn { width: 100%; max-width: 420px; background: var(--accent); color: #1a1a1a; border: none; padding: 13px 0; border-radius: 12px; font-weight: 700; font-size: 0.95rem; cursor: pointer; margin-bottom: 14px; }
   .save-btn:active { transform: scale(0.98); }
-
-  .mini-alert {
-    width: 100%; max-width: 420px; display: flex; align-items: center; gap: 8px;
-    background: rgba(242,193,78,0.1); border: 1px solid rgba(242,193,78,0.35);
-    border-radius: 10px; padding: 8px 12px; margin-bottom: 10px; cursor: pointer;
-    font-size: 0.76rem; font-weight: 600; color: var(--text);
-  }
-
+  .save-btn:disabled { opacity: 0.5; }
+  .mini-alert { width: 100%; max-width: 420px; display: flex; align-items: center; gap: 8px; background: rgba(242,193,78,0.1); border: 1px solid rgba(242,193,78,0.35); border-radius: 10px; padding: 8px 12px; margin-bottom: 10px; cursor: pointer; font-size: 0.76rem; font-weight: 600; color: var(--text); }
   .warning { max-width: 420px; font-size: 0.7rem; color: var(--muted); text-align: center; margin-top: 4px; line-height: 1.4; padding: 0 8px; }
 
-  /* Wheel pickers */
   .wheel-cluster { display: flex; gap: 10px; width: 100%; max-width: 420px; margin-bottom: 10px; }
   .wheel-col { flex: 1; display: flex; flex-direction: column; align-items: center; }
   .wheel-label { font-size: 0.68rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.06em; font-weight: 700; margin-bottom: 8px; }
-  .wheel-frame { position: relative; width: 100%; height: 190px; background: var(--panel); border: 1px solid #24252a33; border-radius: 14px; overflow: hidden; }
-  .wheel-highlight {
-    position: absolute; left: 6px; right: 6px; top: 75px; height: 40px;
-    background: rgba(242,193,78,0.12); border-top: 1px solid rgba(242,193,78,0.4);
-    border-bottom: 1px solid rgba(242,193,78,0.4); border-radius: 8px; pointer-events: none; z-index: 2;
-  }
-  .wheel-fade-top, .wheel-fade-bottom { position: absolute; left: 0; right: 0; height: 50px; pointer-events: none; z-index: 3; }
+  .wheel-frame { position: relative; width: 100%; height: 170px; background: var(--panel); border: 1px solid #24252a33; border-radius: 14px; overflow: hidden; }
+  .wheel-highlight { position: absolute; left: 6px; right: 6px; top: 65px; height: 40px; background: rgba(242,193,78,0.12); border-top: 1px solid rgba(242,193,78,0.4); border-bottom: 1px solid rgba(242,193,78,0.4); border-radius: 8px; pointer-events: none; z-index: 2; }
+  .wheel-fade-top, .wheel-fade-bottom { position: absolute; left: 0; right: 0; height: 45px; pointer-events: none; z-index: 3; }
   .wheel-fade-top { top: 0; background: linear-gradient(to bottom, var(--panel), transparent); }
   .wheel-fade-bottom { bottom: 0; background: linear-gradient(to top, var(--panel), transparent); }
   .wheel-scroll { height: 100%; overflow-y: scroll; scroll-snap-type: y mandatory; -webkit-overflow-scrolling: touch; scrollbar-width: none; }
   .wheel-scroll::-webkit-scrollbar { display: none; }
-  .wheel-item {
-    height: 40px; display: flex; align-items: center; justify-content: center;
-    scroll-snap-align: center; font-size: 0.92rem; color: var(--muted);
-    font-family: ui-monospace, "SF Mono", monospace;
-  }
-  .wheel-item.center-active { color: var(--accent2); font-weight: 800; font-size: 1.1rem; }
+  .wheel-item { height: 40px; display: flex; align-items: center; justify-content: center; scroll-snap-align: center; font-size: 0.88rem; color: var(--muted); font-family: ui-monospace, "SF Mono", monospace; }
+  .wheel-item.center-active { color: var(--accent2); font-weight: 800; font-size: 1.05rem; }
 
-  /* DOF view */
+  .viewfinder-box { position: relative; width: 100%; max-width: 420px; aspect-ratio: 1/1; background: #000; border-radius: 16px; overflow: hidden; margin-bottom: 12px; border: 1px solid #24252a33; }
+  .viewfinder-box video, .viewfinder-box img { width: 100%; height: 100%; object-fit: cover; }
+  .cam-placeholder { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px; color: var(--muted); }
+  .cam-placeholder .cam-emoji { font-size: 2rem; }
+  .cam-activate-btn { background: var(--accent); color: #1a1a1a; padding: 10px 20px; border-radius: 999px; font-weight: 700; font-size: 0.85rem; cursor: pointer; }
+  .viewfinder-controls { position: absolute; bottom: 14px; left: 0; right: 0; display: flex; align-items: center; justify-content: center; gap: 24px; }
+  .cam-shutter-btn { width: 62px; height: 62px; border-radius: 50%; background: #fff; border: 4px solid rgba(255,255,255,0.4); cursor: pointer; }
+  .cam-shutter-btn:active { background: #ddd; }
+  .cam-retake-btn { width: 42px; height: 42px; border-radius: 50%; background: rgba(0,0,0,0.55); color: #fff; display: flex; align-items: center; justify-content: center; font-size: 1.1rem; cursor: pointer; }
+
   .dof-result { width: 100%; max-width: 420px; background: var(--panel); border: 1px solid #24252a33; border-radius: 14px; padding: 18px; margin-bottom: 14px; text-align: center; }
   .dof-result .hyperfocal { font-size: 0.72rem; color: var(--muted); margin-bottom: 10px; }
   .dof-result .hyperfocal b { color: var(--accent); }
@@ -186,27 +123,15 @@
   .dof-sentence { font-size: 0.82rem; color: var(--text); line-height: 1.5; padding-top: 10px; border-top: 1px solid #24252a33; }
   .dof-sentence b { color: var(--accent); }
 
-  /* Modal */
   .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.65); display: flex; align-items: flex-end; justify-content: center; z-index: 100; }
-  .modal-card {
-    width: 100%; max-width: 420px; background: var(--panel); border: 1px solid #2a2b2f33;
-    border-radius: 18px 18px 0 0; padding: 18px; padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 28px); max-height: 85vh; overflow-y: auto;
-  }
+  .modal-card { width: 100%; max-width: 420px; background: var(--panel); border: 1px solid #2a2b2f33; border-radius: 18px 18px 0 0; padding: 18px; padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 28px); max-height: 85vh; overflow-y: auto; }
   .modal-card h3 { margin: 0 0 12px; font-size: 1rem; color: var(--accent); }
   .modal-title-row { display: flex; justify-content: space-between; align-items: center; }
   .modal-title-row h3 { margin: 0; }
-  .modal-x {
-    width: 30px; height: 30px; border-radius: 50%; background: rgba(128,128,128,0.15);
-    display: flex; align-items: center; justify-content: center; font-size: 0.95rem;
-    color: var(--muted); cursor: pointer; flex-shrink: 0; margin-bottom: 12px;
-  }
+  .modal-x { width: 30px; height: 30px; border-radius: 50%; background: rgba(128,128,128,0.15); display: flex; align-items: center; justify-content: center; font-size: 0.95rem; color: var(--muted); cursor: pointer; flex-shrink: 0; margin-bottom: 12px; }
   .modal-card .hint { font-size: 0.72rem; color: var(--muted); margin: -6px 0 14px; line-height: 1.4; }
-  .string-preview {
-    background: var(--bg); border: 1px solid #2f303680; border-radius: 10px; padding: 10px 12px;
-    font-family: ui-monospace, "SF Mono", monospace; font-size: 0.75rem; color: var(--accent2);
-    margin-bottom: 14px; line-height: 1.5; word-break: break-word;
-  }
-  .modal-field { margin-bottom: 12px; }
+  .string-preview { background: var(--bg); border: 1px solid #2f303680; border-radius: 10px; padding: 10px 12px; font-family: ui-monospace, "SF Mono", monospace; font-size: 0.75rem; color: var(--accent2); margin-bottom: 14px; line-height: 1.5; word-break: break-word; }
+  .modal-field { margin-bottom: 14px; }
   .modal-field label { display: block; margin-bottom: 5px; font-size: 0.78rem; }
   .roll-choice-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 10px; }
   .roll-choice-btn { background: var(--bg); border: 1px solid #2f303680; color: var(--text); padding: 9px 4px; border-radius: 9px; font-size: 0.78rem; text-align: center; cursor: pointer; }
@@ -219,11 +144,20 @@
   .checkbox-row input { width: 18px; height: 18px; accent-color: var(--accent); }
   .checkbox-row label { flex: 1; margin: 0; }
 
-  /* Catalog view */
-  .roll-card {
-    width: 100%; background: var(--panel); border: 1px solid #24252a33; border-radius: 14px;
-    padding: 14px 16px; margin-bottom: 10px; cursor: pointer; display: flex; justify-content: space-between; align-items: center;
-  }
+  .chip-grid { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 10px; }
+  .chip { background: var(--bg); border: 1px solid #2f303680; color: var(--muted); padding: 6px 11px; border-radius: 999px; font-size: 0.78rem; cursor: pointer; font-family: ui-monospace, monospace; }
+  .chip.active { border-color: var(--accent); background: rgba(242,193,78,0.14); color: var(--accent); font-weight: 700; }
+  .custom-add-row { display: flex; gap: 8px; margin-bottom: 4px; }
+  .custom-add-row input { margin-left: 0; }
+  .custom-add-btn { background: rgba(78,161,242,0.15); color: var(--accent2); border: 1px solid rgba(78,161,242,0.35); border-radius: 8px; padding: 0 14px; font-size: 0.8rem; font-weight: 700; cursor: pointer; white-space: nowrap; }
+
+  .tip-item { display: flex; gap: 10px; margin-bottom: 16px; align-items: flex-start; }
+  .tip-item:last-child { margin-bottom: 0; }
+  .tip-item .tip-emoji { font-size: 1.3rem; flex-shrink: 0; }
+  .tip-item .tip-title { font-weight: 700; font-size: 0.85rem; color: var(--accent); margin-bottom: 3px; }
+  .tip-item .tip-text { font-size: 0.8rem; color: var(--text); line-height: 1.45; }
+
+  .roll-card { width: 100%; background: var(--panel); border: 1px solid #24252a33; border-radius: 14px; padding: 14px 16px; margin-bottom: 10px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; }
   .roll-card .name { font-weight: 700; font-size: 0.95rem; }
   .roll-card .count { color: var(--muted); font-size: 0.78rem; margin-top: 2px; }
   .roll-card .chevron { color: var(--muted); font-size: 1.1rem; }
@@ -232,7 +166,9 @@
   .back-btn { background: var(--panel); border: 1px solid #24252a33; color: var(--accent); padding: 8px 12px; border-radius: 10px; font-size: 0.85rem; cursor: pointer; }
   .detail-title { font-weight: 700; font-size: 1rem; flex: 1; }
   .delete-roll-btn { color: var(--danger); font-size: 0.75rem; cursor: pointer; padding: 6px 8px; }
-  .shot-card { width: 100%; background: var(--panel); border: 1px solid #24252a33; border-radius: 12px; padding: 12px 14px; margin-bottom: 8px; position: relative; }
+  .shot-card { width: 100%; background: var(--panel); border: 1px solid #24252a33; border-radius: 12px; padding: 12px 14px; margin-bottom: 8px; position: relative; display: flex; gap: 10px; }
+  .shot-card .shot-photo { width: 56px; height: 56px; border-radius: 10px; object-fit: cover; flex-shrink: 0; }
+  .shot-card .shot-info { flex: 1; min-width: 0; }
   .shot-card .subject { font-weight: 700; font-size: 0.9rem; margin-bottom: 2px; }
   .shot-card .datetime { color: var(--muted); font-size: 0.72rem; margin-bottom: 6px; }
   .shot-card .params { font-family: ui-monospace, "SF Mono", monospace; font-size: 0.78rem; color: var(--accent2); }
@@ -243,12 +179,12 @@
 <body>
 
 <div class="top-row">
-  <div class="icon-btn" style="visibility:hidden;">⚙️</div>
+  <div class="icon-btn" id="tipsBtn">❓</div>
   <h1 id="appTitle">📷 Sunny 16 Film</h1>
   <div class="icon-btn" id="appSettingsBtn">⚙️</div>
 </div>
 <div class="subtitle" id="subtitleText"></div>
-<div class="camera-chip" id="cameraChip" style="cursor:pointer;"></div>
+<div class="camera-chip" id="cameraChip"></div>
 
 <div class="tabs">
   <div class="tab-btn active" id="tabCalc"></div>
@@ -263,14 +199,9 @@
     <div class="row">
       <label>ISO</label>
       <select id="iso">
-        <option value="50">50</option>
-        <option value="100" selected>100</option>
-        <option value="200">200</option>
-        <option value="400">400</option>
-        <option value="800">800</option>
-        <option value="1600">1600</option>
-        <option value="3200">3200</option>
-        <option value="6400">6400</option>
+        <option value="50">50</option><option value="100" selected>100</option><option value="200">200</option>
+        <option value="400">400</option><option value="800">800</option><option value="1600">1600</option>
+        <option value="3200">3200</option><option value="6400">6400</option>
       </select>
     </div>
     <div style="margin-top:14px;">
@@ -284,8 +215,8 @@
   </div>
 
   <div class="table-wrap">
-    <div class="header-info" style="display:flex; justify-content:space-between; align-items:center; padding:10px 14px; font-size:0.78rem; color:var(--muted); background:var(--bg); border-bottom:1px solid #24252a33;">
-      <span id="condLabelWrap">· <b id="condLabel"></b></span>
+    <div style="display:flex; justify-content:space-between; align-items:center; padding:10px 14px; font-size:0.78rem; color:var(--muted); background:var(--bg); border-bottom:1px solid #24252a33;">
+      <span>· <b id="condLabel"></b></span>
       <span>ISO <b id="isoLabel">100</b></span>
     </div>
     <table>
@@ -296,46 +227,45 @@
     <div class="table-hint" id="expandBtn" style="cursor:pointer; font-weight:700; color:var(--accent2);"></div>
   </div>
 
-  <div class="reminder-badge">
-    <span class="ricon">💡</span>
-    <span class="rtext" id="reminderText"></span>
-  </div>
+  <div class="reminder-badge"><span class="ricon">💡</span><span class="rtext" id="reminderText"></span></div>
 
   <button class="save-btn" id="saveCalcBtn"></button>
-
   <div class="warning" id="calcWarningText"></div>
 </div>
 
 <!-- ===== MANUAL VIEW ===== -->
 <div class="view hidden" id="manualView">
+  <div class="viewfinder-box" id="viewfinderBox">
+    <video id="camVideo" autoplay playsinline muted class="hidden"></video>
+    <img id="camPreviewImg" class="hidden">
+    <div class="cam-placeholder" id="camPlaceholder">
+      <div class="cam-emoji">📷</div>
+      <div class="cam-activate-btn" id="camActivateBtn"></div>
+    </div>
+    <div class="viewfinder-controls hidden" id="viewfinderControls">
+      <div class="cam-retake-btn hidden" id="camRetakeBtn">🔄</div>
+      <div class="cam-shutter-btn" id="camShutterBtn"></div>
+      <div style="width:42px;"></div>
+    </div>
+  </div>
+
   <div class="wheel-cluster">
     <div class="wheel-col">
       <div class="wheel-label">ISO</div>
-      <div class="wheel-frame">
-        <div class="wheel-highlight"></div><div class="wheel-fade-top"></div><div class="wheel-fade-bottom"></div>
-        <div class="wheel-scroll" id="wheelIso"></div>
-      </div>
+      <div class="wheel-frame"><div class="wheel-highlight"></div><div class="wheel-fade-top"></div><div class="wheel-fade-bottom"></div><div class="wheel-scroll" id="wheelIso"></div></div>
     </div>
     <div class="wheel-col">
       <div class="wheel-label" id="wheelLabelAp"></div>
-      <div class="wheel-frame">
-        <div class="wheel-highlight"></div><div class="wheel-fade-top"></div><div class="wheel-fade-bottom"></div>
-        <div class="wheel-scroll" id="wheelAp"></div>
-      </div>
+      <div class="wheel-frame"><div class="wheel-highlight"></div><div class="wheel-fade-top"></div><div class="wheel-fade-bottom"></div><div class="wheel-scroll" id="wheelAp"></div></div>
     </div>
     <div class="wheel-col">
       <div class="wheel-label" id="wheelLabelSh"></div>
-      <div class="wheel-frame">
-        <div class="wheel-highlight"></div><div class="wheel-fade-top"></div><div class="wheel-fade-bottom"></div>
-        <div class="wheel-scroll" id="wheelSh"></div>
-      </div>
+      <div class="wheel-frame"><div class="wheel-highlight"></div><div class="wheel-fade-top"></div><div class="wheel-fade-bottom"></div><div class="wheel-scroll" id="wheelSh"></div></div>
     </div>
   </div>
 
   <div class="mini-alert hidden" id="manualAlertBtn"></div>
-
   <button class="save-btn" id="saveManualBtn"></button>
-
   <div class="warning" id="manualWarningText"></div>
 </div>
 
@@ -346,7 +276,6 @@
     <div class="row"><label id="dofApertureLabel"></label><select id="dofAperture"></select></div>
     <div class="row"><label id="dofDistanceLabel"></label><input type="number" id="dofDistance" step="0.1" min="0.2" max="1000" value="3"></div>
   </div>
-
   <div class="dof-result">
     <div class="hyperfocal"><span id="dofHyperfocalPrefix"></span> <b id="dofHyperfocal">--</b></div>
     <div class="dof-range">
@@ -356,7 +285,6 @@
     </div>
     <div class="dof-sentence" id="dofSentence">--</div>
   </div>
-
   <div class="warning" id="dofWarningText"></div>
 </div>
 
@@ -364,6 +292,18 @@
 <div class="view hidden" id="catalogView">
   <div id="rollListWrap" style="width:100%;"></div>
   <div id="rollDetailWrap" style="width:100%;" class="hidden"></div>
+</div>
+
+<!-- ===== RENAME ROLL MODAL ===== -->
+<div class="modal-overlay hidden" id="renameOverlay">
+  <div class="modal-card">
+    <div class="modal-title-row"><h3 id="renameTitle"></h3><div class="modal-x" id="renameClose">✕</div></div>
+    <div class="modal-field"><input type="text" id="renameInput"></div>
+    <div class="modal-actions">
+      <div class="btn btn-secondary" id="renameCancel"></div>
+      <div class="btn btn-primary" id="renameConfirm"></div>
+    </div>
+  </div>
 </div>
 
 <!-- ===== SAVE SHOT MODAL ===== -->
@@ -380,6 +320,10 @@
       <label id="subjectFieldLabel"></label>
       <input type="text" id="subjectInput">
     </div>
+    <div class="checkbox-row hidden" id="includePhotoRow">
+      <input type="checkbox" id="includePhotoCheckbox" checked>
+      <label id="includePhotoLabel2"></label>
+    </div>
     <div class="modal-actions">
       <div class="btn btn-secondary" id="modalCancel"></div>
       <div class="btn btn-primary" id="modalConfirm"></div>
@@ -392,12 +336,40 @@
   <div class="modal-card">
     <div class="modal-title-row"><h3 id="cameraModalTitle"></h3><div class="modal-x" id="cameraModalClose">✕</div></div>
     <div class="hint" id="cameraModalHint"></div>
-    <div class="modal-field"><label id="apMinLabel"></label><input type="number" id="apMinInput" step="0.1" min="0.7" max="64" value="1.4"></div>
-    <div class="modal-field"><label id="apMaxLabel"></label><input type="number" id="apMaxInput" step="0.1" min="0.7" max="64" value="22"></div>
-    <div class="modal-field"><label id="shFastestLabel"></label><select id="shFastestSelect"></select></div>
+
+    <div class="modal-field">
+      <label id="savedCamerasLabel"></label>
+      <div class="chip-grid" id="savedCamerasGrid"></div>
+      <div class="custom-add-row">
+        <input type="text" id="cameraNameInput">
+        <div class="custom-add-btn" id="saveCameraAsBtn"></div>
+      </div>
+    </div>
+
+    <div class="modal-field">
+      <label id="apChipsLabel"></label>
+      <div class="chip-grid" id="apChipGrid"></div>
+      <div class="custom-add-row">
+        <input type="number" id="apCustomInput" step="0.1" placeholder="es. 6.3">
+        <div class="custom-add-btn" id="apCustomAdd">+</div>
+      </div>
+    </div>
+
+    <div class="modal-field">
+      <label id="shChipsLabel"></label>
+      <div class="chip-grid" id="shChipGrid"></div>
+      <div class="custom-add-row">
+        <input type="number" id="shCustomInput" step="1" placeholder="es. 160 → 1/160">
+        <div class="custom-add-btn" id="shCustomAddFrac">1/x</div>
+        <div class="custom-add-btn" id="shCustomAddSec">sec</div>
+      </div>
+    </div>
+
     <div class="checkbox-row"><input type="checkbox" id="hasBulbCheckbox" checked><label id="bulbLabel"></label></div>
+
     <div class="modal-field" style="margin-top:12px;"><label id="focalLabel"></label><input type="number" id="focalLengthInput" step="1" min="8" max="1200" value="50"></div>
     <div class="hint" id="focalHint" style="margin-top:-4px;"></div>
+
     <div class="modal-actions">
       <div class="btn btn-secondary" id="cameraModalReset"></div>
       <div class="btn btn-primary" id="cameraModalSave"></div>
@@ -409,17 +381,17 @@
 <div class="modal-overlay hidden" id="appSettingsOverlay">
   <div class="modal-card">
     <div class="modal-title-row"><h3 id="appSettingsTitle"></h3><div class="modal-x" id="appSettingsClose2">✕</div></div>
-    <div class="modal-field">
-      <label id="langFieldLabel"></label>
-      <div class="roll-choice-grid" id="langChoiceGrid"></div>
-    </div>
-    <div class="modal-field">
-      <label id="themeFieldLabel"></label>
-      <div class="roll-choice-grid" id="themeChoiceGrid"></div>
-    </div>
-    <div class="modal-actions">
-      <div class="btn btn-primary" id="appSettingsClose" style="flex:1;"></div>
-    </div>
+    <div class="modal-field"><label id="langFieldLabel"></label><div class="roll-choice-grid" id="langChoiceGrid"></div></div>
+    <div class="modal-field"><label id="themeFieldLabel"></label><div class="roll-choice-grid" id="themeChoiceGrid"></div></div>
+    <div class="modal-actions"><div class="btn btn-primary" id="appSettingsClose" style="flex:1;"></div></div>
+  </div>
+</div>
+
+<!-- ===== TIPS MODAL ===== -->
+<div class="modal-overlay hidden" id="tipsOverlay">
+  <div class="modal-card">
+    <div class="modal-title-row"><h3 id="tipsTitle"></h3><div class="modal-x" id="tipsClose">✕</div></div>
+    <div id="tipsContent"></div>
   </div>
 </div>
 
@@ -430,6 +402,8 @@
     <div class="modal-actions"><div class="btn btn-primary" id="noteOk" style="flex:1;">OK</div></div>
   </div>
 </div>
+
+<canvas id="camCanvas" class="hidden"></canvas>
 
 <script>
 /* ============================ I18N ============================ */
@@ -445,8 +419,11 @@ const STR = {
     saveShotBtn: '💾 Salva scatto',
     calcWarning: '⚠️ Calcolo basato su valori EV standard (regola "Sunny 16"), non su una lettura reale della luce — usalo come riferimento/punto di partenza, non come sostituto di un esposimetro calibrato.',
     wheelLabelAp: 'Diaframma', wheelLabelSh: 'Tempo',
-    manualWarning: "Fai scorrere le rotelle come fossero anelli dell'obiettivo. Se hai impostato la tua fotocamera (📷), qui vedi solo i valori che supporta davvero.",
+    manualWarning: "Fai scorrere le rotelle come fossero anelli dell'obiettivo. Se hai impostato la tua fotocamera, qui vedi solo i valori che supporta davvero.",
     manualAlertLabel: '⚠️ Tocca per un avviso importante',
+    camActivateLabel: '📷 Attiva fotocamera',
+    camPermissionError: "Non riesco ad accedere alla fotocamera. Controlla di aver dato il permesso al sito nelle impostazioni del browser (Safari/Chrome), non nell'app Claude.",
+    storageFullError: 'La memoria del telefono per questa app è piena — elimina qualche scatto vecchio (soprattutto quelli con foto) per liberare spazio.',
     dofFocalLabel: 'Focale (mm)', dofApertureLabel: 'Diaframma', dofDistanceLabel: 'Messa a fuoco (m)',
     dofHyperfocalPrefix: 'Distanza iperfocale:', dofNearLabel: 'Vicino', dofFarLabel: 'Lontano',
     dofWarning: '📐 Calcolato con circolo di confusione 0.03mm (standard per il 35mm pellicola). Confronta il risultato con le tacche di profondità di campo incise sulla ghiera del tuo obiettivo, se presenti — dovrebbero coincidere.',
@@ -454,9 +431,9 @@ const STR = {
     newRollPlaceholder: 'Nome nuovo rullino', subjectFieldLabel: 'Soggetto / nome scatto',
     subjectPlaceholder: 'es. Ritratto sul lungomare', cancelBtn: 'Annulla', saveBtn: 'Salva',
     cameraModalTitle: 'La tua fotocamera',
-    cameraModalHint: 'Imposta i limiti reali del tuo corpo macchina/obiettivo: calcolatore, manuale e avvisi mosso/cavalletto si adatteranno.',
-    apMinLabel: 'Diaframma più aperto (es. 3.5)', apMaxLabel: 'Diaframma più chiuso (es. 16)',
-    shFastestLabel: 'Tempo più rapido disponibile', bulbLabel: 'Ha la posa B (esposizioni manuali illimitate)',
+    cameraModalHint: 'Seleziona i valori che ha davvero la ghiera della tua fotocamera (non quelli che vorresti): il calcolatore e il manuale suggeriranno solo combinazioni che puoi impostare per davvero.',
+    apChipsLabel: 'Diaframmi disponibili', shChipsLabel: 'Tempi di scatto disponibili',
+    bulbLabel: 'Ha la posa B (esposizioni manuali illimitate)',
     focalLabel: "Focale dell'obiettivo (mm)",
     focalHint: 'Usata per capirti quando serve un cavalletto (regola 1/focale) e per la scheda "Campo".',
     resetBtn: 'Ripristina default',
@@ -464,7 +441,12 @@ const STR = {
     themeDark: 'Scuro', themeLight: 'Chiaro', okBtn: 'OK',
     emptyCatalog: 'Nessun rullino ancora.<br>Vai su "Calcolatore" o "Manuale", imposta i parametri e tocca "Salva scatto" per iniziare il tuo primo rullino.',
     backToRolls: '‹ Rullini', deleteRoll: 'Elimina rullino', noShotsInRoll: 'Nessuno scatto in questo rullino.',
+    renameRollTitle: 'Rinomina rullino', duplicateRollNameError: 'Esiste già un rullino con questo nome',
+    includePhotoLabel: 'Includi anche la foto scattata (occupa spazio)',
+    savedCamerasLabel: 'Le tue fotocamere salvate', saveCameraAsLabel: 'Salva come profilo fotocamera',
+    cameraNamePlaceholder: 'Nome (es. Agfa Silette)', maxCamerasError: 'Massimo 5 fotocamere salvate — elimina prima un profilo con la ✕.',
     unnamed: '(senza nome)', manuallySet: 'impostato manualmente',
+    tipsTitle: 'Prima di scattare',
   },
   en: {
     subtitle: 'Calculate exposure, set it manually, log your shots',
@@ -477,8 +459,11 @@ const STR = {
     saveShotBtn: '💾 Save shot',
     calcWarning: '⚠️ Calculation based on standard EV values ("Sunny 16" rule), not an actual light reading — use it as a reference/starting point, not a substitute for a calibrated light meter.',
     wheelLabelAp: 'Aperture', wheelLabelSh: 'Shutter',
-    manualWarning: "Scroll the wheels like lens rings. If you've set up your camera (📷), you'll only see values it actually supports.",
+    manualWarning: "Scroll the wheels like lens rings. If you've set up your camera, you'll only see values it actually supports.",
     manualAlertLabel: '⚠️ Tap for an important notice',
+    camActivateLabel: '📷 Turn on camera',
+    camPermissionError: "Can't access the camera. Check that you've allowed this site in your browser's settings (Safari/Chrome), not in the Claude app.",
+    storageFullError: "This app's storage on your phone is full — delete a few old shots (especially ones with photos) to free up space.",
     dofFocalLabel: 'Focal length (mm)', dofApertureLabel: 'Aperture', dofDistanceLabel: 'Focus distance (m)',
     dofHyperfocalPrefix: 'Hyperfocal distance:', dofNearLabel: 'Near', dofFarLabel: 'Far',
     dofWarning: '📐 Calculated with a 0.03mm circle of confusion (standard for 35mm film). Compare the result with the depth-of-field marks on your lens barrel, if present — they should match.',
@@ -486,9 +471,9 @@ const STR = {
     newRollPlaceholder: 'New roll name', subjectFieldLabel: 'Subject / shot name',
     subjectPlaceholder: 'e.g. Portrait on the seafront', cancelBtn: 'Cancel', saveBtn: 'Save',
     cameraModalTitle: 'Your camera',
-    cameraModalHint: 'Set the real limits of your camera body/lens: the calculator, manual mode and shake/tripod warnings will adapt.',
-    apMinLabel: 'Widest aperture (e.g. 3.5)', apMaxLabel: 'Narrowest aperture (e.g. 16)',
-    shFastestLabel: 'Fastest available shutter speed', bulbLabel: 'Has bulb mode (unlimited manual exposures)',
+    cameraModalHint: "Select the values your camera's dial actually has (not the ones you wish it had): the calculator and manual mode will only suggest combinations you can really set.",
+    apChipsLabel: 'Available apertures', shChipsLabel: 'Available shutter speeds',
+    bulbLabel: 'Has bulb mode (unlimited manual exposures)',
     focalLabel: 'Lens focal length (mm)',
     focalHint: 'Used to know when you need a tripod (1/focal-length rule) and for the "Field" tab.',
     resetBtn: 'Reset to default',
@@ -496,7 +481,12 @@ const STR = {
     themeDark: 'Dark', themeLight: 'Light', okBtn: 'OK',
     emptyCatalog: 'No rolls yet.<br>Go to "Calculator" or "Manual", set your parameters and tap "Save shot" to start your first roll.',
     backToRolls: '‹ Rolls', deleteRoll: 'Delete roll', noShotsInRoll: 'No shots in this roll.',
+    renameRollTitle: 'Rename roll', duplicateRollNameError: 'A roll with this name already exists',
+    includePhotoLabel: 'Also include the captured photo (uses storage)',
+    savedCamerasLabel: 'Your saved cameras', saveCameraAsLabel: 'Save as camera profile',
+    cameraNamePlaceholder: 'Name (e.g. Agfa Silette)', maxCamerasError: 'Maximum 5 saved cameras — delete a profile with the ✕ first.',
     unnamed: '(unnamed)', manuallySet: 'manually set',
+    tipsTitle: 'Before you shoot',
   }
 };
 let LANG = localStorage.getItem('sunny16_lang') || 'it';
@@ -504,13 +494,17 @@ let THEME = localStorage.getItem('sunny16_theme') || 'dark';
 function t(key) { return (STR[LANG] && STR[LANG][key]) || STR.it[key] || key; }
 document.body.classList.toggle('theme-light', THEME === 'light');
 
-/* ============ SCALE A TERZI DI STOP ============ */
+/* ============ SCALE COMUNI (fallback quando la fotocamera non e' configurata) ============ */
 const APERTURE_THIRDS = [1,1.1,1.2,1.4,1.6,1.8,2,2.2,2.5,2.8,3.2,3.5,4,4.5,5,5.6,6.3,7.1,8,9,10,11,13,14,16,18,20,22,25,29,32];
 const SHUTTER_THIRDS = [
   1/8000,1/6400,1/5000,1/4000,1/3200,1/2500,1/2000,1/1600,1/1250,1/1000,1/800,1/640,1/500,1/400,1/320,
   1/250,1/200,1/160,1/125,1/100,1/80,1/60,1/50,1/40,1/30,1/25,1/20,1/15,1/13,1/10,1/8,1/6,1/5,1/4,
   0.3,0.4,0.5,0.6,0.8,1,1.3,1.6,2,2.5,3.2,4,5,6,8,10,13,15,20,25,30
 ];
+/* Valori comuni proposti nel modulo di configurazione (unione scala standard + scala "continentale" Compur/Prontor) */
+const COMMON_APERTURES = [1,1.2,1.4,1.8,2,2.8,3.5,4,4.5,5.6,6.3,8,9,11,13,16,18,22,32];
+const COMMON_SHUTTERS = [1/8000,1/4000,1/2000,1/1000,1/750,1/500,1/300,1/250,1/200,1/125,1/100,1/60,1/50,1/30,1/25,1/15,1/10,1/8,1/5,1/4,1/2,1,2,4,8,15,30];
+
 function formatShutter(t) {
   if (t === 'B') return 'B';
   if (t >= 1) return (Number.isInteger(t) ? t : t.toFixed(1)) + 's';
@@ -519,78 +513,86 @@ function formatShutter(t) {
 function nearestIn(list, target) {
   return list.reduce((prev, curr) => Math.abs(curr - target) < Math.abs(prev - target) ? curr : prev);
 }
+function roundAp(v) { return Math.round(v * 10) / 10; }
 
 /* ============ PROFILO FOTOCAMERA ============ */
 const CAMERA_KEY = 'sunny16_camera_profile';
-const DEFAULT_PROFILE = { apMin: 1.4, apMax: 22, shFastest: 1/8000, hasBulb: true, focalLength: 50, configured: false };
+const DEFAULT_PROFILE = { apertureValues: [], shutterValues: [], hasBulb: true, focalLength: 50, configured: false };
+
 function loadProfile() {
-  try { const p = JSON.parse(localStorage.getItem(CAMERA_KEY)); return p ? { ...DEFAULT_PROFILE, ...p } : { ...DEFAULT_PROFILE }; }
-  catch (e) { return { ...DEFAULT_PROFILE }; }
+  try {
+    let p = JSON.parse(localStorage.getItem(CAMERA_KEY));
+    if (!p) return { ...DEFAULT_PROFILE };
+    // migrazione da versione precedente (apMin/apMax/shFastest)
+    if (p.apMin !== undefined && !p.apertureValues) {
+      let apVals = APERTURE_THIRDS.filter(a => a >= p.apMin - 0.001 && a <= p.apMax + 0.001).map(roundAp);
+      if (!apVals.includes(roundAp(p.apMin))) apVals.push(roundAp(p.apMin));
+      if (!apVals.includes(roundAp(p.apMax))) apVals.push(roundAp(p.apMax));
+      let shVals = SHUTTER_THIRDS.filter(s => s >= p.shFastest - 1e-9 && s <= 30);
+      if (!shVals.includes(p.shFastest)) shVals.push(p.shFastest);
+      p = { apertureValues: apVals, shutterValues: shVals, hasBulb: p.hasBulb, focalLength: p.focalLength, configured: p.configured };
+    }
+    return { ...DEFAULT_PROFILE, ...p };
+  } catch (e) { return { ...DEFAULT_PROFILE }; }
 }
 function saveProfile(p) { localStorage.setItem(CAMERA_KEY, JSON.stringify(p)); }
 let cameraProfile = loadProfile();
 
 function apertureOptionsForProfile(p) {
-  const base = APERTURE_THIRDS.filter(a => a >= p.apMin - 0.001 && a <= p.apMax + 0.001);
-  const set = new Set(base.map(v => Math.round(v*10)/10));
-  set.add(Math.round(p.apMin*10)/10);
-  set.add(Math.round(p.apMax*10)/10);
-  return Array.from(set).sort((a,b) => a-b);
+  if (!p.configured || !p.apertureValues || !p.apertureValues.length) return APERTURE_THIRDS.slice();
+  return [...p.apertureValues].sort((a,b) => a - b);
+}
+function numericShutterValues(p) {
+  const base = (!p.configured || !p.shutterValues || !p.shutterValues.length) ? SHUTTER_THIRDS : p.shutterValues;
+  return [...base].sort((a,b) => a - b);
 }
 function shutterOptionsForProfile(p) {
-  const base = SHUTTER_THIRDS.filter(t => t >= p.shFastest - 1e-9);
-  const set = new Set(base);
-  set.add(p.shFastest);
-  let arr = Array.from(set).sort((a,b) => a-b);
-  if (p.hasBulb) arr.push('B');
-  return arr;
+  const arr = numericShutterValues(p);
+  return p.hasBulb ? [...arr, 'B'] : arr;
 }
 function updateCameraChip() {
   const chip = document.getElementById('cameraChip');
-  chip.textContent = !cameraProfile.configured
-    ? t('cameraChipDefault')
-    : `f/${cameraProfile.apMin}–f/${cameraProfile.apMax} · max ${formatShutter(cameraProfile.shFastest)}${cameraProfile.hasBulb ? ' · B' : ''} · ${cameraProfile.focalLength}mm`;
+  if (!cameraProfile.configured) { chip.textContent = t('cameraChipDefault'); return; }
+  const sh = numericShutterValues(cameraProfile);
+  const ap = apertureOptionsForProfile(cameraProfile);
+  chip.textContent = `f/${ap[0]}–f/${ap[ap.length-1]} · ${formatShutter(sh[0])}–${formatShutter(sh[sh.length-1])}${cameraProfile.hasBulb ? '+B' : ''} · ${cameraProfile.focalLength}mm`;
 }
 
 /* ============ NOTE POPUP ============ */
 const noteOverlay = document.getElementById('noteOverlay');
-document.getElementById('noteText');
-function openNotePopup(html) {
-  document.getElementById('noteText').innerHTML = html;
-  noteOverlay.classList.remove('hidden');
-}
+function openNotePopup(html) { document.getElementById('noteText').innerHTML = html; noteOverlay.classList.remove('hidden'); }
 document.getElementById('noteOk').addEventListener('click', () => noteOverlay.classList.add('hidden'));
 
 /* ============ TEMPLATE NOTE (bilingue) ============ */
-function noteOverexposure(a, shutterText) {
+function noteOverexposure(a, shutterText, minFast) {
   return LANG === 'it'
-    ? `A <b>f/${a}</b> servirebbe un tempo più rapido di ${formatShutter(cameraProfile.shFastest)} (il tuo massimo) — con ${shutterText} rischi la <b>sovraesposizione</b>. Valuta di chiudere il diaframma, abbassare l'ISO o usare un filtro ND.`
-    : `At <b>f/${a}</b> you'd need a faster shutter than ${formatShutter(cameraProfile.shFastest)} (your max) — with ${shutterText} you risk <b>overexposure</b>. Consider closing the aperture, lowering ISO, or using an ND filter.`;
+    ? `A <b>f/${a}</b> servirebbe un tempo più rapido di ${formatShutter(minFast)} (il tuo più veloce) — con ${shutterText} rischi la <b>sovraesposizione</b>. Valuta di chiudere il diaframma, abbassare l'ISO o usare un filtro ND.`
+    : `At <b>f/${a}</b> you'd need a faster shutter than ${formatShutter(minFast)} (your fastest) — with ${shutterText} you risk <b>overexposure</b>. Consider closing the aperture, lowering ISO, or using an ND filter.`;
 }
-function noteUnderexposureNoBulb(a, idealT) {
+function noteUnderexposureNoBulb(a, idealT, maxSlow) {
   return LANG === 'it'
-    ? `A <b>f/${a}</b> servirebbe un'esposizione molto lunga (~${idealT.toFixed(0)}s) ma non hai la posa B — rischio di <b>sottoesposizione</b>. Valuta di aprire il diaframma o alzare l'ISO.`
-    : `At <b>f/${a}</b> you'd need a very long exposure (~${idealT.toFixed(0)}s) but you don't have bulb mode — risk of <b>underexposure</b>. Consider opening the aperture or raising ISO.`;
+    ? `A <b>f/${a}</b> servirebbe un'esposizione più lunga di ${formatShutter(maxSlow)} (~${idealT.toFixed(1)}s) ma non hai la posa B — rischio di <b>sottoesposizione</b>. Valuta di aprire il diaframma o alzare l'ISO.`
+    : `At <b>f/${a}</b> you'd need a longer exposure than ${formatShutter(maxSlow)} (~${idealT.toFixed(1)}s) but you don't have bulb mode — risk of <b>underexposure</b>. Consider opening the aperture or raising ISO.`;
 }
-function noteBulbInfo(a, idealT) {
+function noteBulbInfo(a, idealT, maxSlow) {
   return LANG === 'it'
-    ? `A <b>f/${a}</b> servirebbe circa <b>${idealT.toFixed(0)} secondi</b>: tieni aperto l'otturatore in posa B contando i secondi, e usa <b>sempre il cavalletto</b> — a mano è impossibile tenerla ferma così a lungo.`
-    : `At <b>f/${a}</b> you'd need about <b>${idealT.toFixed(0)} seconds</b>: hold the shutter open in bulb mode counting the seconds, and <b>always use a tripod</b> — handheld it's impossible to hold that steady for that long.`;
+    ? `Il tuo tempo più lento marcato è ${formatShutter(maxSlow)}, ma a <b>f/${a}</b> servirebbe circa <b>${idealT.toFixed(1)} secondi</b>: metti la ghiera su <b>B</b> e conta i secondi a mano, sempre con il <b>cavalletto</b> — a mano libera è impossibile tenerla ferma così a lungo.`
+    : `Your slowest marked speed is ${formatShutter(maxSlow)}, but at <b>f/${a}</b> you'd need about <b>${idealT.toFixed(1)} seconds</b>: set the dial to <b>B</b> and count the seconds by hand, always with a <b>tripod</b> — handheld it's impossible to hold that steady for that long.`;
 }
 function noteShake(shutterText, a, focalLen) {
   return LANG === 'it'
     ? `Con <b>${shutterText}</b> a f/${a} sei più lento della soglia mano libera consigliata (~1/${Math.round(focalLen)}s per un'ottica da ${focalLen}mm): meglio un <b>cavalletto</b> o un appoggio stabile per evitare il mosso.`
     : `With <b>${shutterText}</b> at f/${a} you're slower than the recommended handheld threshold (~1/${Math.round(focalLen)}s for a ${focalLen}mm lens): better use a <b>tripod</b> or stable support to avoid camera shake.`;
 }
-function manualNoteBulb() {
+function manualNoteBulb(maxSlow) {
   return LANG === 'it'
-    ? `Posa B selezionata: tieni aperto l'otturatore per il tempo che decidi tu, sempre con <b>cavalletto</b> — a mano è impraticabile.`
-    : `Bulb mode selected: hold the shutter open for as long as you decide, always with a <b>tripod</b> — handheld it's impractical.`;
+    ? `Posa B selezionata: il tuo tempo più lento marcato è ${formatShutter(maxSlow)}, quindi oltre quello usa B contando i secondi a mano, sempre con <b>cavalletto</b> — a mano libera è impraticabile.`
+    : `Bulb mode selected: your slowest marked speed is ${formatShutter(maxSlow)}, so beyond that use B and count the seconds by hand, always with a <b>tripod</b> — handheld it's impractical.`;
 }
-function manualNoteLong(shutterText) {
+function manualNoteLong(shutterText, maxSlow) {
   return LANG === 'it'
-    ? `${shutterText} è un'esposizione molto lunga: usa il <b>cavalletto</b>.`
-    : `${shutterText} is a very long exposure: use a <b>tripod</b>.`;
+    ? `${shutterText} è più lento del tuo tempo marcato più lento (${formatShutter(maxSlow)}): usa il <b>cavalletto</b>.`
+    : `${shutterText} is slower than your slowest marked speed (${formatShutter(maxSlow)}): use a <b>tripod</b>.`;
 }
 function manualNoteShake(shutterText, focalLen) {
   return LANG === 'it'
@@ -620,7 +622,7 @@ let selectedAperture = null;
 let currentComputedRows = [];
 let currentCondition = LIGHT_CONDITIONS[1];
 let tableExpanded = false;
-const RECOMMENDED_APERTURE_TARGET = 8; // punto di partenza per il "consigliato"
+const RECOMMENDED_APERTURE_TARGET = 8;
 
 const isoSel = document.getElementById('iso');
 const lightGrid = document.getElementById('lightGrid');
@@ -629,6 +631,7 @@ const evLabel = document.getElementById('evLabel');
 const condLabel = document.getElementById('condLabel');
 const isoLabel = document.getElementById('isoLabel');
 const tableBody = document.getElementById('tableBody');
+const expandBtn = document.getElementById('expandBtn');
 
 function rebuildLightGrid() {
   lightGrid.innerHTML = '';
@@ -657,9 +660,7 @@ function evInfoText() {
 document.getElementById('evInfoBtn').addEventListener('click', () => openNotePopup(evInfoText()));
 
 evSlider.addEventListener('input', () => {
-  const nearest = LIGHT_CONDITIONS.reduce((prev, c) =>
-    Math.abs(c.ev - evSlider.value) < Math.abs(prev.ev - evSlider.value) ? c : prev
-  );
+  const nearest = LIGHT_CONDITIONS.reduce((prev, c) => Math.abs(c.ev - evSlider.value) < Math.abs(prev.ev - evSlider.value) ? c : prev);
   document.querySelectorAll('.light-btn').forEach((b, i) => {
     b.classList.toggle('active', LIGHT_CONDITIONS[i].key === nearest.key && Math.abs(nearest.ev - evSlider.value) < 0.3);
   });
@@ -667,8 +668,6 @@ evSlider.addEventListener('input', () => {
   renderCalc();
 });
 isoSel.addEventListener('change', renderCalc);
-
-const expandBtn = document.getElementById('expandBtn');
 
 function renderCalc() {
   const iso = parseFloat(isoSel.value);
@@ -678,7 +677,9 @@ function renderCalc() {
   const evIso = ev100 - Math.log2(iso / 100);
 
   const apOptions = apertureOptionsForProfile(cameraProfile);
-  const shPool = shutterOptionsForProfile(cameraProfile).filter(v => v !== 'B');
+  const shNumeric = numericShutterValues(cameraProfile);
+  const minFast = shNumeric[0];
+  const maxSlow = shNumeric[shNumeric.length - 1];
   const focalLen = cameraProfile.focalLength || 50;
   const handheldThreshold = 1 / focalLen;
 
@@ -686,22 +687,15 @@ function renderCalc() {
     selectedAperture = nearestIn(apOptions, RECOMMENDED_APERTURE_TARGET);
   }
 
-  // 1) calcola il tempo ideale (non arrotondato) per ogni diaframma e quanto "sfora" i limiti della fotocamera
   const idealData = apOptions.map((a, idx) => {
     const idealT = (a * a) / Math.pow(2, evIso);
-    let violationStops = 0; // quanti stop fuori dal range sicuro della fotocamera
+    let violationStops = 0;
     if (cameraProfile.configured) {
-      if (idealT < cameraProfile.shFastest - 1e-9) {
-        violationStops = Math.log2(cameraProfile.shFastest / idealT); // sovraesposizione
-      } else if (idealT > 30 && !cameraProfile.hasBulb) {
-        violationStops = Math.log2(idealT / 30); // sottoesposizione, niente posa B
-      }
+      if (idealT < minFast - 1e-9) violationStops = Math.log2(minFast / idealT);
+      else if (idealT > maxSlow && !cameraProfile.hasBulb) violationStops = Math.log2(idealT / maxSlow);
     }
     return { a, idx, idealT, violationStops };
   });
-
-  // 2) il consigliato è quello che espone correttamente (violationStops minimo);
-  //    a parità, il più vicino a f/8 per versatilità generale
   const best = idealData.reduce((best, cur) => {
     if (cur.violationStops < best.violationStops - 1e-9) return cur;
     if (Math.abs(cur.violationStops - best.violationStops) < 1e-9 &&
@@ -711,64 +705,50 @@ function renderCalc() {
   const recommendedAperture = best.a;
   const recIdx = apOptions.indexOf(recommendedAperture);
 
-  // calcola tutte le righe (dati), poi decide quali mostrare
   const allRows = apOptions.map((a, idx) => {
     const idealT = (a * a) / Math.pow(2, evIso);
-    const snapped = nearestIn(shPool, Math.max(1/8000, Math.min(60, idealT)));
+    const snapped = nearestIn(shNumeric, idealT);
     const shutterText = formatShutter(snapped);
     let mark = null;
-
     if (cameraProfile.configured) {
-      if (idealT < cameraProfile.shFastest - 1e-9) {
-        mark = { type: 'warn', text: noteOverexposure(a, shutterText) };
-      } else if (idealT > 30 && !cameraProfile.hasBulb) {
-        mark = { type: 'warn', text: noteUnderexposureNoBulb(a, idealT) };
-      } else if (idealT > 30 && cameraProfile.hasBulb) {
-        mark = { type: 'info', text: noteBulbInfo(a, idealT) };
-      }
+      if (idealT < minFast - 1e-9) mark = { type: 'warn', text: noteOverexposure(a, shutterText, minFast) };
+      else if (idealT > maxSlow && !cameraProfile.hasBulb) mark = { type: 'warn', text: noteUnderexposureNoBulb(a, idealT, maxSlow) };
+      else if (idealT > maxSlow && cameraProfile.hasBulb) mark = { type: 'info', text: noteBulbInfo(a, idealT, maxSlow) };
     }
-    if (!mark && a === selectedAperture && snapped > handheldThreshold && snapped <= 30) {
+    if (!mark && a === selectedAperture && snapped > handheldThreshold && snapped <= maxSlow) {
       mark = { type: 'shake', text: noteShake(shutterText, a, focalLen) };
     }
     const distFromRec = Math.abs(idx - recIdx);
-    return { aperture: a, shutterText, mark, distFromRec, idx };
+    return { aperture: a, shutterText, mark, distFromRec };
   });
   currentComputedRows = allRows;
 
   const visibleRows = tableExpanded ? allRows : allRows.filter(r => r.distFromRec <= 2);
-
   tableBody.innerHTML = '';
   visibleRows.forEach(r => {
     const { aperture: a, shutterText, mark, distFromRec } = r;
     const tr = document.createElement('tr');
     let cls = [];
     if (a === selectedAperture) cls.push('selected');
-    if (distFromRec === 0) cls.push('rec-main');
-    else if (distFromRec === 1) cls.push('rec-near1');
-    else if (distFromRec === 2) cls.push('rec-near2');
+    if (distFromRec === 0) cls.push('rec-main'); else if (distFromRec === 1) cls.push('rec-near1'); else if (distFromRec === 2) cls.push('rec-near2');
     tr.className = cls.join(' ');
-
     const iconEmoji = mark ? (mark.type === 'warn' ? '⚠️' : mark.type === 'info' ? 'ℹ️' : '🫳') : '';
     const iconClass = mark ? (mark.type === 'warn' ? 'mk-warn' : mark.type === 'info' ? 'mk-info' : 'mk-shake') : '';
     const badge = distFromRec === 0 ? `<span class="rec-badge">${LANG === 'it' ? 'CONSIGLIATO' : 'RECOMMENDED'}</span>` : '';
     tr.innerHTML = `<td class="aperture-col">f/${a}${badge}</td><td>${shutterText}${mark ? `<span class="mark ${iconClass}" data-note>${iconEmoji}</span>` : ''}</td>`;
     tr.addEventListener('click', () => { selectedAperture = a; renderCalc(); });
-    if (mark) {
-      tr.querySelector('[data-note]').addEventListener('click', (e) => { e.stopPropagation(); openNotePopup(mark.text); });
-    }
+    if (mark) tr.querySelector('[data-note]').addEventListener('click', (e) => { e.stopPropagation(); openNotePopup(mark.text); });
     tableBody.appendChild(tr);
   });
 
   const hiddenCount = allRows.length - visibleRows.length;
   if (!tableExpanded && hiddenCount > 0) {
-    expandBtn.textContent = (LANG === 'it' ? `Mostra tutte le combinazioni (+${hiddenCount}) ▾` : `Show all combinations (+${hiddenCount}) ▾`);
+    expandBtn.textContent = LANG === 'it' ? `Mostra tutte le combinazioni (+${hiddenCount}) ▾` : `Show all combinations (+${hiddenCount}) ▾`;
     expandBtn.classList.remove('hidden');
   } else if (tableExpanded) {
-    expandBtn.textContent = (LANG === 'it' ? 'Mostra meno ▴' : 'Show less ▴');
+    expandBtn.textContent = LANG === 'it' ? 'Mostra meno ▴' : 'Show less ▴';
     expandBtn.classList.remove('hidden');
-  } else {
-    expandBtn.classList.add('hidden');
-  }
+  } else expandBtn.classList.add('hidden');
 }
 expandBtn.addEventListener('click', () => { tableExpanded = !tableExpanded; renderCalc(); });
 
@@ -776,43 +756,31 @@ expandBtn.addEventListener('click', () => { tableExpanded = !tableExpanded; rend
 function createWheel(containerId, values, formatFn, initialValue, onChange) {
   const container = document.getElementById(containerId);
   container.innerHTML = '';
-  const itemH = 40, padH = 75;
+  const itemH = 40, padH = 65;
   const padTop = document.createElement('div'); padTop.style.height = padH + 'px'; container.appendChild(padTop);
   values.forEach((v, i) => {
     const item = document.createElement('div');
-    item.className = 'wheel-item';
-    item.textContent = formatFn(v);
-    item.dataset.idx = i;
+    item.className = 'wheel-item'; item.textContent = formatFn(v); item.dataset.idx = i;
     container.appendChild(item);
   });
   const padBottom = document.createElement('div'); padBottom.style.height = padH + 'px'; container.appendChild(padBottom);
-
   let currentIdx = Math.max(0, values.indexOf(initialValue));
   if (currentIdx === -1) currentIdx = 0;
   function scrollToIndex(idx, smooth) { container.scrollTo({ top: idx * itemH, behavior: smooth ? 'smooth' : 'auto' }); }
   function updateActive(idx) { container.querySelectorAll('.wheel-item').forEach((el, i) => el.classList.toggle('center-active', i === idx)); }
-  scrollToIndex(currentIdx, false);
-  updateActive(currentIdx);
-
+  scrollToIndex(currentIdx, false); updateActive(currentIdx);
   let timer;
   container.addEventListener('scroll', () => {
     clearTimeout(timer);
     timer = setTimeout(() => {
       const idx = Math.max(0, Math.min(values.length - 1, Math.round(container.scrollTop / itemH)));
-      currentIdx = idx;
-      updateActive(idx);
-      scrollToIndex(idx, true);
-      onChange(values[idx]);
+      currentIdx = idx; updateActive(idx); scrollToIndex(idx, true); onChange(values[idx]);
     }, 110);
   });
   container.addEventListener('click', (e) => {
-    const item = e.target.closest('.wheel-item');
-    if (!item) return;
+    const item = e.target.closest('.wheel-item'); if (!item) return;
     const idx = parseInt(item.dataset.idx, 10);
-    currentIdx = idx;
-    scrollToIndex(idx, true);
-    updateActive(idx);
-    onChange(values[idx]);
+    currentIdx = idx; scrollToIndex(idx, true); updateActive(idx); onChange(values[idx]);
   });
   return { getValue: () => values[currentIdx] };
 }
@@ -826,22 +794,19 @@ let manualNoteText = null;
 function renderManualNotes() {
   const focalLen = cameraProfile.focalLength || 50;
   const handheldThreshold = 1 / focalLen;
+  const shNumeric = numericShutterValues(cameraProfile);
+  const maxSlow = shNumeric[shNumeric.length - 1];
   const shVal = manShWheel ? manShWheel.getValue() : manShVal;
   manualNoteText = null;
 
   if (shVal === 'B') {
-    manualNoteText = manualNoteBulb();
+    manualNoteText = manualNoteBulb(maxSlow);
   } else if (typeof shVal === 'number') {
-    if (shVal > 30) manualNoteText = manualNoteLong(formatShutter(shVal));
+    if (shVal > maxSlow) manualNoteText = manualNoteLong(formatShutter(shVal), maxSlow);
     else if (shVal > handheldThreshold) manualNoteText = manualNoteShake(formatShutter(shVal), focalLen);
   }
-
-  if (manualNoteText) {
-    manualAlertBtn.textContent = t('manualAlertLabel');
-    manualAlertBtn.classList.remove('hidden');
-  } else {
-    manualAlertBtn.classList.add('hidden');
-  }
+  if (manualNoteText) { manualAlertBtn.textContent = t('manualAlertLabel'); manualAlertBtn.classList.remove('hidden'); }
+  else manualAlertBtn.classList.add('hidden');
 }
 manualAlertBtn.addEventListener('click', () => { if (manualNoteText) openNotePopup(manualNoteText); });
 
@@ -859,6 +824,67 @@ function rebuildManualWheels() {
   renderManualNotes();
 }
 
+/* ============ FOTOCAMERA LIVE (scheda Manuale) ============ */
+const camVideo = document.getElementById('camVideo');
+const camPreviewImg = document.getElementById('camPreviewImg');
+const camPlaceholder = document.getElementById('camPlaceholder');
+const camActivateBtn = document.getElementById('camActivateBtn');
+const viewfinderControls = document.getElementById('viewfinderControls');
+const camShutterBtn = document.getElementById('camShutterBtn');
+const camRetakeBtn = document.getElementById('camRetakeBtn');
+const camCanvas = document.getElementById('camCanvas');
+camActivateBtn.textContent = t('camActivateLabel');
+
+let camStream = null;
+let capturedPhotoDataUrl = null;
+
+async function startCamera() {
+  try {
+    camStream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' }, audio: false });
+    camVideo.srcObject = camStream;
+    camVideo.classList.remove('hidden');
+    camPlaceholder.classList.add('hidden');
+    viewfinderControls.classList.remove('hidden');
+    camPreviewImg.classList.add('hidden');
+    camRetakeBtn.classList.add('hidden');
+  } catch (err) {
+    openNotePopup(t('camPermissionError'));
+  }
+}
+function stopCamera() {
+  if (camStream) { camStream.getTracks().forEach(tr => tr.stop()); camStream = null; }
+  camVideo.classList.add('hidden');
+  viewfinderControls.classList.add('hidden');
+  camPlaceholder.classList.remove('hidden');
+  camPreviewImg.classList.add('hidden');
+  capturedPhotoDataUrl = null;
+}
+function capturePhoto() {
+  if (!camStream) return;
+  const w = camVideo.videoWidth, h = camVideo.videoHeight;
+  if (!w || !h) return;
+  const size = Math.min(w, h);
+  const outSize = 480;
+  camCanvas.width = outSize; camCanvas.height = outSize;
+  const sx = (w - size) / 2, sy = (h - size) / 2;
+  const ctx = camCanvas.getContext('2d');
+  ctx.drawImage(camVideo, sx, sy, size, size, 0, 0, outSize, outSize);
+  capturedPhotoDataUrl = camCanvas.toDataURL('image/jpeg', 0.7);
+  camPreviewImg.src = capturedPhotoDataUrl;
+  camPreviewImg.classList.remove('hidden');
+  camVideo.classList.add('hidden');
+  camRetakeBtn.classList.remove('hidden');
+}
+function retakePhoto() {
+  capturedPhotoDataUrl = null;
+  camPreviewImg.classList.add('hidden');
+  camVideo.classList.remove('hidden');
+  camRetakeBtn.classList.add('hidden');
+}
+camActivateBtn.addEventListener('click', startCamera);
+camShutterBtn.addEventListener('click', capturePhoto);
+camRetakeBtn.addEventListener('click', retakePhoto);
+
 /* ============ DOF ============ */
 const CIRCLE_OF_CONFUSION_MM = 0.03;
 const dofFocal = document.getElementById('dofFocal');
@@ -873,11 +899,7 @@ function populateDofApertureSelect() {
   const opts = apertureOptionsForProfile(cameraProfile);
   const current = parseFloat(dofAperture.value) || 8;
   dofAperture.innerHTML = '';
-  opts.forEach(a => {
-    const opt = document.createElement('option');
-    opt.value = a; opt.textContent = 'f/' + a;
-    dofAperture.appendChild(opt);
-  });
+  opts.forEach(a => { const opt = document.createElement('option'); opt.value = a; opt.textContent = 'f/' + a; dofAperture.appendChild(opt); });
   dofAperture.value = opts.includes(current) ? current : nearestIn(opts, 8);
 }
 function fmtMeters(m) {
@@ -895,7 +917,6 @@ function renderDof() {
   const H = (f * f) / (N * c) + f;
   const Dn = (H * s) / (H + (s - f));
   const Df = (s - f) >= H ? Infinity : (H * s) / (H - (s - f));
-
   dofHyperfocal.textContent = fmtMeters(H / 1000);
   dofNear.textContent = fmtMeters(Dn / 1000);
   dofFar.textContent = fmtMeters(Df / 1000);
@@ -918,15 +939,13 @@ const catalogView = document.getElementById('catalogView');
 let openRollName = null;
 
 function setActiveTab(tab) {
+  if (manualView.classList.contains('hidden') === false && tab !== 'manual') stopCamera();
   [tabCalc, tabManual, tabDof, tabCatalog].forEach(el => el.classList.remove('active'));
   [calcView, manualView, dofView, catalogView].forEach(v => v.classList.add('hidden'));
   if (tab === 'calc') { tabCalc.classList.add('active'); calcView.classList.remove('hidden'); }
   if (tab === 'manual') { tabManual.classList.add('active'); manualView.classList.remove('hidden'); }
   if (tab === 'dof') { tabDof.classList.add('active'); dofView.classList.remove('hidden'); }
-  if (tab === 'catalog') {
-    tabCatalog.classList.add('active'); catalogView.classList.remove('hidden');
-    openRollName ? showRollDetail(openRollName) : showRollList();
-  }
+  if (tab === 'catalog') { tabCatalog.classList.add('active'); catalogView.classList.remove('hidden'); openRollName ? showRollDetail(openRollName) : showRollList(); }
 }
 tabCalc.addEventListener('click', () => setActiveTab('calc'));
 tabManual.addEventListener('click', () => setActiveTab('manual'));
@@ -936,25 +955,135 @@ tabCatalog.addEventListener('click', () => setActiveTab('catalog'));
 /* ============ CAMERA SETTINGS MODAL ============ */
 const cameraChipEl = document.getElementById('cameraChip');
 const cameraModalOverlay = document.getElementById('cameraModalOverlay');
-const apMinInput = document.getElementById('apMinInput');
-const apMaxInput = document.getElementById('apMaxInput');
-const shFastestSelect = document.getElementById('shFastestSelect');
+const apChipGrid = document.getElementById('apChipGrid');
+const shChipGrid = document.getElementById('shChipGrid');
+const apCustomInput = document.getElementById('apCustomInput');
+const shCustomInput = document.getElementById('shCustomInput');
 const hasBulbCheckbox = document.getElementById('hasBulbCheckbox');
 const focalLengthInput = document.getElementById('focalLengthInput');
 
-function rebuildShFastestSelect() {
-  shFastestSelect.innerHTML = '';
-  SHUTTER_THIRDS.forEach(tVal => {
-    const opt = document.createElement('option');
-    opt.value = tVal; opt.textContent = formatShutter(tVal);
-    shFastestSelect.appendChild(opt);
+let tempApChips = [];   // valori numerici mostrati come chip (unione COMMON + salvati + aggiunti)
+let tempShChips = [];
+let tempApSelected = new Set();
+let tempShSelected = new Set();
+
+/* ---- Profili fotocamera salvati (fino a 5) ---- */
+const SAVED_CAMERAS_KEY = 'sunny16_saved_cameras';
+function loadSavedCameras() { try { return JSON.parse(localStorage.getItem(SAVED_CAMERAS_KEY)) || []; } catch (e) { return []; } }
+function saveSavedCameras(list) { localStorage.setItem(SAVED_CAMERAS_KEY, JSON.stringify(list)); }
+
+function renderSavedCamerasGrid() {
+  const grid = document.getElementById('savedCamerasGrid');
+  grid.innerHTML = '';
+  const cams = loadSavedCameras();
+  cams.forEach(cam => {
+    const chip = document.createElement('div');
+    chip.className = 'chip';
+    chip.style.display = 'inline-flex';
+    chip.style.alignItems = 'center';
+    chip.style.gap = '6px';
+    chip.innerHTML = `<span>${cam.name}</span><span style="opacity:0.6;">✕</span>`;
+    chip.addEventListener('click', (e) => {
+      if (e.target.textContent === '✕') {
+        const updated = loadSavedCameras().filter(c => c.id !== cam.id);
+        saveSavedCameras(updated);
+        renderSavedCamerasGrid();
+        return;
+      }
+      cameraProfile = { apertureValues: cam.apertureValues, shutterValues: cam.shutterValues, hasBulb: cam.hasBulb, focalLength: cam.focalLength, configured: true };
+      saveProfile(cameraProfile);
+      applyProfileEverywhere();
+      cameraModalOverlay.classList.add('hidden');
+    });
+    grid.appendChild(chip);
   });
 }
+document.getElementById('saveCameraAsBtn').addEventListener('click', () => {
+  const nameInput = document.getElementById('cameraNameInput');
+  const name = nameInput.value.trim();
+  if (!name) return;
+  const apVals = Array.from(tempApSelected).sort((a,b) => a-b);
+  const shVals = Array.from(tempShSelected).sort((a,b) => a-b);
+  if (!apVals.length || !shVals.length) return;
+  let cams = loadSavedCameras();
+  const existingIdx = cams.findIndex(c => c.name === name);
+  const entry = { id: existingIdx >= 0 ? cams[existingIdx].id : Date.now().toString(36), name, apertureValues: apVals, shutterValues: shVals, hasBulb: hasBulbCheckbox.checked, focalLength: parseFloat(focalLengthInput.value) || DEFAULT_PROFILE.focalLength };
+  if (existingIdx >= 0) { cams[existingIdx] = entry; }
+  else {
+    if (cams.length >= 5) { openNotePopup(t('maxCamerasError')); return; }
+    cams.push(entry);
+  }
+  saveSavedCameras(cams);
+  nameInput.value = '';
+  renderSavedCamerasGrid();
+});
+
+function renderApChipGrid() {
+  apChipGrid.innerHTML = '';
+  tempApChips.slice().sort((a,b) => a-b).forEach(v => {
+    const chip = document.createElement('div');
+    chip.className = 'chip' + (tempApSelected.has(v) ? ' active' : '');
+    chip.textContent = 'f/' + v;
+    chip.addEventListener('click', () => {
+      tempApSelected.has(v) ? tempApSelected.delete(v) : tempApSelected.add(v);
+      chip.classList.toggle('active');
+    });
+    apChipGrid.appendChild(chip);
+  });
+}
+function renderShChipGrid() {
+  shChipGrid.innerHTML = '';
+  tempShChips.slice().sort((a,b) => a-b).forEach(v => {
+    const chip = document.createElement('div');
+    chip.className = 'chip' + (tempShSelected.has(v) ? ' active' : '');
+    chip.textContent = formatShutter(v);
+    chip.addEventListener('click', () => {
+      tempShSelected.has(v) ? tempShSelected.delete(v) : tempShSelected.add(v);
+      chip.classList.toggle('active');
+    });
+    shChipGrid.appendChild(chip);
+  });
+}
+document.getElementById('apCustomAdd').addEventListener('click', () => {
+  const v = roundAp(parseFloat(apCustomInput.value));
+  if (!v || v <= 0) return;
+  if (!tempApChips.includes(v)) tempApChips.push(v);
+  tempApSelected.add(v);
+  apCustomInput.value = '';
+  renderApChipGrid();
+});
+document.getElementById('shCustomAddFrac').addEventListener('click', () => {
+  const denom = parseFloat(shCustomInput.value);
+  if (!denom || denom <= 0) return;
+  const v = 1 / denom;
+  if (!tempShChips.some(x => Math.abs(x - v) < 1e-9)) tempShChips.push(v);
+  tempShSelected.add(tempShChips.find(x => Math.abs(x - v) < 1e-9));
+  shCustomInput.value = '';
+  renderShChipGrid();
+});
+document.getElementById('shCustomAddSec').addEventListener('click', () => {
+  const v = parseFloat(shCustomInput.value);
+  if (!v || v <= 0) return;
+  if (!tempShChips.some(x => Math.abs(x - v) < 1e-9)) tempShChips.push(v);
+  tempShSelected.add(tempShChips.find(x => Math.abs(x - v) < 1e-9));
+  shCustomInput.value = '';
+  renderShChipGrid();
+});
 
 function openCameraModal() {
-  apMinInput.value = cameraProfile.apMin;
-  apMaxInput.value = cameraProfile.apMax;
-  shFastestSelect.value = cameraProfile.shFastest;
+  renderSavedCamerasGrid();
+  document.getElementById('cameraNameInput').placeholder = t('cameraNamePlaceholder');
+  document.getElementById('saveCameraAsBtn').textContent = '💾';
+  const savedAp = cameraProfile.apertureValues && cameraProfile.apertureValues.length ? cameraProfile.apertureValues : [];
+  const savedSh = cameraProfile.shutterValues && cameraProfile.shutterValues.length ? cameraProfile.shutterValues : [];
+  tempApChips = Array.from(new Set([...COMMON_APERTURES, ...savedAp.map(roundAp)]));
+  tempShChips = [];
+  [...COMMON_SHUTTERS, ...savedSh].forEach(v => { if (!tempShChips.some(x => Math.abs(x - v) < 1e-9)) tempShChips.push(v); });
+  tempApSelected = new Set(savedAp.map(roundAp));
+  tempShSelected = new Set();
+  savedSh.forEach(v => { const match = tempShChips.find(x => Math.abs(x - v) < 1e-9); if (match !== undefined) tempShSelected.add(match); });
+  renderApChipGrid();
+  renderShChipGrid();
   hasBulbCheckbox.checked = cameraProfile.hasBulb;
   focalLengthInput.value = cameraProfile.focalLength;
   cameraModalOverlay.classList.remove('hidden');
@@ -971,12 +1100,14 @@ function applyProfileEverywhere() {
   renderDof();
 }
 document.getElementById('cameraModalSave').addEventListener('click', () => {
-  const apMin = parseFloat(apMinInput.value) || DEFAULT_PROFILE.apMin;
-  const apMax = parseFloat(apMaxInput.value) || DEFAULT_PROFILE.apMax;
+  const apVals = Array.from(tempApSelected).sort((a,b) => a-b);
+  const shVals = Array.from(tempShSelected).sort((a,b) => a-b);
   cameraProfile = {
-    apMin: Math.min(apMin, apMax), apMax: Math.max(apMin, apMax),
-    shFastest: parseFloat(shFastestSelect.value), hasBulb: hasBulbCheckbox.checked,
-    focalLength: parseFloat(focalLengthInput.value) || DEFAULT_PROFILE.focalLength, configured: true,
+    apertureValues: apVals.length ? apVals : DEFAULT_PROFILE.apertureValues,
+    shutterValues: shVals.length ? shVals : DEFAULT_PROFILE.shutterValues,
+    hasBulb: hasBulbCheckbox.checked,
+    focalLength: parseFloat(focalLengthInput.value) || DEFAULT_PROFILE.focalLength,
+    configured: apVals.length > 0 && shVals.length > 0,
   };
   saveProfile(cameraProfile);
   applyProfileEverywhere();
@@ -990,7 +1121,7 @@ document.getElementById('cameraModalReset').addEventListener('click', () => {
 });
 document.getElementById('cameraModalClose').addEventListener('click', () => cameraModalOverlay.classList.add('hidden'));
 
-/* ============ APP SETTINGS MODAL (lingua + tema) ============ */
+/* ============ APP SETTINGS MODAL ============ */
 const appSettingsBtn = document.getElementById('appSettingsBtn');
 const appSettingsOverlay = document.getElementById('appSettingsOverlay');
 const langChoiceGrid = document.getElementById('langChoiceGrid');
@@ -1001,7 +1132,6 @@ function renderAppSettingsModal() {
   document.getElementById('langFieldLabel').textContent = t('langFieldLabel');
   document.getElementById('themeFieldLabel').textContent = t('themeFieldLabel');
   document.getElementById('appSettingsClose').textContent = t('okBtn');
-
   langChoiceGrid.innerHTML = '';
   [['it','Italiano'], ['en','English']].forEach(([code, label]) => {
     const b = document.createElement('div');
@@ -1010,7 +1140,6 @@ function renderAppSettingsModal() {
     b.addEventListener('click', () => { setLanguage(code); renderAppSettingsModal(); });
     langChoiceGrid.appendChild(b);
   });
-
   themeChoiceGrid.innerHTML = '';
   [['dark', t('themeDark')], ['light', t('themeLight')]].forEach(([code, label]) => {
     const b = document.createElement('div');
@@ -1024,23 +1153,53 @@ appSettingsBtn.addEventListener('click', () => { renderAppSettingsModal(); appSe
 document.getElementById('appSettingsClose').addEventListener('click', () => appSettingsOverlay.classList.add('hidden'));
 document.getElementById('appSettingsClose2').addEventListener('click', () => appSettingsOverlay.classList.add('hidden'));
 
-function setTheme(code) {
-  THEME = code;
-  localStorage.setItem('sunny16_theme', THEME);
-  document.body.classList.toggle('theme-light', THEME === 'light');
+function setTheme(code) { THEME = code; localStorage.setItem('sunny16_theme', THEME); document.body.classList.toggle('theme-light', THEME === 'light'); }
+function setLanguage(code) { LANG = code; localStorage.setItem('sunny16_lang', LANG); refreshAllText(); }
+
+/* ============ TIPS MODAL ============ */
+const tipsBtn = document.getElementById('tipsBtn');
+const tipsOverlay = document.getElementById('tipsOverlay');
+const tipsContent = document.getElementById('tipsContent');
+
+const TIPS = [
+  { emoji: '🌸', it_t: 'Sfondo sfocato (ritratti)', en_t: 'Blurred background (portraits)',
+    it_x: "Diaframma più aperto possibile (numero basso: f/2-f/5.6), stai vicino al soggetto e tieni lo sfondo lontano.",
+    en_x: 'Use the widest aperture you can (low number: f/2-f/5.6), get close to the subject and keep the background far away.' },
+  { emoji: '🏔️', it_t: 'Tutto a fuoco (paesaggi)', en_t: 'Everything in focus (landscapes)',
+    it_x: 'Diaframma chiuso (f/11-f/16). Usa la scheda "Campo" per trovare la distanza di messa a fuoco che copre tutto.',
+    en_x: 'Use a closed aperture (f/11-f/16). Use the "Field" tab to find the focus distance that covers everything.' },
+  { emoji: '⚡', it_t: 'Congelare il movimento', en_t: 'Freezing motion',
+    it_x: 'Tempo di scatto rapido: 1/500 o più veloce per sport/azione, 1/250 per un soggetto che cammina.',
+    en_x: 'Fast shutter speed: 1/500 or faster for sports/action, 1/250 for a walking subject.' },
+  { emoji: '💫', it_t: 'Mosso creativo (scie, acqua setosa)', en_t: 'Creative motion blur (light trails, silky water)',
+    it_x: "Tempo lento (1/4s o più lento) + cavalletto sempre. Se c'è troppa luce, valuta un filtro ND.",
+    en_x: 'Slow shutter (1/4s or slower) + always a tripod. If there is too much light, consider an ND filter.' },
+  { emoji: '🌗', it_t: 'Ombre marcate, effetto drammatico', en_t: 'Strong shadows, dramatic effect',
+    it_x: 'Scatta con luce laterale o in controluce (mattina/sera), esponi per le zone luminose e lascia le ombre scure.',
+    en_x: 'Shoot with side light or backlight (morning/evening), expose for the highlights and let shadows go dark.' },
+  { emoji: '🌇', it_t: 'Colori caldi, atmosfera', en_t: 'Warm colors, atmosphere',
+    it_x: "Scatta durante la golden hour, la prima/ultima ora di luce del giorno.",
+    en_x: 'Shoot during golden hour, the first/last hour of daylight.' },
+  { emoji: '🎯', it_t: 'Il metodo pratico', en_t: 'The practical approach',
+    it_x: "Decidi PRIMA l'effetto che vuoi (sfocato o nitido? fermo o mosso?), scegli diaframma o tempo di conseguenza, poi regola l'ISO per bilanciare l'esposizione.",
+    en_x: 'Decide the effect you want FIRST (blurred or sharp? still or motion?), choose aperture or shutter accordingly, then adjust ISO to balance exposure.' },
+];
+function renderTips() {
+  document.getElementById('tipsTitle').textContent = t('tipsTitle');
+  tipsContent.innerHTML = '';
+  TIPS.forEach(tip => {
+    const div = document.createElement('div');
+    div.className = 'tip-item';
+    div.innerHTML = `<div class="tip-emoji">${tip.emoji}</div><div><div class="tip-title">${LANG === 'it' ? tip.it_t : tip.en_t}</div><div class="tip-text">${LANG === 'it' ? tip.it_x : tip.en_x}</div></div>`;
+    tipsContent.appendChild(div);
+  });
 }
-function setLanguage(code) {
-  LANG = code;
-  localStorage.setItem('sunny16_lang', LANG);
-  refreshAllText();
-}
+tipsBtn.addEventListener('click', () => { renderTips(); tipsOverlay.classList.remove('hidden'); });
+document.getElementById('tipsClose').addEventListener('click', () => tipsOverlay.classList.add('hidden'));
 
 function refreshAllText() {
   document.getElementById('subtitleText').textContent = t('subtitle');
-  tabCalc.textContent = t('tabCalc');
-  tabManual.textContent = t('tabManual');
-  tabDof.textContent = t('tabDof');
-  tabCatalog.textContent = t('tabCatalog');
+  tabCalc.textContent = t('tabCalc'); tabManual.textContent = t('tabManual'); tabDof.textContent = t('tabDof'); tabCatalog.textContent = t('tabCatalog');
   document.getElementById('lightCondLabel').textContent = t('lightCondLabel');
   document.getElementById('evFineLabel').textContent = t('evFineLabel');
   document.getElementById('thAperture').textContent = t('thAperture');
@@ -1053,6 +1212,7 @@ function refreshAllText() {
   document.getElementById('wheelLabelSh').textContent = t('wheelLabelSh');
   document.getElementById('manualWarningText').textContent = t('manualWarning');
   document.getElementById('saveManualBtn').textContent = t('saveShotBtn');
+  camActivateBtn.textContent = t('camActivateLabel');
   document.getElementById('dofFocalLabel').textContent = t('dofFocalLabel');
   document.getElementById('dofApertureLabel').textContent = t('dofApertureLabel');
   document.getElementById('dofDistanceLabel').textContent = t('dofDistanceLabel');
@@ -1069,9 +1229,9 @@ function refreshAllText() {
   document.getElementById('modalConfirm').textContent = t('saveBtn');
   document.getElementById('cameraModalTitle').textContent = t('cameraModalTitle');
   document.getElementById('cameraModalHint').textContent = t('cameraModalHint');
-  document.getElementById('apMinLabel').textContent = t('apMinLabel');
-  document.getElementById('apMaxLabel').textContent = t('apMaxLabel');
-  document.getElementById('shFastestLabel').textContent = t('shFastestLabel');
+  document.getElementById('savedCamerasLabel').textContent = t('savedCamerasLabel');
+  document.getElementById('apChipsLabel').textContent = t('apChipsLabel');
+  document.getElementById('shChipsLabel').textContent = t('shChipsLabel');
   document.getElementById('bulbLabel').textContent = t('bulbLabel');
   document.getElementById('focalLabel').textContent = t('focalLabel');
   document.getElementById('focalHint').textContent = t('focalHint');
@@ -1085,15 +1245,16 @@ function refreshAllText() {
   rebuildManualWheels();
   populateDofApertureSelect();
   renderDof();
-  if (!catalogView.classList.contains('hidden')) {
-    openRollName ? showRollDetail(openRollName) : showRollList();
-  }
+  if (!catalogView.classList.contains('hidden')) { openRollName ? showRollDetail(openRollName) : showRollList(); }
 }
 
 /* ============ STORAGE CATALOGO ============ */
 const STORAGE_KEY = 'sunny16_catalog_v1';
 function loadCatalog() { try { return JSON.parse(localStorage.getItem(STORAGE_KEY)) || {}; } catch (e) { return {}; } }
-function saveCatalog(catalog) { localStorage.setItem(STORAGE_KEY, JSON.stringify(catalog)); }
+function saveCatalogSafe(catalog) {
+  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(catalog)); return true; }
+  catch (e) { openNotePopup(t('storageFullError')); return false; }
+}
 
 /* ============ SAVE SHOT MODAL ============ */
 const modalOverlay = document.getElementById('modalOverlay');
@@ -1114,7 +1275,7 @@ function buildShotDataFromCalc() {
     date: `${pad(now.getDate())}/${pad(now.getMonth()+1)}/${now.getFullYear()}`,
     time: `${pad(now.getHours())}:${pad(now.getMinutes())}`,
     iso, aperture: selectedAperture, shutter: row ? row.shutterText : '--',
-    ev: ev100, light: condLabelOf(currentCondition), source: 'calc',
+    ev: ev100, light: condLabelOf(currentCondition), source: 'calc', photo: null,
   };
 }
 function buildShotDataFromManual() {
@@ -1124,6 +1285,7 @@ function buildShotDataFromManual() {
     time: `${pad(now.getHours())}:${pad(now.getMinutes())}`,
     iso: manIsoWheel.getValue(), aperture: manApWheel.getValue(),
     shutter: formatShutter(manShWheel.getValue()), source: 'manual',
+    photo: capturedPhotoDataUrl || null,
   };
 }
 function shotToString(shot, subject) {
@@ -1139,11 +1301,18 @@ function openSaveModal(shot) {
   pendingShot = shot;
   subjectInput.value = '';
   stringPreview.textContent = shotToString(pendingShot, '');
-
+  const includePhotoRow = document.getElementById('includePhotoRow');
+  const includePhotoCheckbox = document.getElementById('includePhotoCheckbox');
+  if (shot.photo) {
+    document.getElementById('includePhotoLabel2').textContent = t('includePhotoLabel');
+    includePhotoCheckbox.checked = true;
+    includePhotoRow.classList.remove('hidden');
+  } else {
+    includePhotoRow.classList.add('hidden');
+  }
   const catalog = loadCatalog();
   const rollNames = Object.keys(catalog);
   selectedRollName = rollNames.length ? rollNames[rollNames.length - 1] : null;
-
   rollChoiceGrid.innerHTML = '';
   rollNames.forEach(name => {
     const b = document.createElement('div');
@@ -1151,14 +1320,12 @@ function openSaveModal(shot) {
     b.textContent = name;
     b.addEventListener('click', () => {
       selectedRollName = name;
-      newRollInput.classList.add('hidden');
-      newRollInput.value = '';
+      newRollInput.classList.add('hidden'); newRollInput.value = '';
       document.querySelectorAll('.roll-choice-btn').forEach(x => x.classList.remove('active'));
       b.classList.add('active');
     });
     rollChoiceGrid.appendChild(b);
   });
-
   const newBtn = document.createElement('div');
   newBtn.className = 'roll-choice-btn';
   newBtn.textContent = t('newRollBtn');
@@ -1168,18 +1335,11 @@ function openSaveModal(shot) {
     newBtn.classList.add('active');
     newRollInput.classList.remove('hidden');
     newRollInput.value = `${LANG === 'it' ? 'Rullino' : 'Roll'} ${rollNames.length + 1}`;
-    newRollInput.focus();
-    newRollInput.select();
+    newRollInput.focus(); newRollInput.select();
   });
   rollChoiceGrid.appendChild(newBtn);
-
-  if (rollNames.length === 0) {
-    newRollInput.classList.remove('hidden');
-    newRollInput.value = `${LANG === 'it' ? 'Rullino' : 'Roll'} 1`;
-    newBtn.classList.add('active');
-  } else {
-    newRollInput.classList.add('hidden');
-  }
+  if (rollNames.length === 0) { newRollInput.classList.remove('hidden'); newRollInput.value = `${LANG === 'it' ? 'Rullino' : 'Roll'} 1`; newBtn.classList.add('active'); }
+  else newRollInput.classList.add('hidden');
   modalOverlay.classList.remove('hidden');
 }
 
@@ -1191,12 +1351,17 @@ modalConfirm.addEventListener('click', () => {
   const rollName = (selectedRollName === null) ? (newRollInput.value.trim() || (LANG === 'it' ? 'Rullino 1' : 'Roll 1')) : selectedRollName;
   const subject = subjectInput.value.trim();
   if (!pendingShot) return;
+  const includePhotoCheckbox = document.getElementById('includePhotoCheckbox');
+  const finalShot = { ...pendingShot, subject };
+  if (pendingShot.photo && !includePhotoCheckbox.checked) finalShot.photo = null;
   const catalog = loadCatalog();
   if (!catalog[rollName]) catalog[rollName] = [];
-  catalog[rollName].push({ ...pendingShot, subject });
-  saveCatalog(catalog);
-  modalOverlay.classList.add('hidden');
-  pendingShot = null;
+  catalog[rollName].push(finalShot);
+  if (saveCatalogSafe(catalog)) {
+    modalOverlay.classList.add('hidden');
+    pendingShot = null;
+    if (capturedPhotoDataUrl) retakePhoto();
+  }
 });
 
 /* ============ CATALOGO ============ */
@@ -1210,15 +1375,10 @@ function showRollList() {
   rollListWrap.innerHTML = '';
   const catalog = loadCatalog();
   const names = Object.keys(catalog);
-  if (names.length === 0) {
-    rollListWrap.innerHTML = `<div class="empty-state">${t('emptyCatalog')}</div>`;
-    return;
-  }
+  if (names.length === 0) { rollListWrap.innerHTML = `<div class="empty-state">${t('emptyCatalog')}</div>`; return; }
   names.forEach(name => {
     const shots = catalog[name];
-    const countText = LANG === 'it'
-      ? `${shots.length} scatt${shots.length === 1 ? 'o' : 'i'}`
-      : `${shots.length} shot${shots.length === 1 ? '' : 's'}`;
+    const countText = LANG === 'it' ? `${shots.length} scatt${shots.length === 1 ? 'o' : 'i'}` : `${shots.length} shot${shots.length === 1 ? '' : 's'}`;
     const card = document.createElement('div');
     card.className = 'roll-card';
     card.innerHTML = `<div><div class="name">${name}</div><div class="count">${countText}</div></div><div class="chevron">›</div>`;
@@ -1226,6 +1386,35 @@ function showRollList() {
     rollListWrap.appendChild(card);
   });
 }
+/* ============ RINOMINA RULLINO ============ */
+const renameOverlay = document.getElementById('renameOverlay');
+const renameInput = document.getElementById('renameInput');
+let renamingRoll = null;
+
+function openRenameModal(rollName) {
+  renamingRoll = rollName;
+  renameInput.value = rollName;
+  document.getElementById('renameTitle').textContent = t('renameRollTitle');
+  document.getElementById('renameCancel').textContent = t('cancelBtn');
+  document.getElementById('renameConfirm').textContent = t('saveBtn');
+  renameOverlay.classList.remove('hidden');
+  setTimeout(() => { renameInput.focus(); renameInput.select(); }, 50);
+}
+document.getElementById('renameClose').addEventListener('click', () => renameOverlay.classList.add('hidden'));
+document.getElementById('renameCancel').addEventListener('click', () => renameOverlay.classList.add('hidden'));
+document.getElementById('renameConfirm').addEventListener('click', () => {
+  const newName = renameInput.value.trim();
+  if (!newName || newName === renamingRoll) { renameOverlay.classList.add('hidden'); return; }
+  const catalog = loadCatalog();
+  if (catalog[newName] && newName !== renamingRoll) { openNotePopup(t('duplicateRollNameError')); return; }
+  const rebuilt = {};
+  Object.keys(catalog).forEach(k => { rebuilt[k === renamingRoll ? newName : k] = catalog[k]; });
+  if (saveCatalogSafe(rebuilt)) {
+    openRollName = newName;
+    renameOverlay.classList.add('hidden');
+    showRollDetail(newName);
+  }
+});
 
 function showRollDetail(rollName) {
   openRollName = rollName;
@@ -1234,57 +1423,50 @@ function showRollDetail(rollName) {
   rollDetailWrap.innerHTML = '';
   const header = document.createElement('div');
   header.className = 'detail-header';
-  header.innerHTML = `<div class="back-btn" id="backBtn">${t('backToRolls')}</div><div class="detail-title">${rollName}</div><div class="delete-roll-btn" id="deleteRollBtn">${t('deleteRoll')}</div>`;
+  header.innerHTML = `<div class="back-btn" id="backBtn">${t('backToRolls')}</div><div class="detail-title">${rollName}</div><div class="delete-roll-btn" id="renameRollBtn" style="color:var(--accent2);">✏️</div><div class="delete-roll-btn" id="deleteRollBtn">${t('deleteRoll')}</div>`;
   rollDetailWrap.appendChild(header);
   header.querySelector('#backBtn').addEventListener('click', showRollList);
+  header.querySelector('#renameRollBtn').addEventListener('click', () => openRenameModal(rollName));
   header.querySelector('#deleteRollBtn').addEventListener('click', () => {
-    const catalog = loadCatalog();
-    delete catalog[rollName];
-    saveCatalog(catalog);
-    showRollList();
+    const catalog = loadCatalog(); delete catalog[rollName]; saveCatalogSafe(catalog); showRollList();
   });
-
   const catalog = loadCatalog();
   const shots = catalog[rollName] || [];
   if (shots.length === 0) {
-    const empty = document.createElement('div');
-    empty.className = 'empty-state';
-    empty.textContent = t('noShotsInRoll');
-    rollDetailWrap.appendChild(empty);
-    return;
+    const empty = document.createElement('div'); empty.className = 'empty-state'; empty.textContent = t('noShotsInRoll');
+    rollDetailWrap.appendChild(empty); return;
   }
   shots.slice().reverse().forEach((shot, revIdx) => {
     const realIdx = shots.length - 1 - revIdx;
     const card = document.createElement('div');
     card.className = 'shot-card';
     const srcLine = shot.source === 'calc' ? `EV ${shot.ev} (${shot.light})` : t('manuallySet');
+    const photoHtml = shot.photo ? `<img class="shot-photo" src="${shot.photo}">` : '';
     card.innerHTML = `
-      <div class="shot-delete" data-idx="${realIdx}">✕</div>
-      <div class="subject">${shot.subject && shot.subject.trim() ? shot.subject : t('unnamed')}</div>
-      <div class="datetime">${shot.date} · ${shot.time}</div>
-      <div class="params">ISO ${shot.iso} · f/${shot.aperture} · ${shot.shutter}</div>
-      <div class="src-tag">${srcLine}</div>
+      ${photoHtml}
+      <div class="shot-info">
+        <div class="shot-delete" data-idx="${realIdx}">✕</div>
+        <div class="subject">${shot.subject && shot.subject.trim() ? shot.subject : t('unnamed')}</div>
+        <div class="datetime">${shot.date} · ${shot.time}</div>
+        <div class="params">ISO ${shot.iso} · f/${shot.aperture} · ${shot.shutter}</div>
+        <div class="src-tag">${srcLine}</div>
+      </div>
     `;
     card.querySelector('.shot-delete').addEventListener('click', (e) => {
       e.stopPropagation();
       const idx = parseInt(e.target.getAttribute('data-idx'), 10);
-      const cat = loadCatalog();
-      cat[rollName].splice(idx, 1);
-      saveCatalog(cat);
-      showRollDetail(rollName);
+      const cat = loadCatalog(); cat[rollName].splice(idx, 1); saveCatalogSafe(cat); showRollDetail(rollName);
     });
     rollDetailWrap.appendChild(card);
   });
 }
 
 /* ============ INIT ============ */
-/* Chiudi toccando fuori dal riquadro (su tutte le finestrelle) */
 modalOverlay.addEventListener('click', (e) => { if (e.target === modalOverlay) { modalOverlay.classList.add('hidden'); pendingShot = null; } });
-[cameraModalOverlay, appSettingsOverlay, noteOverlay].forEach(ov => {
+[cameraModalOverlay, appSettingsOverlay, noteOverlay, tipsOverlay, renameOverlay].forEach(ov => {
   ov.addEventListener('click', (e) => { if (e.target === ov) ov.classList.add('hidden'); });
 });
 
-rebuildShFastestSelect();
 rebuildLightGrid();
 renderCalc();
 rebuildManualWheels();
