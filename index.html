@@ -255,6 +255,10 @@
   </div>
   <div class="table-hint hidden" id="camExposureLabel" style="margin-top:-4px; margin-bottom:6px; font-weight:700; cursor:pointer;"></div>
   <div class="warning" id="camSimDisclaimer" style="margin-bottom:10px;"></div>
+  <div class="checkbox-row" style="width:100%; max-width:420px; margin-bottom:14px;">
+    <input type="checkbox" id="simToggle" checked>
+    <label id="simToggleLabel"></label>
+  </div>
 
   <div class="wheel-cluster">
     <div class="wheel-col">
@@ -414,15 +418,20 @@
     <div class="viewfinder-box" style="aspect-ratio:4/3;">
       <video id="evCamVideo" autoplay playsinline muted></video>
     </div>
-    <div class="modal-actions">
+    <div id="evCamResult" class="hidden" style="text-align:center; margin:14px 0 4px; font-weight:800; font-size:1.05rem; color:var(--accent2);"></div>
+    <div class="modal-actions" id="evCamRowEstimate">
       <div class="btn btn-primary" id="evCamEstimateBtn" style="flex:1;"></div>
+    </div>
+    <div class="modal-actions hidden" id="evCamRowConfirm">
+      <div class="btn btn-secondary" id="evCamRetryBtn" style="flex:1;"></div>
+      <div class="btn btn-primary" id="evCamAcceptBtn" style="flex:1;"></div>
     </div>
   </div>
 </div>
 
 <!-- ===== PHOTO LIGHTBOX ===== -->
-<div class="modal-overlay hidden" id="lightboxOverlay">
-  <div class="modal-card" style="padding:10px;">
+<div class="modal-overlay hidden" id="lightboxOverlay" style="align-items:center; padding:20px;">
+  <div class="modal-card" style="padding:10px; border-radius:16px; max-height:none;">
     <img id="lightboxImg" style="width:100%; border-radius:12px; display:block;">
   </div>
 </div>
@@ -459,6 +468,7 @@ const STR = {
     savedCamerasHint: 'Tocca un nome per caricarlo e usarlo subito. Per modificarlo, caricalo, cambia i valori sotto, poi salvalo di nuovo con lo stesso nome.',
     camActivateLabel: '📷 Attiva fotocamera',
     camSimDisclaimer: "🎞️ L'immagine mostrata è una SIMULAZIONE di come apparirebbe l'esposizione su pellicola con questi parametri — non corrisponde all'output reale di una fotocamera vera, che dipende da ottica, pellicola e sviluppo.",
+    simToggleLabel: 'Simula esposizione ed effetti sulla foto (se disattivo, scatto normale senza modifiche)',
     camPermissionError: "Non riesco ad accedere alla fotocamera. Controlla di aver dato il permesso al sito nelle impostazioni del browser (Safari/Chrome), non nell'app Claude.",
     storageFullError: 'La memoria del telefono per questa app è piena — elimina qualche scatto vecchio (soprattutto quelli con foto) per liberare spazio.',
     dofFocalLabel: 'Focale (mm)', dofApertureLabel: 'Diaframma', dofDistanceLabel: 'Messa a fuoco (m)',
@@ -504,6 +514,7 @@ const STR = {
     savedCamerasHint: "Tap a name to load and use it right away. To edit one, load it, change the values below, then save it again with the same name.",
     camActivateLabel: '📷 Turn on camera',
     camSimDisclaimer: "🎞️ The image shown is a SIMULATION of how the exposure would look on film with these settings — it does not match the real output of an actual camera, which depends on the lens, film stock and development.",
+    simToggleLabel: 'Simulate exposure and effects on the photo (if off, plain unedited shot)',
     camPermissionError: "Can't access the camera. Check that you've allowed this site in your browser's settings (Safari/Chrome), not in the Claude app.",
     storageFullError: "This app's storage on your phone is full — delete a few old shots (especially ones with photos) to free up space.",
     dofFocalLabel: 'Focal length (mm)', dofApertureLabel: 'Aperture', dofDistanceLabel: 'Focus distance (m)',
@@ -725,13 +736,20 @@ const evCamOverlay = document.getElementById('evCamOverlay');
 const evCamVideo = document.getElementById('evCamVideo');
 const evCamBtn = document.getElementById('evCamBtn');
 let evCamStream = null;
+let pendingEstimatedEv = null;
 
 async function openEvCam() {
   document.getElementById('evCamTitle').textContent = LANG === 'it' ? 'Stima EV dalla fotocamera' : 'Estimate EV from camera';
   document.getElementById('evCamHint').textContent = LANG === 'it'
-    ? "Inquadra la scena e tocca \"Stima\". È una stima approssimativa basata sulla luminosità media dell'immagine — non un esposimetro calibrato: usala come punto di partenza, poi regola tu con lo slider se necessario."
-    : 'Point at the scene and tap "Estimate". This is a rough estimate based on the image\'s average brightness — not a calibrated light meter: use it as a starting point, then fine-tune with the slider if needed.';
+    ? "Inquadra la scena e tocca \"Stima\". È una lettura approssimativa basata sulla luminosità dell'immagine della fotocamera del telefono — che si auto-corregge da sola — quindi può sbagliare parecchio, specie in ambienti mai troppo scuri o troppo chiari agli occhi della fotocamera stessa. Trattala come un suggerimento di partenza, non come un dato affidabile al 100%."
+    : "Point at the scene and tap \"Estimate\". This is a rough reading based on the phone camera's image brightness — which auto-corrects itself — so it can be quite wrong, especially since the camera compensates for the very thing we're trying to measure. Treat it as a starting suggestion, not a fully reliable reading.";
   document.getElementById('evCamEstimateBtn').textContent = LANG === 'it' ? '📸 Stima' : '📸 Estimate';
+  document.getElementById('evCamRetryBtn').textContent = LANG === 'it' ? 'Riprova' : 'Retry';
+  document.getElementById('evCamAcceptBtn').textContent = LANG === 'it' ? 'Accetta' : 'Accept';
+  document.getElementById('evCamResult').classList.add('hidden');
+  document.getElementById('evCamRowConfirm').classList.add('hidden');
+  document.getElementById('evCamRowEstimate').classList.remove('hidden');
+  pendingEstimatedEv = null;
   evCamOverlay.classList.remove('hidden');
   try {
     evCamStream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' }, audio: false });
@@ -761,19 +779,36 @@ function estimateEvFromCamera() {
   const minL = 15, maxL = 235;
   const clamped = Math.max(minL, Math.min(maxL, avgLuma));
   const frac = (clamped - minL) / (maxL - minL);
-  const estimatedEv = Math.round((1 + frac * 14) * 2) / 2; // arrotonda a mezzo stop, range ~1-15
-  evSlider.value = estimatedEv;
-  const nearest = LIGHT_CONDITIONS.reduce((prev, cnd) => Math.abs(cnd.ev - estimatedEv) < Math.abs(prev.ev - estimatedEv) ? cnd : prev);
+  pendingEstimatedEv = Math.round((1 + frac * 14) * 2) / 2; // arrotonda a mezzo stop, range ~1-15
+  const nearest = LIGHT_CONDITIONS.reduce((prev, cnd) => Math.abs(cnd.ev - pendingEstimatedEv) < Math.abs(prev.ev - pendingEstimatedEv) ? cnd : prev);
+  const resultEl = document.getElementById('evCamResult');
+  resultEl.textContent = (LANG === 'it' ? 'Stima: ' : 'Estimate: ') + `EV ${pendingEstimatedEv} (~${condLabelOf(nearest)})`;
+  resultEl.classList.remove('hidden');
+  document.getElementById('evCamRowEstimate').classList.add('hidden');
+  document.getElementById('evCamRowConfirm').classList.remove('hidden');
+}
+function acceptEvEstimate() {
+  if (pendingEstimatedEv === null) return;
+  evSlider.value = pendingEstimatedEv;
+  const nearest = LIGHT_CONDITIONS.reduce((prev, cnd) => Math.abs(cnd.ev - pendingEstimatedEv) < Math.abs(prev.ev - pendingEstimatedEv) ? cnd : prev);
   document.querySelectorAll('.light-btn').forEach((b, i) => {
-    b.classList.toggle('active', LIGHT_CONDITIONS[i].key === nearest.key && Math.abs(nearest.ev - estimatedEv) < 0.3);
+    b.classList.toggle('active', LIGHT_CONDITIONS[i].key === nearest.key && Math.abs(nearest.ev - pendingEstimatedEv) < 0.3);
   });
   condLabel.textContent = (LANG === 'it' ? 'Stima fotocamera' : 'Camera estimate') + ` (~${condLabelOf(nearest)})`;
   renderCalc();
   closeEvCam();
 }
+function retryEvEstimate() {
+  document.getElementById('evCamResult').classList.add('hidden');
+  document.getElementById('evCamRowConfirm').classList.add('hidden');
+  document.getElementById('evCamRowEstimate').classList.remove('hidden');
+  pendingEstimatedEv = null;
+}
 evCamBtn.addEventListener('click', openEvCam);
 document.getElementById('evCamClose').addEventListener('click', closeEvCam);
 document.getElementById('evCamEstimateBtn').addEventListener('click', estimateEvFromCamera);
+document.getElementById('evCamRetryBtn').addEventListener('click', retryEvEstimate);
+document.getElementById('evCamAcceptBtn').addEventListener('click', acceptEvEstimate);
 evCamOverlay.addEventListener('click', (e) => { if (e.target === evCamOverlay) closeEvCam(); });
 
 evSlider.addEventListener('input', () => {
@@ -1041,8 +1076,9 @@ function capturePhoto(bulbSeconds) {
   const shutterDisplay = isBulbTimed ? `${bulbSeconds.toFixed(1)}s (B)` : formatShutter(shutter);
   lastBulbDurationSeconds = isBulbTimed ? bulbSeconds : null;
   const expLabel = document.getElementById('camExposureLabel');
+  const simOn = document.getElementById('simToggle').checked;
 
-  if (typeof shutter === 'number') {
+  if (simOn && typeof shutter === 'number') {
     const evIso = sceneEV100 - Math.log2(iso / 100);
     const idealT = (aperture * aperture) / Math.pow(2, evIso);
     const stopsDiff = Math.log2(shutter / idealT);
@@ -1065,6 +1101,11 @@ function capturePhoto(bulbSeconds) {
     lastExposureExplanation = LANG === 'it'
       ? `Ho stimato la luce della scena dal fotogramma appena scattato (~EV ${sceneEV100.toFixed(1)}) e confrontato con ISO ${iso}, f/${aperture}, ${shutterDisplay} che hai impostato${isBulbTimed ? ' (tempo cronometrato tenendo premuto)' : ''}: la differenza è ${stopsDiff.toFixed(1)} stop, applicata come schiarimento/scurimento all'immagine. È una stima — la lettura di luce dalla fotocamera del telefono non è calibrata come un vero esposimetro.`
       : `I estimated the scene's light from the frame just captured (~EV ${sceneEV100.toFixed(1)}) and compared it with the ISO ${iso}, f/${aperture}, ${shutterDisplay} you set${isBulbTimed ? ' (timed by holding the shutter button)' : ''}: the difference is ${stopsDiff.toFixed(1)} stops, applied as brightening/darkening to the image. It's an estimate — the phone camera's light reading isn't calibrated like a real light meter.`;
+  } else if (!simOn) {
+    expLabel.textContent = '📷 ' + (LANG === 'it' ? 'Simulazione disattivata — scatto normale' : 'Simulation off — plain shot');
+    lastExposureExplanation = LANG === 'it'
+      ? "Hai disattivato la simulazione: questa è la foto così com'è, senza nessuna modifica basata sui parametri impostati."
+      : "You've turned off the simulation: this is the photo as-is, with no adjustments based on the settings you chose.";
   }
   expLabel.classList.remove('hidden');
 
@@ -1438,6 +1479,7 @@ function refreshAllText() {
   document.getElementById('saveManualBtn').textContent = t('saveShotBtn');
   camActivateBtn.textContent = t('camActivateLabel');
   document.getElementById('camSimDisclaimer').textContent = t('camSimDisclaimer');
+  document.getElementById('simToggleLabel').textContent = t('simToggleLabel');
   document.getElementById('dofFocalLabel').textContent = t('dofFocalLabel');
   document.getElementById('dofApertureLabel').textContent = t('dofApertureLabel');
   document.getElementById('dofDistanceLabel').textContent = t('dofDistanceLabel');
@@ -1501,6 +1543,7 @@ function buildShotDataFromCalc() {
     time: `${pad(now.getHours())}:${pad(now.getMinutes())}`,
     iso, aperture: selectedAperture, shutter: row ? row.shutterText : '--',
     ev: ev100, light: condLabelOf(currentCondition), source: 'calc', photo: null,
+    camera: findMatchingSavedCameraName(cameraProfile) || null,
   };
 }
 function buildShotDataFromManual() {
@@ -1511,6 +1554,7 @@ function buildShotDataFromManual() {
     iso: manIsoWheel.getValue(), aperture: manApWheel.getValue(),
     shutter: (lastBulbDurationSeconds !== null) ? `${lastBulbDurationSeconds.toFixed(1)}s (B)` : formatShutter(manShWheel.getValue()), source: 'manual',
     photo: capturedPhotoDataUrl || null,
+    camera: findMatchingSavedCameraName(cameraProfile) || null,
   };
 }
 function shotToString(shot, subject) {
@@ -1674,7 +1718,7 @@ function showRollDetail(rollName) {
         <div class="subject">${shot.subject && shot.subject.trim() ? shot.subject : t('unnamed')}</div>
         <div class="datetime">${shot.date} · ${shot.time}</div>
         <div class="params">ISO ${shot.iso} · f/${shot.aperture} · ${shot.shutter}</div>
-        <div class="src-tag">${srcLine}</div>
+        <div class="src-tag">${srcLine}${shot.camera ? ' · 📷 ' + shot.camera : ''}</div>
       </div>
     `;
     if (shot.photo) {
