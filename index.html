@@ -842,14 +842,15 @@ function renderCalc() {
       if (idealT < minFast - 1e-9) violationStops = Math.log2(minFast / idealT);
       else if (idealT > maxSlow && !cameraProfile.hasBulb) violationStops = Math.log2(idealT / maxSlow);
     }
-    return { a, idx, idealT, violationStops };
+    // quanto il tempo richiesto sfora la soglia "mano libera" (1/focale) — 0 se sei dentro la soglia
+    const shakeStops = idealT > handheldThreshold ? Math.log2(idealT / handheldThreshold) : 0;
+    return { a, idx, idealT, violationStops, shakeStops };
   });
-  const best = idealData.reduce((best, cur) => {
-    if (cur.violationStops < best.violationStops - 1e-9) return cur;
-    if (Math.abs(cur.violationStops - best.violationStops) < 1e-9 &&
-        Math.abs(cur.a - RECOMMENDED_APERTURE_TARGET) < Math.abs(best.a - RECOMMENDED_APERTURE_TARGET)) return cur;
-    return best;
-  }, idealData[0]);
+  function score(x) {
+    // priorità: 1) non violare i limiti della fotocamera, 2) restare scattabile a mano libera, 3) preferenza leggera per f/8
+    return x.violationStops * 1000 + x.shakeStops * 1 + Math.abs(x.a - RECOMMENDED_APERTURE_TARGET) * 0.01;
+  }
+  const best = idealData.reduce((best, cur) => score(cur) < score(best) - 1e-9 ? cur : best, idealData[0]);
   const recommendedAperture = best.a;
   const recIdx = apOptions.indexOf(recommendedAperture);
 
