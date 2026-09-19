@@ -205,7 +205,8 @@
       </select>
     </div>
     <div style="margin-top:14px;">
-      <label style="display:block;margin-bottom:8px;" id="lightCondLabel"></label>
+      <label style="display:block;margin-bottom:4px;" id="lightCondLabel"></label>
+      <div style="font-size:0.68rem; color:var(--muted); margin-bottom:8px; line-height:1.35;" id="lightCondSubtext"></div>
       <div class="light-grid" id="lightGrid"></div>
     </div>
     <div class="ev-fine">
@@ -448,7 +449,8 @@ const STR = {
     subtitle: "Calcola l'esposizione, imposta a mano, registra i tuoi scatti",
     cameraChipDefault: 'Nessuna fotocamera impostata — tocca qui per configurarla',
     tabCalc: 'Calcolatore', tabManual: 'Manuale', tabDof: 'Campo', tabCatalog: '📁 Rullini',
-    lightCondLabel: 'Condizione di luce', evFineLabel: 'Regolazione fine',
+    lightCondLabel: 'Condizione di luce',
+    lightCondSubtext: "Scegli la luce dove si trova il SOGGETTO, non il meteo generale — se scatti all'ombra in una giornata di sole, seleziona \"Ombra\", non \"Sole pieno\".", evFineLabel: 'Regolazione fine',
     thAperture: 'Diaframma', thShutter: 'Tempo',
     tableHint: 'Tocca una riga per selezionare la coppia da salvare',
     reminderText: 'f/1.4 = molto aperto (più luce, tempi più rapidi) · f/22 = molto chiuso (meno luce, tempi più lenti)',
@@ -493,7 +495,8 @@ const STR = {
     subtitle: 'Calculate exposure, set it manually, log your shots',
     cameraChipDefault: 'No camera set — tap here to configure it',
     tabCalc: 'Calculator', tabManual: 'Manual', tabDof: 'Field', tabCatalog: '📁 Rolls',
-    lightCondLabel: 'Light condition', evFineLabel: 'Fine adjustment',
+    lightCondLabel: 'Light condition',
+    lightCondSubtext: 'Pick the light where the SUBJECT actually is, not the general weather — if you\'re shooting in shade on a sunny day, choose "Shade", not "Full sun".', evFineLabel: 'Fine adjustment',
     thAperture: 'Aperture', thShutter: 'Shutter',
     tableHint: 'Tap a row to select the pair to save',
     reminderText: 'f/1.4 = wide open (more light, faster shutter) · f/22 = closed down (less light, slower shutter)',
@@ -1402,6 +1405,7 @@ function refreshAllText() {
   document.getElementById('subtitleText').textContent = t('subtitle');
   tabCalc.textContent = t('tabCalc'); tabManual.textContent = t('tabManual'); tabDof.textContent = t('tabDof'); tabCatalog.textContent = t('tabCatalog');
   document.getElementById('lightCondLabel').textContent = t('lightCondLabel');
+  document.getElementById('lightCondSubtext').textContent = t('lightCondSubtext');
   document.getElementById('evFineLabel').textContent = t('evFineLabel');
   document.getElementById('thAperture').textContent = t('thAperture');
   document.getElementById('thShutter').textContent = t('thShutter');
