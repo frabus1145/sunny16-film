@@ -253,12 +253,7 @@
     </div>
     <div id="bulbTimerDisplay" class="hidden" style="position:absolute; top:12px; left:50%; transform:translateX(-50%); background:rgba(0,0,0,0.65); color:#fff; padding:6px 16px; border-radius:999px; font-family:ui-monospace, monospace; font-weight:800; font-size:1rem; z-index:5;">⏱ 0.0s</div>
   </div>
-  <div class="table-hint hidden" id="camExposureLabel" style="margin-top:-4px; margin-bottom:6px; font-weight:700; cursor:pointer;"></div>
   <div class="warning" id="camSimDisclaimer" style="margin-bottom:10px;"></div>
-  <div class="checkbox-row" style="width:100%; max-width:420px; margin-bottom:14px;">
-    <input type="checkbox" id="simToggle" checked>
-    <label id="simToggleLabel"></label>
-  </div>
 
   <div class="wheel-cluster">
     <div class="wheel-col">
@@ -467,8 +462,7 @@ const STR = {
     editingCameraLine: 'Stai modificando:', noCameraSelected: 'nessuna (profilo personalizzato)',
     savedCamerasHint: 'Tocca un nome per caricarlo e usarlo subito. Per modificarlo, caricalo, cambia i valori sotto, poi salvalo di nuovo con lo stesso nome.',
     camActivateLabel: '📷 Attiva fotocamera',
-    camSimDisclaimer: "🎞️ L'immagine mostrata è una SIMULAZIONE di come apparirebbe l'esposizione su pellicola con questi parametri — non corrisponde all'output reale di una fotocamera vera, che dipende da ottica, pellicola e sviluppo.",
-    simToggleLabel: 'Simula esposizione ed effetti sulla foto (se disattivo, scatto normale senza modifiche)',
+    camSimDisclaimer: "📷 La foto è solo un promemoria visivo dello scatto — non riflette l'esposizione reale che avresti con questi parametri su pellicola.",
     camPermissionError: "Non riesco ad accedere alla fotocamera. Controlla di aver dato il permesso al sito nelle impostazioni del browser (Safari/Chrome), non nell'app Claude.",
     storageFullError: 'La memoria del telefono per questa app è piena — elimina qualche scatto vecchio (soprattutto quelli con foto) per liberare spazio.',
     dofFocalLabel: 'Focale (mm)', dofApertureLabel: 'Diaframma', dofDistanceLabel: 'Messa a fuoco (m)',
@@ -513,8 +507,7 @@ const STR = {
     editingCameraLine: 'Editing:', noCameraSelected: 'none (custom profile)',
     savedCamerasHint: "Tap a name to load and use it right away. To edit one, load it, change the values below, then save it again with the same name.",
     camActivateLabel: '📷 Turn on camera',
-    camSimDisclaimer: "🎞️ The image shown is a SIMULATION of how the exposure would look on film with these settings — it does not match the real output of an actual camera, which depends on the lens, film stock and development.",
-    simToggleLabel: 'Simulate exposure and effects on the photo (if off, plain unedited shot)',
+    camSimDisclaimer: "📷 The photo is just a visual reminder of the shot — it doesn't reflect the real exposure you'd get on film with these settings.",
     camPermissionError: "Can't access the camera. Check that you've allowed this site in your browser's settings (Safari/Chrome), not in the Claude app.",
     storageFullError: "This app's storage on your phone is full — delete a few old shots (especially ones with photos) to free up space.",
     dofFocalLabel: 'Focal length (mm)', dofApertureLabel: 'Aperture', dofDistanceLabel: 'Focus distance (m)',
@@ -1009,12 +1002,10 @@ function stopCamera() {
   viewfinderControls.classList.add('hidden');
   camPlaceholder.classList.remove('hidden');
   camPreviewImg.classList.add('hidden');
-  document.getElementById('camExposureLabel').classList.add('hidden');
   cancelBulbHold();
   capturedPhotoDataUrl = null;
   lastBulbDurationSeconds = null;
 }
-let lastExposureExplanation = '';
 let lastBulbDurationSeconds = null;
 let bulbHoldStart = null;
 let bulbTimerInterval = null;
@@ -1055,59 +1046,8 @@ function capturePhoto(bulbSeconds) {
   const ctx = camCanvas.getContext('2d');
   ctx.drawImage(camVideo, sx, sy, size, size, 0, 0, outSize, outSize);
 
-  // --- stima la luce della scena dal fotogramma appena scattato ---
-  const imgData = ctx.getImageData(0, 0, outSize, outSize);
-  const data = imgData.data;
-  let total = 0, count = 0;
-  for (let i = 0; i < data.length; i += 4) {
-    total += 0.2126 * data[i] + 0.7152 * data[i+1] + 0.0722 * data[i+2];
-    count++;
-  }
-  const avgLuma = total / count;
-  const minL = 15, maxL = 235;
-  const clamped = Math.max(minL, Math.min(maxL, avgLuma));
-  const frac = (clamped - minL) / (maxL - minL);
-  const sceneEV100 = 1 + frac * 14;
-
-  const iso = manIsoWheel.getValue();
-  const aperture = manApWheel.getValue();
   const isBulbTimed = typeof bulbSeconds === 'number';
-  const shutter = isBulbTimed ? Math.max(bulbSeconds, 1/8000) : manShWheel.getValue();
-  const shutterDisplay = isBulbTimed ? `${bulbSeconds.toFixed(1)}s (B)` : formatShutter(shutter);
   lastBulbDurationSeconds = isBulbTimed ? bulbSeconds : null;
-  const expLabel = document.getElementById('camExposureLabel');
-  const simOn = document.getElementById('simToggle').checked;
-
-  if (simOn && typeof shutter === 'number') {
-    const evIso = sceneEV100 - Math.log2(iso / 100);
-    const idealT = (aperture * aperture) / Math.pow(2, evIso);
-    const stopsDiff = Math.log2(shutter / idealT);
-    const factor = Math.pow(2, stopsDiff);
-    const noiseAmount = Math.min(35, Math.max(0, (iso - 100) / 6400 * 35));
-    for (let i = 0; i < data.length; i += 4) {
-      for (let c = 0; c < 3; c++) {
-        let v = data[i+c] * factor;
-        if (noiseAmount > 0) v += (Math.random() - 0.5) * noiseAmount;
-        data[i+c] = Math.max(0, Math.min(255, v));
-      }
-    }
-    ctx.putImageData(imgData, 0, 0);
-    if (Math.abs(stopsDiff) < 0.25) {
-      expLabel.textContent = '✅ ' + (LANG === 'it' ? 'Esposizione corretta' : 'Correct exposure');
-    } else {
-      const dir = stopsDiff > 0 ? (LANG === 'it' ? 'sovraesposta' : 'overexposed') : (LANG === 'it' ? 'sottoesposta' : 'underexposed');
-      expLabel.textContent = `${stopsDiff > 0 ? '⚠️ +' : '⚠️ '}${stopsDiff.toFixed(1)} stop (${dir})`;
-    }
-    lastExposureExplanation = LANG === 'it'
-      ? `Ho stimato la luce della scena dal fotogramma appena scattato (~EV ${sceneEV100.toFixed(1)}) e confrontato con ISO ${iso}, f/${aperture}, ${shutterDisplay} che hai impostato${isBulbTimed ? ' (tempo cronometrato tenendo premuto)' : ''}: la differenza è ${stopsDiff.toFixed(1)} stop, applicata come schiarimento/scurimento all'immagine. È una stima — la lettura di luce dalla fotocamera del telefono non è calibrata come un vero esposimetro.`
-      : `I estimated the scene's light from the frame just captured (~EV ${sceneEV100.toFixed(1)}) and compared it with the ISO ${iso}, f/${aperture}, ${shutterDisplay} you set${isBulbTimed ? ' (timed by holding the shutter button)' : ''}: the difference is ${stopsDiff.toFixed(1)} stops, applied as brightening/darkening to the image. It's an estimate — the phone camera's light reading isn't calibrated like a real light meter.`;
-  } else if (!simOn) {
-    expLabel.textContent = '📷 ' + (LANG === 'it' ? 'Simulazione disattivata — scatto normale' : 'Simulation off — plain shot');
-    lastExposureExplanation = LANG === 'it'
-      ? "Hai disattivato la simulazione: questa è la foto così com'è, senza nessuna modifica basata sui parametri impostati."
-      : "You've turned off the simulation: this is the photo as-is, with no adjustments based on the settings you chose.";
-  }
-  expLabel.classList.remove('hidden');
 
   capturedPhotoDataUrl = camCanvas.toDataURL('image/jpeg', 0.75);
   camPreviewImg.src = capturedPhotoDataUrl;
@@ -1121,7 +1061,6 @@ function retakePhoto() {
   camPreviewImg.classList.add('hidden');
   camVideo.classList.remove('hidden');
   camRetakeBtn.classList.add('hidden');
-  document.getElementById('camExposureLabel').classList.add('hidden');
 }
 camActivateBtn.addEventListener('click', startCamera);
 camShutterBtn.addEventListener('pointerdown', (e) => { if (manShWheel.getValue() === 'B') { e.preventDefault(); startBulbHold(); } });
@@ -1129,7 +1068,6 @@ camShutterBtn.addEventListener('pointerup', () => { if (manShWheel.getValue() ==
 camShutterBtn.addEventListener('pointerleave', () => { if (manShWheel.getValue() === 'B' && bulbHoldStart !== null) endBulbHold(); });
 camShutterBtn.addEventListener('click', () => { if (manShWheel.getValue() !== 'B') capturePhoto(); });
 camRetakeBtn.addEventListener('click', retakePhoto);
-document.getElementById('camExposureLabel').addEventListener('click', () => openNotePopup(lastExposureExplanation));
 
 /* ============ DOF ============ */
 const CIRCLE_OF_CONFUSION_MM = 0.03;
@@ -1479,7 +1417,6 @@ function refreshAllText() {
   document.getElementById('saveManualBtn').textContent = t('saveShotBtn');
   camActivateBtn.textContent = t('camActivateLabel');
   document.getElementById('camSimDisclaimer').textContent = t('camSimDisclaimer');
-  document.getElementById('simToggleLabel').textContent = t('simToggleLabel');
   document.getElementById('dofFocalLabel').textContent = t('dofFocalLabel');
   document.getElementById('dofApertureLabel').textContent = t('dofApertureLabel');
   document.getElementById('dofDistanceLabel').textContent = t('dofDistanceLabel');
