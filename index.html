@@ -856,16 +856,23 @@ function renderCalc() {
 
   const allRows = apOptions.map((a, idx) => {
     const idealT = (a * a) / Math.pow(2, evIso);
-    const snapped = nearestIn(shNumeric, idealT);
-    const shutterText = formatShutter(snapped);
     let mark = null;
-    if (cameraProfile.configured) {
-      if (idealT < minFast - 1e-9) mark = { type: 'warn', text: noteOverexposure(a, shutterText, minFast) };
-      else if (idealT > maxSlow && !cameraProfile.hasBulb) mark = { type: 'warn', text: noteUnderexposureNoBulb(a, idealT, maxSlow) };
-      else if (idealT > maxSlow && cameraProfile.hasBulb) mark = { type: 'info', text: noteBulbInfo(a, idealT, maxSlow) };
-    }
-    if (!mark && a === selectedAperture && snapped > handheldThreshold && snapped <= maxSlow) {
-      mark = { type: 'shake', text: noteShake(shutterText, a, focalLen) };
+    let shutterText;
+    const needsBulb = cameraProfile.configured && idealT > maxSlow && cameraProfile.hasBulb;
+
+    if (needsBulb) {
+      shutterText = 'B';
+      mark = { type: 'info', text: noteBulbInfo(a, idealT, maxSlow) };
+    } else {
+      const snapped = nearestIn(shNumeric, idealT);
+      shutterText = formatShutter(snapped);
+      if (cameraProfile.configured) {
+        if (idealT < minFast - 1e-9) mark = { type: 'warn', text: noteOverexposure(a, shutterText, minFast) };
+        else if (idealT > maxSlow && !cameraProfile.hasBulb) mark = { type: 'warn', text: noteUnderexposureNoBulb(a, idealT, maxSlow) };
+      }
+      if (!mark && a === selectedAperture && snapped > handheldThreshold && snapped <= maxSlow) {
+        mark = { type: 'shake', text: noteShake(shutterText, a, focalLen) };
+      }
     }
     const distFromRec = Math.abs(idx - recIdx);
     return { aperture: a, shutterText, mark, distFromRec };
