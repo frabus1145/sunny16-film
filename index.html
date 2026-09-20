@@ -13,6 +13,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Sunny 16 Film">
 <meta name="theme-color" content="#0b0b0d">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
 <style>
   :root {
     --bg: #0b0b0d; --panel: #17181b; --accent: #f2c14e; --accent2: #4ea1f2;
@@ -401,7 +402,7 @@
         <div class="btn btn-secondary" id="exportBackupBtn"></div>
         <div class="btn btn-secondary" id="importBackupBtn"></div>
       </div>
-      <input type="file" id="importFileInput" accept="application/json" class="hidden">
+      <input type="file" id="importFileInput" accept=".zip,.json,application/zip,application/json" class="hidden">
     </div>
     <div class="modal-actions"><div class="btn btn-primary" id="appSettingsClose" style="flex:1;"></div></div>
   </div>
@@ -502,7 +503,7 @@ const STR = {
     resetBtn: 'Ripristina default',
     appSettingsTitle: 'Impostazioni', langFieldLabel: 'Lingua', themeFieldLabel: 'Tema',
     themeDark: 'Scuro', themeLight: 'Chiaro', okBtn: 'OK',
-    backupLabel: 'Backup dati', backupHint: 'Tutto è salvato solo su questo telefono/browser. Esporta un file di backup periodicamente per non rischiare di perdere rullini e foto.',
+    backupLabel: 'Backup dati', backupHint: "Tutto è salvato solo su questo telefono/browser. L'esportazione crea uno ZIP con: le foto vere in una cartella, un elenco leggibile (apribile con Excel/Numbers/Fogli), e un file tecnico per il ripristino nell'app.",
     exportBackupBtn: '📤 Esporta', importBackupBtn: '📥 Importa',
     importConfirmMsg: 'Importare questo backup SOVRASCRIVERÀ tutti i rullini, le foto e i profili fotocamera attuali. Continuare?',
     importSuccessMsg: 'Backup importato con successo.',
@@ -556,7 +557,7 @@ const STR = {
     resetBtn: 'Reset to default',
     appSettingsTitle: 'Settings', langFieldLabel: 'Language', themeFieldLabel: 'Theme',
     themeDark: 'Dark', themeLight: 'Light', okBtn: 'OK',
-    backupLabel: 'Data backup', backupHint: "Everything is stored only on this phone/browser. Export a backup file regularly so you don't risk losing rolls and photos.",
+    backupLabel: 'Data backup', backupHint: "Everything is stored only on this phone/browser. Exporting creates a ZIP with: the actual photos in a folder, a readable list (opens with Excel/Numbers/Sheets), and a technical file for restoring in the app.",
     exportBackupBtn: '📤 Export', importBackupBtn: '📥 Import',
     importConfirmMsg: 'Importing this backup will OVERWRITE all current rolls, photos and camera profiles. Continue?',
     importSuccessMsg: 'Backup imported successfully.',
@@ -1420,16 +1421,50 @@ function askConfirm(message, onConfirm) {
 }
 
 /* ============ BACKUP / RIPRISTINO ============ */
-function exportBackup() {
+function sanitizeFilename(s) {
+  return (s || '').normalize('NFKD').replace(/[^a-zA-Z0-9\- _]/g, '').trim().replace(/\s+/g, '_').slice(0, 40) || (LANG === 'it' ? 'scatto' : 'shot');
+}
+function buildReadableCsv(catalog) {
+  const header = ['Rullino','Data','Ora','Soggetto','ISO','Diaframma','Tempo','Fotocamera','Fonte','EV/Luce'];
+  const rows = [header];
+  Object.keys(catalog).forEach(rollName => {
+    catalog[rollName].forEach(shot => {
+      rows.push([
+        rollName, shot.date || '', shot.time || '', shot.subject || '', shot.iso, 'f/' + shot.aperture, shot.shutter,
+        shot.camera || '', shot.source === 'calc' ? 'Calcolatore' : 'Manuale',
+        shot.source === 'calc' ? `EV ${shot.ev} (${shot.light})` : '',
+      ]);
+    });
+  });
+  return rows.map(r => r.map(v => `"${String(v).replace(/"/g, '""')}"`).join(',')).join('\r\n');
+}
+
+async function exportBackup() {
+  const catalog = loadCatalog();
   const payload = {
     app: 'sunny16-film', version: 1, exportedAt: new Date().toISOString(),
-    catalog: loadCatalog(), cameras: loadSavedCameras(), activeProfile: cameraProfile,
+    catalog, cameras: loadSavedCameras(), activeProfile: cameraProfile,
   };
-  const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
+  const zip = new JSZip();
+  zip.file('backup-tecnico.json', JSON.stringify(payload, null, 2));
+  zip.file('elenco-scatti.csv', '\ufeff' + buildReadableCsv(catalog));
+  const fotoFolder = zip.folder('foto');
+  let photoCount = 0;
+  Object.keys(catalog).forEach(rollName => {
+    catalog[rollName].forEach(shot => {
+      if (shot.photo) {
+        const base64Data = shot.photo.split(',')[1];
+        const fname = `${sanitizeFilename(rollName)}/${(shot.date || '').replace(/\//g, '-')}_${(shot.time || '').replace(':', '')}_${sanitizeFilename(shot.subject)}.jpg`;
+        fotoFolder.file(fname, base64Data, { base64: true });
+        photoCount++;
+      }
+    });
+  });
+  const blob = await zip.generateAsync({ type: 'blob' });
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
   const dateStr = new Date().toISOString().slice(0,10);
-  a.href = url; a.download = `sunny16-backup-${dateStr}.json`;
+  a.href = url; a.download = `sunny16-backup-${dateStr}.zip`;
   document.body.appendChild(a); a.click(); document.body.removeChild(a);
   URL.revokeObjectURL(url);
 }
@@ -1437,26 +1472,33 @@ document.getElementById('exportBackupBtn').addEventListener('click', exportBacku
 
 const importFileInput = document.getElementById('importFileInput');
 document.getElementById('importBackupBtn').addEventListener('click', () => importFileInput.click());
-importFileInput.addEventListener('change', (e) => {
+importFileInput.addEventListener('change', async (e) => {
   const file = e.target.files[0];
   if (!file) return;
-  const reader = new FileReader();
-  reader.onload = () => {
-    let data;
-    try { data = JSON.parse(reader.result); } catch (err) { openNotePopup(t('importErrorMsg')); return; }
-    if (!data || typeof data.catalog !== 'object') { openNotePopup(t('importErrorMsg')); return; }
-    askConfirm(t('importConfirmMsg'), () => {
-      saveCatalogSafe(data.catalog || {});
-      if (Array.isArray(data.cameras)) saveSavedCameras(data.cameras.slice(0,5));
-      if (data.activeProfile) { cameraProfile = { ...DEFAULT_PROFILE, ...data.activeProfile }; saveProfile(cameraProfile); }
-      applyProfileEverywhere();
-      openRollName = null;
-      if (!catalogView.classList.contains('hidden')) showRollList();
-      appSettingsOverlay.classList.add('hidden');
-      openNotePopup(t('importSuccessMsg'));
-    });
-  };
-  reader.readAsText(file);
+  let data = null;
+  try {
+    if (file.name.toLowerCase().endsWith('.zip')) {
+      const zip = await JSZip.loadAsync(file);
+      const jsonEntry = zip.file('backup-tecnico.json');
+      if (!jsonEntry) throw new Error('missing json');
+      const text = await jsonEntry.async('string');
+      data = JSON.parse(text);
+    } else {
+      const text = await file.text();
+      data = JSON.parse(text);
+    }
+  } catch (err) { data = null; }
+  if (!data || typeof data.catalog !== 'object') { openNotePopup(t('importErrorMsg')); importFileInput.value = ''; return; }
+  askConfirm(t('importConfirmMsg'), () => {
+    saveCatalogSafe(data.catalog || {});
+    if (Array.isArray(data.cameras)) saveSavedCameras(data.cameras.slice(0,5));
+    if (data.activeProfile) { cameraProfile = { ...DEFAULT_PROFILE, ...data.activeProfile }; saveProfile(cameraProfile); }
+    applyProfileEverywhere();
+    openRollName = null;
+    if (!catalogView.classList.contains('hidden')) showRollList();
+    appSettingsOverlay.classList.add('hidden');
+    openNotePopup(t('importSuccessMsg'));
+  });
   importFileInput.value = '';
 });
 
