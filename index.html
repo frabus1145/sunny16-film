@@ -394,7 +394,27 @@
     <div class="modal-title-row"><h3 id="appSettingsTitle"></h3><div class="modal-x" id="appSettingsClose2">✕</div></div>
     <div class="modal-field"><label id="langFieldLabel"></label><div class="roll-choice-grid" id="langChoiceGrid"></div></div>
     <div class="modal-field"><label id="themeFieldLabel"></label><div class="roll-choice-grid" id="themeChoiceGrid"></div></div>
+    <div class="modal-field">
+      <label id="backupLabel"></label>
+      <div class="hint" id="backupHint" style="margin-top:0;"></div>
+      <div class="modal-actions" style="margin-top:6px;">
+        <div class="btn btn-secondary" id="exportBackupBtn"></div>
+        <div class="btn btn-secondary" id="importBackupBtn"></div>
+      </div>
+      <input type="file" id="importFileInput" accept="application/json" class="hidden">
+    </div>
     <div class="modal-actions"><div class="btn btn-primary" id="appSettingsClose" style="flex:1;"></div></div>
+  </div>
+</div>
+
+<!-- ===== CONFIRM DIALOG ===== -->
+<div class="modal-overlay hidden" id="confirmOverlay">
+  <div class="modal-card">
+    <div class="string-preview" id="confirmText" style="color:var(--text); font-family:inherit; font-size:0.88rem;"></div>
+    <div class="modal-actions">
+      <div class="btn btn-secondary" id="confirmCancelBtn"></div>
+      <div class="btn btn-primary" id="confirmOkBtn" style="background:var(--danger); color:#fff;"></div>
+    </div>
   </div>
 </div>
 
@@ -482,6 +502,14 @@ const STR = {
     resetBtn: 'Ripristina default',
     appSettingsTitle: 'Impostazioni', langFieldLabel: 'Lingua', themeFieldLabel: 'Tema',
     themeDark: 'Scuro', themeLight: 'Chiaro', okBtn: 'OK',
+    backupLabel: 'Backup dati', backupHint: 'Tutto è salvato solo su questo telefono/browser. Esporta un file di backup periodicamente per non rischiare di perdere rullini e foto.',
+    exportBackupBtn: '📤 Esporta', importBackupBtn: '📥 Importa',
+    importConfirmMsg: 'Importare questo backup SOVRASCRIVERÀ tutti i rullini, le foto e i profili fotocamera attuali. Continuare?',
+    importSuccessMsg: 'Backup importato con successo.',
+    importErrorMsg: 'Questo file non sembra un backup valido di Sunny 16 Film.',
+    deleteShotConfirm: 'Eliminare questo scatto? Non si può annullare.',
+    deleteRollConfirm: 'Eliminare l\'intero rullino con tutti i suoi scatti? Non si può annullare.',
+    deleteConfirmBtn: 'Elimina', cancelBtn2: 'Annulla',
     emptyCatalog: 'Nessun rullino ancora.<br>Vai su "Calcolatore" o "Manuale", imposta i parametri e tocca "Salva scatto" per iniziare il tuo primo rullino.',
     backToRolls: '‹ Rullini', deleteRoll: 'Elimina rullino', noShotsInRoll: 'Nessuno scatto in questo rullino.',
     renameRollTitle: 'Rinomina rullino', duplicateRollNameError: 'Esiste già un rullino con questo nome',
@@ -528,6 +556,14 @@ const STR = {
     resetBtn: 'Reset to default',
     appSettingsTitle: 'Settings', langFieldLabel: 'Language', themeFieldLabel: 'Theme',
     themeDark: 'Dark', themeLight: 'Light', okBtn: 'OK',
+    backupLabel: 'Data backup', backupHint: "Everything is stored only on this phone/browser. Export a backup file regularly so you don't risk losing rolls and photos.",
+    exportBackupBtn: '📤 Export', importBackupBtn: '📥 Import',
+    importConfirmMsg: 'Importing this backup will OVERWRITE all current rolls, photos and camera profiles. Continue?',
+    importSuccessMsg: 'Backup imported successfully.',
+    importErrorMsg: "This file doesn't look like a valid Sunny 16 Film backup.",
+    deleteShotConfirm: "Delete this shot? This can't be undone.",
+    deleteRollConfirm: "Delete the entire roll with all its shots? This can't be undone.",
+    deleteConfirmBtn: 'Delete', cancelBtn2: 'Cancel',
     emptyCatalog: 'No rolls yet.<br>Go to "Calculator" or "Manual", set your parameters and tap "Save shot" to start your first roll.',
     backToRolls: '‹ Rolls', deleteRoll: 'Delete roll', noShotsInRoll: 'No shots in this roll.',
     renameRollTitle: 'Rename roll', duplicateRollNameError: 'A roll with this name already exists',
@@ -1344,6 +1380,10 @@ function renderAppSettingsModal() {
   document.getElementById('langFieldLabel').textContent = t('langFieldLabel');
   document.getElementById('themeFieldLabel').textContent = t('themeFieldLabel');
   document.getElementById('appSettingsClose').textContent = t('okBtn');
+  document.getElementById('backupLabel').textContent = t('backupLabel');
+  document.getElementById('backupHint').textContent = t('backupHint');
+  document.getElementById('exportBackupBtn').textContent = t('exportBackupBtn');
+  document.getElementById('importBackupBtn').textContent = t('importBackupBtn');
   langChoiceGrid.innerHTML = '';
   [['it','Italiano'], ['en','English']].forEach(([code, label]) => {
     const b = document.createElement('div');
@@ -1364,6 +1404,61 @@ function renderAppSettingsModal() {
 appSettingsBtn.addEventListener('click', () => { renderAppSettingsModal(); appSettingsOverlay.classList.remove('hidden'); });
 document.getElementById('appSettingsClose').addEventListener('click', () => appSettingsOverlay.classList.add('hidden'));
 document.getElementById('appSettingsClose2').addEventListener('click', () => appSettingsOverlay.classList.add('hidden'));
+
+/* ============ CONFERMA GENERICA ============ */
+const confirmOverlay = document.getElementById('confirmOverlay');
+const confirmText = document.getElementById('confirmText');
+const confirmCancelBtn = document.getElementById('confirmCancelBtn');
+const confirmOkBtn = document.getElementById('confirmOkBtn');
+function askConfirm(message, onConfirm) {
+  confirmText.textContent = message;
+  confirmCancelBtn.textContent = t('cancelBtn2');
+  confirmOkBtn.textContent = t('deleteConfirmBtn');
+  confirmOkBtn.onclick = () => { confirmOverlay.classList.add('hidden'); onConfirm(); };
+  confirmCancelBtn.onclick = () => confirmOverlay.classList.add('hidden');
+  confirmOverlay.classList.remove('hidden');
+}
+
+/* ============ BACKUP / RIPRISTINO ============ */
+function exportBackup() {
+  const payload = {
+    app: 'sunny16-film', version: 1, exportedAt: new Date().toISOString(),
+    catalog: loadCatalog(), cameras: loadSavedCameras(), activeProfile: cameraProfile,
+  };
+  const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  const dateStr = new Date().toISOString().slice(0,10);
+  a.href = url; a.download = `sunny16-backup-${dateStr}.json`;
+  document.body.appendChild(a); a.click(); document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+document.getElementById('exportBackupBtn').addEventListener('click', exportBackup);
+
+const importFileInput = document.getElementById('importFileInput');
+document.getElementById('importBackupBtn').addEventListener('click', () => importFileInput.click());
+importFileInput.addEventListener('change', (e) => {
+  const file = e.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = () => {
+    let data;
+    try { data = JSON.parse(reader.result); } catch (err) { openNotePopup(t('importErrorMsg')); return; }
+    if (!data || typeof data.catalog !== 'object') { openNotePopup(t('importErrorMsg')); return; }
+    askConfirm(t('importConfirmMsg'), () => {
+      saveCatalogSafe(data.catalog || {});
+      if (Array.isArray(data.cameras)) saveSavedCameras(data.cameras.slice(0,5));
+      if (data.activeProfile) { cameraProfile = { ...DEFAULT_PROFILE, ...data.activeProfile }; saveProfile(cameraProfile); }
+      applyProfileEverywhere();
+      openRollName = null;
+      if (!catalogView.classList.contains('hidden')) showRollList();
+      appSettingsOverlay.classList.add('hidden');
+      openNotePopup(t('importSuccessMsg'));
+    });
+  };
+  reader.readAsText(file);
+  importFileInput.value = '';
+});
 
 function setTheme(code) { THEME = code; localStorage.setItem('sunny16_theme', THEME); document.body.classList.toggle('theme-light', THEME === 'light'); }
 function setLanguage(code) { LANG = code; localStorage.setItem('sunny16_lang', LANG); refreshAllText(); }
@@ -1646,7 +1741,9 @@ function showRollDetail(rollName) {
   header.querySelector('#backBtn').addEventListener('click', showRollList);
   header.querySelector('#renameRollBtn').addEventListener('click', () => openRenameModal(rollName));
   header.querySelector('#deleteRollBtn').addEventListener('click', () => {
-    const catalog = loadCatalog(); delete catalog[rollName]; saveCatalogSafe(catalog); showRollList();
+    askConfirm(t('deleteRollConfirm'), () => {
+      const catalog = loadCatalog(); delete catalog[rollName]; saveCatalogSafe(catalog); showRollList();
+    });
   });
   const catalog = loadCatalog();
   const shots = catalog[rollName] || [];
@@ -1680,7 +1777,9 @@ function showRollDetail(rollName) {
     card.querySelector('.shot-delete').addEventListener('click', (e) => {
       e.stopPropagation();
       const idx = parseInt(e.target.getAttribute('data-idx'), 10);
-      const cat = loadCatalog(); cat[rollName].splice(idx, 1); saveCatalogSafe(cat); showRollDetail(rollName);
+      askConfirm(t('deleteShotConfirm'), () => {
+        const cat = loadCatalog(); cat[rollName].splice(idx, 1); saveCatalogSafe(cat); showRollDetail(rollName);
+      });
     });
     rollDetailWrap.appendChild(card);
   });
@@ -1688,7 +1787,7 @@ function showRollDetail(rollName) {
 
 /* ============ INIT ============ */
 modalOverlay.addEventListener('click', (e) => { if (e.target === modalOverlay) { modalOverlay.classList.add('hidden'); pendingShot = null; } });
-[cameraModalOverlay, appSettingsOverlay, noteOverlay, tipsOverlay, renameOverlay, document.getElementById('lightboxOverlay')].forEach(ov => {
+[cameraModalOverlay, appSettingsOverlay, noteOverlay, tipsOverlay, renameOverlay, confirmOverlay, document.getElementById('lightboxOverlay')].forEach(ov => {
   ov.addEventListener('click', (e) => { if (e.target === ov) ov.classList.add('hidden'); });
 });
 
